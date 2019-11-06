@@ -9,7 +9,7 @@ projet cs cycleGAN 2019
   
   v-laurent - Valentin Laurent
   
-  ??? - Ilyas Moutawwakil
+  night-sky-magician - Ilyas Moutawwakil
   
   ??? - Lilian Lecomte
   
