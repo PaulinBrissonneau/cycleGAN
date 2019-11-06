@@ -1,7 +1,7 @@
 # cycleGAN
 projet cs cycleGAN 2019
 
-Dictionnaire pseudos-noms :
+--> Dictionnaire pseudos-noms :
 
   traffic144 - Joanna Tomasik
   
