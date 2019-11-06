@@ -9,4 +9,10 @@ projet cs cycleGAN 2019
   
   v-laurent - Valentin Laurent
   
+  ??? - Ilyas Moutawwakil
+  
+  ??? - Lilian Lecomte
+  
+  ??? - Thomas Kebaili
+  
   PaulinBrissonneau - Paulin Brissonneau
