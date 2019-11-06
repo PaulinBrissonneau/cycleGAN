@@ -7,4 +7,6 @@ projet cs cycleGAN 2019
   
   arimmel - Arpad Rimmel
   
+  v-laurent - Valentin Laurent
+  
   PaulinBrissonneau - Paulin Brissonneau
