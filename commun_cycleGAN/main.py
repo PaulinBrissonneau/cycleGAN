@@ -15,14 +15,16 @@ LOAD_MODEL = read_config("LOAD_MODEL")
 #à ajouter dans le config reader :
 END_EPOCH = 100  # @param {type:"integer"}
 BATCH_SIZE = 1  # @param {type:"integer"}
+TEST_RATIO = 0.2
 
 if LOAD_MODEL:
     START_EPOCH = LOAD_EPOCH
 else:
     START_EPOCH = 0
 
-train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas ("vangogh2photo")
 
+#train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas ("vangogh2photo")
+train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas_paulin("vangogh2photo", test_ratio = TEST_RATIO)
 
 TRAIN_A_BUF = len(train_A)
 TRAIN_B_BUF = len(train_B)
