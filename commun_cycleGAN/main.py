@@ -3,14 +3,25 @@
 import os
 from tqdm import tqdm
 from pandas import DataFrame
+import numpy as np
+from config_reader import *
+from data_process import *
+from display import *
+from saver import *
+from builder import *
+
+LOAD_MODEL = read_config("LOAD_MODEL")
+
+#à ajouter dans le config reader :
+END_EPOCH = 100  # @param {type:"integer"}
+BATCH_SIZE = 1  # @param {type:"integer"}
 
 if LOAD_MODEL:
     START_EPOCH = LOAD_EPOCH
 else:
     START_EPOCH = 0
 
-END_EPOCH = 100  # @param {type:"integer"}
-BATCH_SIZE = 1  # @param {type:"integer"}
+train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas ("vangogh2photo")
 
 
 TRAIN_A_BUF = len(train_A)
@@ -21,7 +32,22 @@ TRAIN_BATCHES =int(TRAIN_BUF/BATCH_SIZE)
 # a pandas dataframe to save the loss information to
 losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
 losses.loc[len(losses)] = (0, 0)
-summarize_performance(START_EPOCH-1, model, train_A, train_B, losses)
+
+# ajouter ca dans config_params
+VIS_LINES = 1 #@param {type:"integer"}
+VIS_ROWS = 3 #@param {type:"integer"}
+
+PLOT_SIZE = 20 #@param {type:"integer"}
+
+plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE)
+
+# ajouter ca dans config_params
+ALPHA = 0.0002 #@param {type:"number"}
+BETA_1 = 0.5 #@param {type:"number"}
+
+model = build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET)
+
+save_performance(START_EPOCH-1, model, train_A, train_B, losses, DATASET)
 
 pool_A, pool_B = [], []
 
@@ -52,4 +78,4 @@ for i in range(START_EPOCH, END_EPOCH):
     # clear previous results
     clear_output()
     # evaluate the model performance, sometimes
-    summarize_performance(i, model, train_A, train_B, losses)
+    save_performance(i, model, train_A, train_B, losses, DATASET)
