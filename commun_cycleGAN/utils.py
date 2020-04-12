@@ -1,5 +1,6 @@
 #@title Third party functions for saving model and plots
 
+#il faut coder une classe Buffer 
 
 
 def update_pool_A(image, max_size=50):

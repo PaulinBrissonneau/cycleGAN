@@ -51,15 +51,13 @@ def get_datas_paulin(dataset, test_ratio):
 
     nb_train = int(len(files_x)*(1-test_ratio))
 
-    files_x_train = files_x[:nb_train]
-    files_y_train = files_y[:nb_train]
-    files_x_test = files_x[nb_train:]
-    files_y_test = files_y[nb_train:]
+    files_x_train, files_y_train = files_x[:nb_train], files_y[:nb_train]
+    files_x_test, files_y_test = files_x[nb_train:], files_y[nb_train:]
 
     def make_dataset (files) :
 
         nb = len(files)
-        print("len(files_x_train) :",nb)
+        print("len(file) :",nb)
         filenames = tf.constant(files)
         dataset = tf.data.Dataset.from_tensor_slices((filenames))
        
@@ -71,7 +69,7 @@ def get_datas_paulin(dataset, test_ratio):
             return image
             
         dataset = dataset.map(_parse_function)
-        return dataset
+        return dataset, nb
 
     ## AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER
     image_string = tf.io.read_file(files_x_train[0])  
@@ -82,4 +80,12 @@ def get_datas_paulin(dataset, test_ratio):
     print(len(files_x_train))
     print(len(files_x_test))
 
-    return make_dataset (files_x_train), make_dataset (files_y_train), make_dataset (files_x_test), make_dataset (files_y_test), dims, dataset
+    ##AUSSI AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER
+    train_A, nb_train_A = make_dataset (files_x_train)
+    train_B, nb_train_B = make_dataset (files_y_train)
+    test_A, nb_test_A = make_dataset (files_x_test)
+    test_B, nb_test_B = make_dataset (files_y_test)
+
+    #on peut ajouter un shuffle ici si vous voulez
+
+    return train_A, train_B, test_A, test_B, dims, dataset, nb_train_A, nb_train_B

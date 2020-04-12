@@ -7,7 +7,8 @@ from IPython.display import clear_output
 import numpy as np
 
 
-# probablement à réécrire pour pas avoir à réimporter tf ici, à discuter
+# probablement à réécrire pour pas avoir à réimporter tf ici, pas opti du tout, à discuter
+import tensorflow as tf
 
 def plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE):
 

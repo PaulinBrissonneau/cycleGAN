@@ -2,6 +2,8 @@ from tensorflow.keras.models import Sequential, Model
 import tensorflow as tf
 import numpy as np
 
+from utils import *
+
 class cycleGAN(Model):
     """
     Honestly, the best way to implement a model
