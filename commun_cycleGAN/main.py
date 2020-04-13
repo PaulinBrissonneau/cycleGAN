@@ -50,10 +50,12 @@ BETA_1 = 0.5 #@param {type:"number"}
 
 model = build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET)
 
+#il faut créer les buffer ici
+
 #pour l'instant incompatible
 #save_performance(START_EPOCH-1, model, train_A, train_B, losses, DATASET)
 
-pool_A, pool_B = [], []
+
 
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
@@ -66,6 +68,8 @@ for i in range(START_EPOCH, END_EPOCH):
     j = 0
     for image_1, image_2 in zip(train_A, train_B) :
         j+= 1
+
+        print(j)
         
         real_a = image_1
         real_b = image_2

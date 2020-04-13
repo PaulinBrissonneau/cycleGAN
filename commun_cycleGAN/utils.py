@@ -1,6 +1,10 @@
 #@title Third party functions for saving model and plots
 
-#il faut coder une classe Buffer 
+#il faut coder une classe Buffer
+
+import numpy as np
+
+pool_A, pool_B = [], []
 
 
 def update_pool_A(image, max_size=50):
