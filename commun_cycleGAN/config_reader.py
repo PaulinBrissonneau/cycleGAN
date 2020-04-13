@@ -1,4 +1,4 @@
-# à voir, c'est surement mieux de récupérer tous les paramètres d'un coup
+# à coder
 
 def read_config (a):
     #in : param (str)

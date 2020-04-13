@@ -36,7 +36,8 @@ def get_datas_ilyas (dataset):
 
 #il faut avoir les images enregistrées sur le disque
 #c'est du mapping, donc moins de mémoire vive
-def get_datas_paulin(dataset, test_ratio):
+#vient du code de Paulin
+def get_datas_mapping(dataset, test_ratio):
 
     #à coder : compatibilité avec l'autre code : 
 

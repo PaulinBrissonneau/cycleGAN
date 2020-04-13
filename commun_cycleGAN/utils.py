@@ -4,6 +4,7 @@
 
 import numpy as np
 
+#à recoder, il faut une classe buffer !
 pool_A, pool_B = [], []
 
 

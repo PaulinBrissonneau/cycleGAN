@@ -23,8 +23,10 @@ else:
     START_EPOCH = 0
 
 # pour moi  TRAIN_A_BUF  TRAIN_B_BUF c'est à enlever, c'est pas nécessaire, comme vous voulez
+
+
 #train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas ("vangogh2photo")
-train_A, train_B, test_A, test_B, DIMS, DATASET, TRAIN_A_BUF, TRAIN_B_BUF = get_datas_paulin("vangogh2photo", test_ratio = TEST_RATIO)
+train_A, train_B, test_A, test_B, DIMS, DATASET, TRAIN_A_BUF, TRAIN_B_BUF = get_datas_mapping("vangogh2photo", test_ratio = TEST_RATIO)
 
 #pas de TEST_A_BUF car pas de test dans le code de base, il faudra rajouter
 
@@ -69,6 +71,7 @@ for i in range(START_EPOCH, END_EPOCH):
     for image_1, image_2 in zip(train_A, train_B) :
         j+= 1
 
+        #à recoder
         print(j)
         
         real_a = image_1
