@@ -28,7 +28,7 @@ if CONFIG['on_gpu'] :
 - faire le config_reader - OK 
 - gérer l'affichage
 - gérer les datas test
-- refair le buffer
+- coder le buffer - OK
 - ...
 """
 
@@ -41,8 +41,9 @@ train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['
 losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
 losses.loc[len(losses)] = (0, 0)
 
-#pour l'instant incompatible
-#plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE)
+# display sample / visualisation
+if CONFIG['plot_sample']:
+    plot_sample(train_A, train_B, CONFIG['vis_lines'], CONFIG['vis_rows'], CONFIG['plot_size'])
 
 model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'])
 
