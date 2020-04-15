@@ -19,7 +19,6 @@ CONFIG['max_buffer_size'] = 50
 """
 
 
-
 def read_config (config_file):
     #in : config file (str)
     #out : dico (all params)

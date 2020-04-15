@@ -2,7 +2,6 @@
 
 import tensorflow as tf
 import tensorflow_datasets as tfds
-from pathlib import Path
 import os
 
 def get_datas_ilyas (dataset):
@@ -21,15 +20,6 @@ def get_datas_ilyas (dataset):
     DIMS = train_A[0].shape
     DATASET = DATASET.upper()
 
-
-    PATHS = [
-            f'plots/{DATASET}/',
-            f'models/{DATASET}/',
-            f'logs/{DATASET}/'      
-            ]
-
-    for path in PATHS:
-        Path(path).mkdir(parents=True, exist_ok=True)
 
     return train_A, train_B, test_A, test_B, DIMS, DATASET
 

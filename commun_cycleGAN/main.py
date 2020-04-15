@@ -5,6 +5,7 @@ from tqdm import tqdm
 from pandas import DataFrame
 import numpy as np
 import tensorflow as tf
+from pathlib import Path
 
 from config_reader import *
 from data_process import *
@@ -26,15 +27,24 @@ if CONFIG['on_gpu'] :
 
 """trucs à faire ici :
 - faire le config_reader - OK 
-- gérer l'affichage
+- gérer l'affichage - OK
+- gérer l'enregistrement - OK
 - gérer les datas test
 - coder le buffer - OK
 - ...
 """
 
 
-
 train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'])
+
+PATHS = [
+            f"{CONFIG['output_folder']}/plots/{CONFIG['dataset']}/",
+            f"{CONFIG['output_folder']}/models/{CONFIG['dataset']}/",
+            f"{CONFIG['output_folder']}/logs/{CONFIG['dataset']}/" 
+        ]
+
+for path in PATHS:
+    Path(path).mkdir(parents=True, exist_ok=True)
 
 
 # a pandas dataframe to save the loss information to
@@ -42,17 +52,16 @@ losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
 losses.loc[len(losses)] = (0, 0)
 
 # display sample / visualisation
-if CONFIG['plot_sample']:
-    plot_sample(train_A, train_B, CONFIG['vis_lines'], CONFIG['vis_rows'], CONFIG['plot_size'])
+if CONFIG['plot_sample']: plot_sample(train_A, train_B, CONFIG['vis_lines'], CONFIG['vis_rows'], CONFIG['plot_size'])
 
 model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'])
 
 
-#pour l'instant incompatible
-#save_performance(START_EPOCH-1, model, train_A, train_B, losses, DATASET)
 
+#make batches from the tf.Dataset
 BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
+
 
 
 #continue training
@@ -60,6 +69,11 @@ if not CONFIG['load_model'] :
     START_EPOCH = 0
 else:
     START_EPOCH = CONFIG['load_epoch']
+
+# evaluate the model performance, and save
+#j'ai laissé le train_A dans le plot comme c'était dans le code, mais en vrai c'est test_A qu'il faut plot, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
+if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
+if CONFIG['save_models'] : save_models (START_EPOCH-1, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
     
 
 # iterate through epochs
@@ -68,7 +82,7 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     # initiate loss counter
     loss = []
 
-    #get the bumber of batch
+    #get the number of batch
     number_of_batch = len(list(zip(train_A, train_B)))
 
     tqdm_bar = tqdm(total=number_of_batch)
@@ -90,8 +104,7 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     # average loss over epoch
     losses.loc[len(losses)] = np.mean(loss, axis=0)
     
-    # evaluate the model performance, sometimes
-
-    #pour l'instant incompatible
-    #save_performance(i, model, train_A, train_B, losses, DATASET)
-    
+    # evaluate the model performance, and save
+    #j'ai laissé le train_A dans le plot comme c'était, mais en vrai c'est test qu'il faut plot_A, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
+    if CONFIG['save_plots'] : save_plots (i, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
+    if CONFIG['save_models'] : save_models (i, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])

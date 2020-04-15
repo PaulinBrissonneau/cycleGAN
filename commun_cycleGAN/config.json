@@ -14,11 +14,14 @@
     "test_ratio" : 0.2,
 
 
-    "plot_sample" : true,
+    "plot_sample" : false,
     "vis_lines" : 1,
     "vis_rows" : 3,
     "plot_size" : 20,
 
+    "save_plots" : true,
+    "save_models" : true,
+    "output_folder" : "output",
 
     "alpha" : 0.0002,
     "beta_1" : 0.5,
