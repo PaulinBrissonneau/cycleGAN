@@ -33,7 +33,7 @@ losses.loc[len(losses)] = (0, 0)
 #pour l'instant incompatible
 #plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE)
 
-model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buufer_size'])
+model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'])
 
 
 #pour l'instant incompatible

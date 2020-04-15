@@ -2,8 +2,6 @@ from tensorflow.keras.models import Sequential, Model
 import tensorflow as tf
 import numpy as np
 
-from utils import *
-
 class cycleGAN(Model):
     """
     Honestly, the best way to implement a model
@@ -119,7 +117,7 @@ class cycleGAN(Model):
 
         # generate fake sample
         gen_a = self.B_to_A(real_b)
-        gen_a = update_pool_A(gen_a)
+        gen_a = self.buffer_A.update(gen_a)
 
         # discriminator element
         real_output = self.discriminate_A(real_a)
@@ -143,7 +141,7 @@ class cycleGAN(Model):
         """
         # generate fake sample
         gen_b = self.A_to_B(real_a)
-        gen_b = update_pool_B(gen_b)
+        gen_b = self.buffer_B.update(gen_b)
 
         # discriminator element
         real_output = self.discriminate_B(real_b)
