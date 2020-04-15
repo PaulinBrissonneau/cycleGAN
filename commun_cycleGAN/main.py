@@ -11,11 +11,8 @@ from display import *
 from saver import *
 from cycleGAN_builder import *
 
-LOAD_MODEL = read_config("LOAD_MODEL")
-
 
 """trucs à faire ici :
-- nettoyer le code
 - faire le config_reader
 - gérer l'affichage
 - gérer les datas test
@@ -48,8 +45,9 @@ model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'
 BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
-#continue training (-1 means restart)
-if not CONFIG['load_epoch'] :
+
+#continue training
+if not CONFIG['load_model'] :
     START_EPOCH = 0
 else:
     START_EPOCH = CONFIG['load_epoch']
@@ -67,11 +65,8 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     tqdm_bar = tqdm(total=number_of_batch)
 
     #enumerate batches over the training set (Joanna the Best)
-    for image_1, image_2 in zip(train_A, train_B) :
+    for real_a, real_b in zip(train_A, train_B) :
         tqdm_bar.update(1)
-
-        real_a = image_1
-        real_b = image_2
 
         # update generator B->A via adversarial and cycle loss
         B_to_A_loss = model.train_B_to_A(real_a, real_b)

@@ -7,7 +7,8 @@ from gan_networks import *
 
 def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET) :
 
-    #écrire les spécs
+    #in : params of the model
+    #out : complete Model object of cycleGAN
 
     disc_A, disc_B, gen_A_to_B, gen_B_to_A = get_networks (DIMS, DATASET)
 

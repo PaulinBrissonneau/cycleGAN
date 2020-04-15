@@ -55,7 +55,7 @@ def get_datas_mapping(test_ratio):
     def make_dataset (files) :
 
         nb = len(files)
-        print("len(file) :",nb)
+        print("files imported :",nb)
         filenames = tf.constant(files)
         dataset = tf.data.Dataset.from_tensor_slices((filenames))
        
@@ -69,13 +69,15 @@ def get_datas_mapping(test_ratio):
         dataset = dataset.map(_parse_function)
         return dataset, nb
 
-    ## AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER PROPREMENT
+    ## TOUT LE RESTE EST UN AJOUT POUR LA COMPATIBLITE AVEC ILYAS, MAIS A RECODER PROPREMENT
+
+    #get dimnensions of an image
     image_string = tf.io.read_file(files_x_train[0])  
     image_decoded = tf.image.decode_jpeg(image_string, channels=3)
     image = tf.cast(image_decoded, tf.float32)
     dims = image.shape
 
-    ##AUSSI AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER PROPREMENT
+    #create mapped datasets
     train_A, nb_train_A = make_dataset (files_x_train)
     train_B, nb_train_B = make_dataset (files_y_train)
     test_A, nb_test_A = make_dataset (files_x_test)

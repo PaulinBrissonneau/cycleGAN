@@ -1,0 +1,15 @@
+{
+    "load_model" : false,
+    "load_epoch" : 0,
+    "end_epoch" : 100,
+    "batch_size" : 1,
+    "test_ratio" : 0.2,
+    "vis_lines" : 1,
+    "vis_rows" : 3,
+    "plot_size" : 20,
+    "alpha" : 0.0002,
+    "beta_1" : 0.5,
+    "dataset" : "vangogh2photo"
+
+
+}

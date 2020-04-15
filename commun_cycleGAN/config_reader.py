@@ -1,29 +1,30 @@
-# à coder
+#reader of the config file
+
+import json
+
+"""
+Les valeurs par défauts si besoin :
+
+CONFIG['load_epoch'] = False
+CONFIG['end_epoch'] = 100
+CONFIG['batch_size'] = 1
+CONFIG['test_ratio'] = 0.2
+CONFIG['vis_lines'] = 1
+CONFIG['vis_rows'] = 3
+CONFIG['plot_size'] = 20
+CONFIG['alpha'] = 0.0002
+CONFIG['beta_1'] = 0.5
+CONFIG['dataset'] = "vangogh2photo"
+"""
+
+
 
 def read_config (config_file):
     #in : config file (str)
     #out : dico (all params)
 
-    CONFIG = {}
+    with open('commun_cycleGAN/'+config_file) as config_file:
+        CONFIG = json.loads(config_file.read())
 
-    """à coder
-
-
-
-
-
-
-    """
-    CONFIG['load_epoch'] = False
-    CONFIG['end_epoch'] = 100
-    CONFIG['batch_size'] = 1
-    CONFIG['test_ratio'] = 0.2
-    CONFIG['vis_lines'] = 1 #@param {type:"integer"}
-    CONFIG['vis_rows'] = 3 #@param {type:"integer"}
-    CONFIG['plot_size'] = 20 #@param {type:"integer"}
-    CONFIG['alpha'] = 0.0002 #@param {type:"number"}
-    CONFIG['beta_1'] = 0.5 #@param {type:"number"}
-    CONFIG['dataset'] = "vangogh2photo"
     
-
     return CONFIG
