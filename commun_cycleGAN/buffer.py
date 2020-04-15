@@ -1,10 +1,9 @@
 #il faut coder une classe Buffer
 
-import numpy as np
 import random as rd
 
 
-class Buffer_version1 () :
+class Buffer () :
 
   def __init__(self, max_size):
     self.max_size = max_size
@@ -13,24 +12,25 @@ class Buffer_version1 () :
   def update (self, image):
     selected = list()
 
-    if len(pool_A) < max_size:
+    if len(self.pool) < self.max_size:
         # stock the pool
-        pool_A.append(image)
+        self.pool.append(image)
         selected.append(image)
-    elif np.random.random() < 0.5:
+    elif rd.random() < 0.5:
         # use image, but don't add it to the pool
         selected.append(image)
     else:
         # replace an existing image and use replaced image
-        ix = np.random.randint(0, len(pool_A))
-        selected.append(pool_A[ix])
+        ix = rd.randint(0, len(self.pool)-1)
+        selected.append(self.pool[ix])
         pool_A[ix] = image
 
     return selected
 
 
 
-class Buffer_version2 () :
+#on la prendra si on a besoin
+class Buffer_plus_souple() :
 
   def __init__(self, max_size):
     self.max_size = max_size
@@ -51,4 +51,5 @@ class Buffer_version2 () :
       pop = rd.randint(0, len(self.pool)-1)
       self.pool.pop(pop)
       self.pool.append(image)
+
 
