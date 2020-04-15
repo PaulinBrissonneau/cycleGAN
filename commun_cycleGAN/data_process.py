@@ -34,12 +34,9 @@ def get_datas_ilyas (dataset):
     return train_A, train_B, test_A, test_B, DIMS, DATASET
 
 
-#il faut avoir les images enregistrées sur le disque
 #c'est du mapping, donc moins de mémoire vive
-#vient du code de Paulin
-def get_datas_mapping(dataset, test_ratio):
-
-    #à coder : compatibilité avec l'autre code : 
+#il faut avoir les images enregistrées sur le disque (mais si qqun se chauffe on peut le faire depuis tfds aussi)
+def get_datas_mapping(test_ratio):
 
     #in : dataset (str)
     #out : train_A, train_B, test_A, test_B
@@ -72,21 +69,18 @@ def get_datas_mapping(dataset, test_ratio):
         dataset = dataset.map(_parse_function)
         return dataset, nb
 
-    ## AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER
+    ## AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER PROPREMENT
     image_string = tf.io.read_file(files_x_train[0])  
     image_decoded = tf.image.decode_jpeg(image_string, channels=3)
     image = tf.cast(image_decoded, tf.float32)
     dims = image.shape
 
-    print(len(files_x_train))
-    print(len(files_x_test))
-
-    ##AUSSI AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER
+    ##AUSSI AJOUT COMPATIBLITE AVEC ILYAS, MAIS A RECODER PROPREMENT
     train_A, nb_train_A = make_dataset (files_x_train)
     train_B, nb_train_B = make_dataset (files_y_train)
     test_A, nb_test_A = make_dataset (files_x_test)
     test_B, nb_test_B = make_dataset (files_y_test)
 
-    #on peut ajouter un shuffle ici si vous voulez
+    #on peut ajouter des shuffles ici si vous voulez
 
-    return train_A, train_B, test_A, test_B, dims, dataset, nb_train_A, nb_train_B
+    return train_A, train_B, test_A, test_B, dims

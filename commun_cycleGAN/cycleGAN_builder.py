@@ -1,4 +1,4 @@
-#@title Build and compile the model with its optimizers
+#Build and compile the model with its optimizers
 
 from tensorflow.keras.optimizers import Adam
 from cycleGAN import *

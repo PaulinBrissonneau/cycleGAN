@@ -4,76 +4,72 @@ import os
 from tqdm import tqdm
 from pandas import DataFrame
 import numpy as np
+
 from config_reader import *
 from data_process import *
 from display import *
 from saver import *
-from builder import *
+from cycleGAN_builder import *
 
 LOAD_MODEL = read_config("LOAD_MODEL")
 
-#à ajouter dans le config reader :
-END_EPOCH = 100  # @param {type:"integer"}
-BATCH_SIZE = 1  # @param {type:"integer"}
-TEST_RATIO = 0.2
 
-if LOAD_MODEL:
-    START_EPOCH = LOAD_EPOCH
-else:
-    START_EPOCH = 0
+"""trucs à faire ici :
+- nettoyer le code
+- faire le config_reader
+- gérer l'affichage
+- gérer les datas test
+- ...
+"""
 
-# pour moi  TRAIN_A_BUF  TRAIN_B_BUF c'est à enlever, c'est pas nécessaire, comme vous voulez
+#read configuration file
+CONFIG = read_config("config.json")
 
+train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'])
 
-#train_A, train_B, test_A, test_B, DIMS, DATASET = get_datas ("vangogh2photo")
-train_A, train_B, test_A, test_B, DIMS, DATASET, TRAIN_A_BUF, TRAIN_B_BUF = get_datas_mapping("vangogh2photo", test_ratio = TEST_RATIO)
-
-#pas de TEST_A_BUF car pas de test dans le code de base, il faudra rajouter
-
-TRAIN_BUF = min([TRAIN_A_BUF, TRAIN_B_BUF])
-TRAIN_BATCHES =int(TRAIN_BUF/BATCH_SIZE)
 
 # a pandas dataframe to save the loss information to
 losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
 losses.loc[len(losses)] = (0, 0)
 
-# ajouter ca dans config_params
-VIS_LINES = 1 #@param {type:"integer"}
-VIS_ROWS = 3 #@param {type:"integer"}
-
-PLOT_SIZE = 20 #@param {type:"integer"}
-
 #pour l'instant incompatible
 #plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE)
 
-# ajouter ca dans config_params
-ALPHA = 0.0002 #@param {type:"number"}
-BETA_1 = 0.5 #@param {type:"number"}
+model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'])
 
-model = build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET)
 
 #il faut créer les buffer ici
+"""à coder"""
+
 
 #pour l'instant incompatible
 #save_performance(START_EPOCH-1, model, train_A, train_B, losses, DATASET)
 
-
-
+BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
+#continue training (-1 means restart)
+if not CONFIG['load_epoch'] :
+    START_EPOCH = 0
+else:
+    START_EPOCH = CONFIG['load_epoch']
+    
+
 # iterate through epochs
-for i in range(START_EPOCH, END_EPOCH):
+for i in range(START_EPOCH, CONFIG['end_epoch']):
+
     # initiate loss counter
     loss = []
 
-    #enumerate batches over the training set
-    j = 0
-    for image_1, image_2 in zip(train_A, train_B) :
-        j+= 1
+    #get the bumber of batch
+    number_of_batch = len(list(zip(train_A, train_B)))
 
-        #à recoder
-        print(j)
-        
+    tqdm_bar = tqdm(total=number_of_batch)
+
+    #enumerate batches over the training set (Joanna the Best)
+    for image_1, image_2 in zip(train_A, train_B) :
+        tqdm_bar.update(1)
+
         real_a = image_1
         real_b = image_2
 
