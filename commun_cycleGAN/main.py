@@ -13,9 +13,10 @@ from cycleGAN_builder import *
 
 
 """trucs à faire ici :
-- faire le config_reader
+- faire le config_reader - OK 
 - gérer l'affichage
 - gérer les datas test
+- refair le buffer
 - ...
 """
 
