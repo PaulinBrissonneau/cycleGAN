@@ -3,14 +3,18 @@
 from tensorflow.keras.optimizers import Adam
 from cycleGAN import *
 from gan_networks import *
+from buffer import *
 
 
-def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET) :
+def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET, BUFFER_MAX_SIZE) :
 
     #in : params of the model
     #out : complete Model object of cycleGAN
 
     disc_A, disc_B, gen_A_to_B, gen_B_to_A = get_networks (DIMS, DATASET)
+
+    buffer_A = Buffer(max_size = BUFFER_MAX_SIZE)
+    buffer_B = Buffer(max_size = BUFFER_MAX_SIZE)
 
     # optimizers
     gen_A_to_B_optimizer = Adam(lr=ALPHA, beta_1=BETA_1)
@@ -27,7 +31,10 @@ def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET) :
                     disc_A_optimizer = disc_A_optimizer,
                     disc_B_optimizer = disc_B_optimizer,
                     gen_A_to_B_optimizer = gen_A_to_B_optimizer,
-                    gen_B_to_A_optimizer = gen_B_to_A_optimizer, )
+                    gen_B_to_A_optimizer = gen_B_to_A_optimizer,
+                    buffer_A = buffer_A,
+                    buffer_B = buffer_B,
+                                            )
 
 
     return model

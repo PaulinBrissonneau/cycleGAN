@@ -15,6 +15,7 @@ CONFIG['plot_size'] = 20
 CONFIG['alpha'] = 0.0002
 CONFIG['beta_1'] = 0.5
 CONFIG['dataset'] = "vangogh2photo"
+CONFIG['max_buffer_size'] = 50
 """
 
 

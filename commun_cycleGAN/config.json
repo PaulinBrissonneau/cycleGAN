@@ -9,7 +9,8 @@
     "plot_size" : 20,
     "alpha" : 0.0002,
     "beta_1" : 0.5,
-    "dataset" : "vangogh2photo"
+    "dataset" : "vangogh2photo",
+    "max_buffer_size" : 50
 
 
 }

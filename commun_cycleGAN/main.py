@@ -13,9 +13,10 @@ from cycleGAN_builder import *
 
 
 """trucs à faire ici :
-- faire le config_reader
+- faire le config_reader - OK 
 - gérer l'affichage
 - gérer les datas test
+- refair le buffer
 - ...
 """
 
@@ -32,11 +33,7 @@ losses.loc[len(losses)] = (0, 0)
 #pour l'instant incompatible
 #plot_sample(VIS_LINES, VIS_ROWS, PLOT_SIZE)
 
-model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'])
-
-
-#il faut créer les buffer ici
-"""à coder"""
+model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'])
 
 
 #pour l'instant incompatible
