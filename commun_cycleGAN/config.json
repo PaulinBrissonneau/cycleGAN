@@ -1,4 +1,7 @@
 {
+
+
+    "on_gpu" : false,
     "load_model" : false,
     "load_epoch" : 0,
     "end_epoch" : 100,

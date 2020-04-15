@@ -4,12 +4,24 @@ import os
 from tqdm import tqdm
 from pandas import DataFrame
 import numpy as np
+import tensorflow as tf
 
 from config_reader import *
 from data_process import *
 from display import *
 from saver import *
 from cycleGAN_builder import *
+
+#passage en eager execution
+tf.config.experimental_run_functions_eagerly(True)
+
+#read configuration file
+CONFIG = read_config("config.json")
+
+#passage en GPU
+if CONFIG['on_gpu'] :
+    gpu = tf.config.experimental.list_physical_devices('GPU')[0]
+    tf.config.experimental.set_memory_growth(gpu, True)
 
 
 """trucs à faire ici :
@@ -20,8 +32,7 @@ from cycleGAN_builder import *
 - ...
 """
 
-#read configuration file
-CONFIG = read_config("config.json")
+
 
 train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'])
 
