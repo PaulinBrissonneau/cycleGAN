@@ -20,14 +20,12 @@ tf.config.experimental_run_functions_eagerly(True)
 
 #read configuration file
 config_file = sys.argv[1]
-#config_file = "config_example_cpu.json"
-
 print("config_file : ", config_file)
-
 CONFIG = read_config(config_file)
 
 #passage en GPU
 if CONFIG['on_gpu'] :
+    print("nombre de GPU : ", len(tf.config.experimental.list_physical_devices('GPU')))
     gpu = tf.config.experimental.list_physical_devices('GPU')[0]
     tf.config.experimental.set_memory_growth(gpu, True)
 

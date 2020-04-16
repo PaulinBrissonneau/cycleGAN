@@ -3,7 +3,7 @@
 #PBS -S /bin/bash
 #PBS -N cycleGAN_example
 #PBS -j oe
-#PBS -l walltime=4:00:00
+#PBS -l walltime=01:00:00
 #PBS -l select=1:ncpus=16:ngpus=1:mem=32gb
 #PBS -q gpuq
 #PBS -P cycleGAN
