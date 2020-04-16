@@ -19,7 +19,7 @@ import sys
 tf.config.experimental_run_functions_eagerly(True)
 
 #read configuration file
-config_file = sys.argv[0]
+config_file = sys.argv[1]
 #config_file = "config_example_cpu.json"
 
 print("config_file : ", config_file)
