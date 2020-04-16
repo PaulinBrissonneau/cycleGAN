@@ -12,12 +12,19 @@ from data_process import *
 from display import *
 from saver import *
 from cycleGAN_builder import *
+import sys
+
 
 #passage en eager execution
 tf.config.experimental_run_functions_eagerly(True)
 
 #read configuration file
-CONFIG = read_config("config.json")
+config_file = sys.argv[0]
+#config_file = "config_example_cpu.json"
+
+print("config_file : ", config_file)
+
+CONFIG = read_config(config_file)
 
 #passage en GPU
 if CONFIG['on_gpu'] :
@@ -35,7 +42,7 @@ if CONFIG['on_gpu'] :
 """
 
 
-train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'])
+train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'], data_x_folder = CONFIG['data_x_folder'], data_y_folder = CONFIG['data_y_folder'])
 
 PATHS = [
             f"{CONFIG['output_folder']}/plots/{CONFIG['dataset']}/",

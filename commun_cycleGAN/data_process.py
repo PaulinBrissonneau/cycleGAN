@@ -26,19 +26,16 @@ def get_datas_ilyas (dataset):
 
 #c'est du mapping, donc moins de mémoire vive
 #il faut avoir les images enregistrées sur le disque (mais si qqun se chauffe on peut le faire depuis tfds aussi)
-def get_datas_mapping(test_ratio):
+def get_datas_mapping(test_ratio, data_x_folder, data_y_folder):
 
     #in : dataset (str)
     #out : train_A, train_B, test_A, test_B
 
-    direct_x = "/home/paulin/Documents/datas/orangeApple/orange/"
-    direct_y = "/home/paulin/Documents/datas/orangeApple/apple/"
+    files_x = [data_x_folder + img for img in os.listdir(data_x_folder)]
+    files_y = [data_y_folder + img for img in os.listdir(data_y_folder)]
 
-    files_x = [direct_x + img for img in os.listdir(direct_x)]
-    files_y = [direct_y + img for img in os.listdir(direct_y)]
-
+    #split in test and train
     nb_train = int(len(files_x)*(1-test_ratio))
-
     files_x_train, files_y_train = files_x[:nb_train], files_y[:nb_train]
     files_x_test, files_y_test = files_x[nb_train:], files_y[nb_train:]
 
@@ -49,6 +46,7 @@ def get_datas_mapping(test_ratio):
         filenames = tf.constant(files)
         dataset = tf.data.Dataset.from_tensor_slices((filenames))
        
+        #mapping dataset <-> images
         def _parse_function(filenames):
             image_string = tf.io.read_file(filenames)  
             image_decoded = tf.image.decode_jpeg(image_string, channels=3)
