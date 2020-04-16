@@ -23,7 +23,7 @@ class Buffer () :
         # replace an existing image and use replaced image
         ix = rd.randint(0, len(self.pool)-1)
         selected.append(self.pool[ix])
-        pool_A[ix] = image
+        self.pool[ix] = image
 
     return selected
 
