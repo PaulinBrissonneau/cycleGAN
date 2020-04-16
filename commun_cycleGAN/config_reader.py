@@ -23,7 +23,7 @@ def read_config (config_file):
     #in : config file (str)
     #out : dico (all params)
 
-    with open('commun_cycleGAN/'+config_file) as config_file:
+    with open(config_file) as config_file:
         CONFIG = json.loads(config_file.read())
 
     
