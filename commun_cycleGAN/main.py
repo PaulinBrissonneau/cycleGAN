@@ -6,6 +6,7 @@ from pandas import DataFrame
 import numpy as np
 import tensorflow as tf
 from pathlib import Path
+import datetime
 
 from config_reader import *
 from data_process import *
@@ -29,23 +30,16 @@ if CONFIG['on_gpu'] :
     gpu = tf.config.experimental.list_physical_devices('GPU')[0]
     tf.config.experimental.set_memory_growth(gpu, True)
 
+train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'], data_x_folder = CONFIG['data_x_folder'], data_y_folder = CONFIG['data_y_folder'], debug_sample=CONFIG['debug_sample'])
 
-"""trucs à faire ici :
-- faire le config_reader - OK 
-- gérer l'affichage - OK
-- gérer l'enregistrement - OK
-- gérer les datas test
-- coder le buffer - OK
-- ...
-"""
-
-
-train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['test_ratio'], data_x_folder = CONFIG['data_x_folder'], data_y_folder = CONFIG['data_y_folder'])
-
+#prevent collisions in directory names
+now = datetime.datetime.now()
+now = "_"+str(now.year)+"_"+str(now.month)+"_"+str(now.day)+"-"+str(now.hour)+"_"+str(now.minute)+"_"+str(now.second)
+output_folder_date = CONFIG['output_folder']+now
 PATHS = [
-            f"{CONFIG['output_folder']}/plots/{CONFIG['dataset']}/",
-            f"{CONFIG['output_folder']}/models/{CONFIG['dataset']}/",
-            f"{CONFIG['output_folder']}/logs/{CONFIG['dataset']}/" 
+            f"{output_folder_date}/plots/{CONFIG['dataset']}/",
+            f"{output_folder_date}/models/{CONFIG['dataset']}/",
+            f"{output_folder_date}/logs/{CONFIG['dataset']}/" 
         ]
 
 for path in PATHS:
@@ -77,8 +71,8 @@ else:
 
 # evaluate the model performance, and save
 #j'ai laissé le train_A dans le plot comme c'était dans le code, mais en vrai c'est test_A qu'il faut plot, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
-if CONFIG['save_models'] : save_models (START_EPOCH-1, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
+if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
+if CONFIG['save_models'] : save_models (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
     
 
 # iterate through epochs
@@ -90,8 +84,14 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     #get the number of batch
     number_of_batch = len(list(zip(train_A, train_B)))
 
-    tqdm_bar = tqdm(total=number_of_batch)
+    #update learning rate
+    current_learning_rate = tf.compat.v1.train.polynomial_decay(learning_rate=CONFIG['alpha'], global_step=i, decay_steps=CONFIG['decay_steps'], end_learning_rate=CONFIG['end_learning_rate'], power=1.0)
+    model.disc_A_optimizer.learning_rate = current_learning_rate
+    model.disc_B_optimizer.learning_rate = current_learning_rate
+    model.gen_A_to_B_optimizer.learning_rate = current_learning_rate
+    model.gen_B_to_A_optimizer.learning_rate = current_learning_rate
 
+    tqdm_bar = tqdm(total=number_of_batch)
     #enumerate batches over the training set (Joanna the Best)
     for real_a, real_b in zip(train_A, train_B) :
         tqdm_bar.update(1)
@@ -111,5 +111,5 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     
     # evaluate the model performance, and save
     #j'ai laissé le train_A dans le plot comme c'était, mais en vrai c'est test qu'il faut plot_A, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-    if CONFIG['save_plots'] : save_plots (i, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
-    if CONFIG['save_models'] : save_models (i, model, CONFIG['output_folder'], train_A, train_B, losses, CONFIG['dataset'])
+    if CONFIG['save_plots'] : save_plots (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
+    if CONFIG['save_models'] : save_models (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])

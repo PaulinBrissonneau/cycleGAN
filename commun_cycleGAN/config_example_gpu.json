@@ -14,6 +14,7 @@
     "data_y_folder" : "/gpfs/workdir/brissonnp/orangeApple/orange/",
     "batch_size" : 1,
     "test_ratio" : 0.2,
+    "debug_sample" : -1,
 
 
     "plot_sample" : false,
@@ -21,11 +22,15 @@
     "vis_rows" : 3,
     "plot_size" : 20,
 
+
     "save_plots" : true,
     "save_models" : true,
     "output_folder" : "/gpfs/workdir/brissonnp/output/",
 
+
     "alpha" : 0.0002,
+    "decay_steps" : 100,
+    "end_learning_rate" : 0,
     "beta_1" : 0.5,
     "max_buffer_size" : 50
 

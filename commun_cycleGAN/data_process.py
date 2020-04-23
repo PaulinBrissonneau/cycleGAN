@@ -26,7 +26,7 @@ def get_datas_ilyas (dataset):
 
 #c'est du mapping, donc moins de mémoire vive
 #il faut avoir les images enregistrées sur le disque (mais si qqun se chauffe on peut le faire depuis tfds aussi)
-def get_datas_mapping(test_ratio, data_x_folder, data_y_folder):
+def get_datas_mapping(test_ratio, data_x_folder, data_y_folder, debug_sample):
 
     #in : dataset (str)
     #out : train_A, train_B, test_A, test_B
@@ -34,8 +34,10 @@ def get_datas_mapping(test_ratio, data_x_folder, data_y_folder):
     files_x = [data_x_folder + img for img in os.listdir(data_x_folder)]
     files_y = [data_y_folder + img for img in os.listdir(data_y_folder)]
 
-    #split in test and train
-    nb_train = int(len(files_x)*(1-test_ratio))
+    #split in test and train OR debug_sample (smaller sample to see bugs)
+    if debug_sample == -1 : nb_train = int(len(files_x)*(1-test_ratio))
+    else : nb_train = debug_sample
+
     files_x_train, files_y_train = files_x[:nb_train], files_y[:nb_train]
     files_x_test, files_y_test = files_x[nb_train:], files_y[nb_train:]
 
