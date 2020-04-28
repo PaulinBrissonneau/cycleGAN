@@ -1,0 +1,39 @@
+{
+
+    
+    "on_gpu" : true,
+
+
+    "load_model" : false,
+    "load_epoch" : 0,
+    "end_epoch" : 100,
+
+
+    "dataset" : "celeb_smile",
+    "data_x_folder" : "/gpfs/workdir/brissonnp/celeb_smile_168_216/celebNotSmile/",
+    "data_y_folder" : "/gpfs/workdir/brissonnp/celeb_smile_168_216/celebSmile/",
+    "batch_size" : 1,
+    "test_ratio" : 0.5,
+    "debug_sample" : -1,
+
+
+    "plot_sample" : false,
+    "vis_lines" : 1,
+    "vis_rows" : 3,
+    "plot_size" : 20,
+
+
+    "save_plots" : true,
+    "n_sample" : 3,
+    "save_models" : true,
+    "output_folder" : "/gpfs/workdir/brissonnp/output/",
+
+
+    "alpha" : 0.0002,
+    "decay_steps" : 100,
+    "end_learning_rate" : 0,
+    "beta_1" : 0.5,
+    "max_buffer_size" : 50
+
+
+}

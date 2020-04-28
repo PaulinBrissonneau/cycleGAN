@@ -71,7 +71,7 @@ else:
 
 # evaluate the model performance, and save
 #j'ai laissé le train_A dans le plot comme c'était dans le code, mais en vrai c'est test_A qu'il faut plot, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
+if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'])
 if CONFIG['save_models'] : save_models (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
     
 
@@ -111,5 +111,5 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     
     # evaluate the model performance, and save
     #j'ai laissé le train_A dans le plot comme c'était, mais en vrai c'est test qu'il faut plot_A, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-    if CONFIG['save_plots'] : save_plots (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
+    if CONFIG['save_plots'] : save_plots (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'])
     if CONFIG['save_models'] : save_models (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])

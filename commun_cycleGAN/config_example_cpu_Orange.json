@@ -1,7 +1,7 @@
 {
 
     
-    "on_gpu" : true,
+    "on_gpu" : false,
 
 
     "load_model" : false,
@@ -10,22 +10,23 @@
 
 
     "dataset" : "orangeApple",
-    "data_x_folder" : "/gpfs/workdir/brissonnp/orangeApple/apple/",
-    "data_y_folder" : "/gpfs/workdir/brissonnp/orangeApple/orange/",
+    "data_x_folder" : "/home/paulin/Documents/datas/orangeApple/apple/",
+    "data_y_folder" : "/home/paulin/Documents/datas/orangeApple/orange/",
     "batch_size" : 1,
     "test_ratio" : 0.2,
     "debug_sample" : -1,
 
 
-    "plot_sample" : false,
+    "plot_sample" : true,
     "vis_lines" : 1,
     "vis_rows" : 3,
     "plot_size" : 20,
 
 
     "save_plots" : true,
+    "n_sample" : 3,
     "save_models" : true,
-    "output_folder" : "/gpfs/workdir/brissonnp/output/",
+    "output_folder" : "output",
 
 
     "alpha" : 0.0002,

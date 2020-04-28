@@ -3,16 +3,13 @@ import numpy as np
 from matplotlib import pyplot
 import tensorflow as tf
 
-#à passer dans le main, dans config, etc
-N_SAMPLES = 3 #@param {type:"integer"}
-
 # evaluate the discrimenator, plot generated images
-def save_plots (epoch, model, output_folder, test_A, test_B, losses, DATASET):
+def save_plots (epoch, model, output_folder, test_A, test_B, losses, DATASET, n_samples):
     # a simple summerizing print
     print(f"Epoch: {epoch+1} | A_to_B_loss: {losses.A_to_B_loss.values[-1]} | B_to_A_loss: {losses.B_to_A_loss.values[-1]}")
     # save plot
-    save_plot(epoch, model.A_to_B, output_folder, test_A, 'A_to_B', DATASET)
-    save_plot(epoch, model.B_to_A, output_folder, test_B, 'B_to_A', DATASET)
+    save_plot(epoch, model.A_to_B, output_folder, test_A, 'A_to_B', DATASET, n_samples)
+    save_plot(epoch, model.B_to_A, output_folder, test_B, 'B_to_A', DATASET, n_samples)
     # save history
     save_history(losses, output_folder, DATASET)
 
@@ -28,7 +25,7 @@ def save_models(epoch, model, output_folder, test_A, test_B, losses, DATASET):
 
 
 # create and save a plot of generated images
-def save_plot(epoch, model, output_folder, test_X, domains, DATASET,  n_samples=N_SAMPLES):
+def save_plot(epoch, model, output_folder, test_X, domains, DATASET, n_samples):
     # choose random images from dataset
     ix = list(np.random.randint(0, len(list(test_X)), n_samples))
     #transformation from tf.data to numpy array
