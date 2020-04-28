@@ -19,4 +19,4 @@ module load anaconda3/5.3.1
 source activate tf-gpu
 
 # Train the network
-python main.py config_example_gpu.json
+python main.py config_example_gpu_Smile.json
