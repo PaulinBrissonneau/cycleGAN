@@ -28,6 +28,9 @@
     "save_models" : true,
     "output_folder" : "output",
 
+    "save_plots_during_batch" : true,
+    "freq_plots_during_batch" : 10,
+
 
     "alpha" : 0.0002,
     "decay_steps" : 100,

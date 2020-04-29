@@ -4,12 +4,12 @@ from matplotlib import pyplot
 import tensorflow as tf
 
 # evaluate the discrimenator, plot generated images
-def save_plots (epoch, model, output_folder, test_A, test_B, losses, DATASET, n_samples):
+def save_plots (epoch, model, output_folder, test_A, test_B, losses, DATASET, n_samples,  during_batch = False, batch = -1):
     # a simple summerizing print
     print(f"Epoch: {epoch+1} | A_to_B_loss: {losses.A_to_B_loss.values[-1]} | B_to_A_loss: {losses.B_to_A_loss.values[-1]}")
     # save plot
-    save_plot(epoch, model.A_to_B, output_folder, test_A, 'A_to_B', DATASET, n_samples)
-    save_plot(epoch, model.B_to_A, output_folder, test_B, 'B_to_A', DATASET, n_samples)
+    save_plot(epoch, model.A_to_B, output_folder, test_A, 'A_to_B', DATASET, n_samples, during_batch, batch)
+    save_plot(epoch, model.B_to_A, output_folder, test_B, 'B_to_A', DATASET, n_samples, during_batch, batch)
     # save history
     save_history(losses, output_folder, DATASET)
 
@@ -25,7 +25,7 @@ def save_models(epoch, model, output_folder, test_A, test_B, losses, DATASET):
 
 
 # create and save a plot of generated images
-def save_plot(epoch, model, output_folder, test_X, domains, DATASET, n_samples):
+def save_plot(epoch, model, output_folder, test_X, domains, DATASET, n_samples, during_batch, batch):
     # choose random images from dataset
     ix = list(np.random.randint(0, len(list(test_X)), n_samples))
     #transformation from tf.data to numpy array
@@ -47,7 +47,8 @@ def save_plot(epoch, model, output_folder, test_X, domains, DATASET, n_samples):
         pyplot.axis('off')
         pyplot.imshow(gen_x[i])
     # save plot to file
-    file_name = f"{output_folder}/plots/{DATASET}/cycleGAN_e{epoch+1:03}_{domains}.png"
+    if during_batch : file_name = f"{output_folder}/plots/{DATASET}/cycleGAN_epoch{epoch+1:03}_batch{batch}_{domains}.png"
+    else : file_name = f"{output_folder}/plots/{DATASET}/cycleGAN_epoch{epoch+1:03}_{domains}.png"
     pyplot.savefig(file_name)
     # pyplot.show()
     pyplot.close()

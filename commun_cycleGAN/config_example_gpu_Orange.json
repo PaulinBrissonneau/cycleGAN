@@ -28,6 +28,9 @@
     "save_models" : true,
     "output_folder" : "/gpfs/workdir/brissonnp/output/",
 
+    "save_plots_during_batch" : false,
+    "freq_plots_during_batch" : 1000,
+
 
     "alpha" : 0.0002,
     "decay_steps" : 100,
