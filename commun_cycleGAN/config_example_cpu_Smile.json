@@ -29,7 +29,7 @@
     "output_folder" : "output",
 
     "save_plots_during_batch" : true,
-    "freq_plots_during_batch" : 10,
+    "freq_plots_during_batch" : 4,
 
 
     "alpha" : 0.0002,
