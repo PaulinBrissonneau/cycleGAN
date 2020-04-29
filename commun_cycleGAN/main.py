@@ -91,6 +91,9 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
     model.gen_A_to_B_optimizer.learning_rate = current_learning_rate
     model.gen_B_to_A_optimizer.learning_rate = current_learning_rate
 
+    #à changer
+    i_test = 0
+
     tqdm_bar = tqdm(total=number_of_batch)
     #enumerate batches over the training set (Joanna the Best)
     for real_a, real_b in zip(train_A, train_B) :
@@ -106,6 +109,11 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
         disc_B_loss = model.train_disc_B(real_a, real_b)
         # save batch loss
         loss.append((A_to_B_loss, B_to_A_loss))
+
+        # diplay during batch (à changer)
+        i_test+=1
+        if CONFIG['save_plots'] and i_test%1000 == 0 : save_plots (i_test, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'])
+
     # average loss over epoch
     losses.loc[len(losses)] = np.mean(loss, axis=0)
     
