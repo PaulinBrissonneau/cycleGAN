@@ -29,7 +29,7 @@
     "output_folder" : "/gpfs/workdir/brissonnp/output/",
 
     "save_plots_during_batch" : true,
-    "freq_plots_during_batch" : 100,
+    "freq_plots_during_batch" : 10,
 
 
     "alpha" : 0.0002,
