@@ -31,7 +31,8 @@ def save_plot(epoch, model, output_folder, test_X, domains, DATASET, n_samples, 
     #transformation from tf.data to numpy array
     test_x = np.array([np.array(list(test_X)[i][0]) for i in ix])
     # generate transfered images
-    gen_x = model(test_x)
+    gen_x = model(test_x) #checked : in ]0, 1[
+
     # scale from [-1,1] to [0,1] and clip()
     test_x = np.clip(((test_x + 1.) / 2.), 0, 1)
     gen_x = np.clip((gen_x + 1.) / 2., 0, 1)

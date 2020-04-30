@@ -4,7 +4,7 @@
 #PBS -N cycleGAN_example
 #PBS -j oe
 #PBS -l walltime=24:00:00
-#PBS -l select=1:ncpus=12:ngpus=1:mem=32gb
+#PBS -l select=1:ncpus=12:ngpus=1:mem=64gb
 #PBS -q gpuq
 #PBS -P cycleGAN
 #PBS -M paulin.brissonneau@student-cs.fr
