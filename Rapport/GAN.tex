@@ -1,7 +1,7 @@
 \chapter{Les GAN (Réseaux Adverses Génératifs)}
 
 \section{Principe général des GAN}
-Le principe général des GAN repose sur l'utilisation de deux réseaux, ayant des objectifs contraires, on dit qu'ils sont \textbf{{adversaires}. Le premier réseau transforme du bruit en image, c'est le \textbf{générateur}. Le deuxième réseau prend en entrées des images et a pour but de les classer selon deux classes, c'est donc un classifieur binaire, il est appelé \textbf{discriminateur}. Le plus souvent, le discriminateur sera alimenté par des images de deux sortes : celles provenant de la base de donnée (images réelles), et celles générée par le générateur, on rôle sera donc de dire si une image est réelle ou générée.
+Le principe général des GAN repose sur l'utilisation de deux réseaux, ayant des objectifs contraires, on dit qu'ils sont \textbf{adversaires}. Le premier réseau transforme du bruit en image, c'est le \textbf{générateur}. Le deuxième réseau prend en entrées des images et a pour but de les classer selon deux classes, c'est donc un classifieur binaire, il est appelé \textbf{discriminateur}. Le plus souvent, le discriminateur sera alimenté par des images de deux sortes : celles provenant de la base de donnée (images réelles), et celles générée par le générateur, on rôle sera donc de dire si une image est réelle ou générée.
 
 Blabla explication
 Blabal invention Yann Goodfellow [ref]
@@ -18,7 +18,7 @@ blablabla
 
 \section{Étude de la convergence des GAN}
 
-De par leur caractère adversaires, les GAN requièrent un équilibre fin entre la générateur et le discriminateur, ils sont donc par nature \textbf{instables}. L'étude de la convergence des GAN est un domaine encore très actif de la recherche. Deux allons discuter de deux phénomènes très communs qui peuvent gêner ou ruiner l'apprentissage des GAN : l'\textbf{l'effondrement des modes} (\textit{mode collapse}), et la \textbf{non-convergence} due à la perte d'équilibre du système.
+De par leur caractère adversaires, les GAN requièrent un équilibre fin entre la générateur et le discriminateur, ils sont donc par nature \textbf{instables}. L'étude de la convergence des GAN est un domaine encore très actif de la recherche. Deux allons discuter de deux phénomènes très communs qui peuvent gêner ou ruiner l'apprentissage des GAN : l'\textbf{effondrement des modes} (\textit{mode collapse}), et la \textbf{non-convergence} due à la perte d'équilibre du système.
 
 \subsection{L'effondrement des modes}
 
