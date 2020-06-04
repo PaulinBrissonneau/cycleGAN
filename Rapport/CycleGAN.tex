@@ -25,7 +25,7 @@ Le transfert de style (à deux classes), repose sur deux banques de données, qu
   \item Dans le cas où chaque élément de A n'a pas de lien direct avec un élément de B en particulier, le problème est un \textbf{transfert de style non appairé}. Le but n'est plus d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes, mais d'apprendre le transfert entre le style de A et le style de B, sans avoir d'exemple d'une telle transformation. Il faut donc \textit{comprendre} à un niveau sémantique les style de A et B.\\
   \textit{Par exemple, si vous voulez transformer une image de votre chien en image de chat, vous ne pouvez pas obtenir une banque d'image de chiens déguisés en chats. Vous devez donc travailler avec d'une part des images de chiens (A), d'autre part des images de chats (B), sans pouvoir former de paires entre A et B.}\\
    La différence entre ces deux cas est illustrée par la figure ??. 
-\end{itemize}\\
+\end{itemize}
 
 \begin{figure}[!h]
 \centering
@@ -46,16 +46,25 @@ Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du styl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt]{"images/cycleGAN_principe"}
+\includegraphics[width=300pt]{"images/cycleGAN_principe"}
 \caption{legende (figure à changer)}
 \end{figure}
 
 Comme on l'a entrevu dans le paragraphe précédent, une difficulté est que les données ne sont pas appairées, la fonction de coût ne peut donc pas venir de la comparaison directe de l'image générée à l'image souhaitée. Pour pallier à ce manque, deux fonctions de coûts principales et indépendantes sont utilisées.\\
-La première est celle d'un GAN classique : pour une transformation $A\rightarrowB$ (resp. $B\rightarrowA$), le discriminateur $D_B$ (resp. $D_A$) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}.\\
-Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seulement ce coût, comment peut-on s'assurer que l'image obtenue a encore un lien avec l'image de départ ? Pour garantir cela, il faut s'assurer de pouvoir reconstruire l'image de départ après lui avoir fait subir  la transformation $A\rightarrowB$ suivie de $B\rightarrowA$. En d'autres termes, cela revient à ajouter des conditions sur les générateurs G et F telles que $$\forall a \in A, F(G(a)) \approx a \\ et \forall b \in B, G(F(b))\approx b.$$
+La première est celle d'un GAN classique : pour une transformation $ A \rightarrow B $ (resp. $ B \rightarrow A $), le discriminateur $ D_B $ (resp. $ D_A $) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}.\\
+
+Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seulement ce coût, comment peut-on s'assurer que l'image obtenue a encore un lien avec l'image de départ ? Pour garantir cela, il faut s'assurer de pouvoir reconstruire l'image de départ après lui avoir fait subir  la transformation $ A \rightarrow B $ suivie de $ B \rightarrow A $. En d'autres termes, cela revient à ajouter des conditions sur les générateurs G et F telles que :
+
+\begin{equation}
+\begin{split}
+\forall a \in A, F(G(a)) \approx a \\
+\forall b \in B, G(F(b)) \approx b
+\end{split}
+\end{equation}
+
 Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}.\\
 
-Pour résumer le fonctionnement global du cycleGAN. Le générateur G qui assure la transformation $A\rightarrowB$ est optimisé pour tromper le discriminateur $D_B$ comme dans un GAN classique, mais aussi aussi pour que à F fixé, $F\circG=\mathbb{1}$. Symétriquement, il en est de même pour le générateur F qui assure la transformation $B\rightarrowA$. Les discriminateurs, quant à eux, sont mis à jour selon la même fonction de coût qu'un discriminateur de GAN classique. Les fonctions de coûts utilisées sont détaillées dans la partie suivante.
+Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assure la transformation $ A \rightarrow B $) est optimisé pour tromper le discriminateur $ D_B $ comme dans un GAN classique, mais aussi aussi pour que à F fixé, $ F \circ G = \mathbb{1} $. Et symétriquement, il en est de même pour le générateur F (qui assure la transformation $ B \rightarrow A $). Les discriminateurs, quant à eux, sont mis à jour selon la même fonction de coût qu'un discriminateur de GAN classique. Les fonctions de coûts utilisées sont détaillées dans la partie suivante.
 
 
 \section{Les fonctions de coûts}
