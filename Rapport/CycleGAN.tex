@@ -71,43 +71,44 @@ Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assur
 
 \subsubsection{Coût adversaire : \textit{GAN Loss}}
 
-blablablala
+[REF]
 
+Comme précisé dans la partie précédente, le coût associé au caractère adversaire de l'apprentissage est celui d'un GAN classique. Avec les mêmes notations que dans le paragraphe précédent, en considérant le générateur G et son discriminateur associé $D_B$ associé, on a :
 $$\begin{aligned}
-\mathcal{L}_{\mathrm{GAN}}\left(G, D_{Y}, X, Y\right) &=\mathbb{E}_{y \sim p_{\mathrm{data}}(y)}\left[\log D_{Y}(y)\right] +\mathbb{E}_{x \sim p_{\text {data }}(x)}\left[\log \left(1-D_{Y}(G(x))\right]\right.
+\mathcal{L}_{\mathrm{GAN}}\left(G, D_{B}, A, B\right) &=\mathbb{E}_{b \sim p_{\mathrm{data}}(b)}\left[\log D_{B}(b)\right] +\mathbb{E}_{a \sim p_{\text {data }}(a)}\left[\log \left(1-D_{B}(G(a))\right]\right.
 \end{aligned}$$
 
-blablablala
+Comme dans le cas d'un GAN classique, le générateur tend à minimiser ce coût et le discriminateur tend à la minimiser.
+
+Pour l'autre GAN, c'est à dire le générateur F et sont discriminateur $D_A$, on a de même : $$\begin{aligned}
+\mathcal{L}_{\mathrm{GAN}}\left(F, D_{A}, B, A\right) &=\mathbb{E}_{a \sim p_{\mathrm{data}}(a)}\left[\log D_{A}(a)\right] +\mathbb{E}_{b \sim p_{\text {data }}(b)}\left[\log \left(1-D_{A}(G(b))\right]\right.
+\end{aligned}$$
 
 \subsubsection{Coût du cycle : \textit{Cycle Consistency Loss}}
 
-blablablala [REF]
+[REF]
+
+Conformément aux explications données dans le paragraphe précédent, on cherche une fonction de coût qui assure que : $ F \circ G = \mathbb{1} $ et $ G \circ F = \mathbb{1} $. Ces deux égalité sont appelées respectivement \textit{backward cycle consistency} \textit{forkward cycle consistency} Il est important de noter que l'on veut un coût qui n'interviennent pas à une hauteur sémantique. On considère donc deux simples comparaisons pixel à pixel, une pour la \textit{backward cycle consistency} et une pour la \textit{forkward cycle consistency}, que l'on somme. La fonction de coût qui en découle est donc :
 
 $$\begin{aligned}
-\mathcal{L}_{\mathrm{cyc}}(G, F) &=\mathbb{E}_{x \sim p_{\text {data }}(x)}\left[\|F(G(x))-x\|_{1}\right] +\mathbb{E}_{y \sim p_{\text {data }}(y)}\left[\|G(F(y))-y\|_{1}\right]
+\mathcal{L}_{\mathrm{cyc}}(G, F) &=\mathbb{E}_{a \sim p_{\text {data }}(a)}\left[\|F(G(a))-a\|_{1}\right] +\mathbb{E}_{b \sim p_{\text {data }}(b)}\left[\|G(F(b))-b\|_{1}\right]
 \end{aligned}$$
-
-blablablala
 
 \subsubsection{Fonction de coût globale}
 
-blablablala
+Les deux fonctions de coûts adversaires jouent des rôles symétriques, elles ont la même importance dans la forme de la fonction de coût globale. Cependant, rien ne laisse penser que l'importance de la fonction de coût du cycle leur est aussi équivalente. Il est donc nécessaire d'introduire un $\lambda \in \mathbb{R}$ tel que :
 
 $$\begin{aligned}
-\mathcal{L}\left(G, F, D_{X}, D_{Y}\right) &=\mathcal{L}_{\mathrm{GAN}}\left(G, D_{Y}, X, Y\right) +\mathcal{L}_{\mathrm{GAN}}\left(F, D_{X}, Y, X\right) +\lambda \mathcal{L}_{\mathrm{cyc}}(G, F)
+\mathcal{L}_{\text{total}} &=\mathcal{L}_{\mathrm{GAN}}\left(G, D_{B}, A, B\right) +\mathcal{L}_{\mathrm{GAN}}\left(F, D_{A}, B, A\right) +\lambda \cdot \mathcal{L}_{\mathrm{cyc}}(G, F)
 \end{aligned}$$
 
-blablablala
+$\lambda$ est un hyper-paramètre. D'après [REF], $\lambda \approx 10$ donne les meilleurs résultats.
 
 \subsubsection{Préservation de la couleur}
 
+[REF]
 
-
-blablablala Lidentity [REF]
-
-
-
-blablablala
+Pour certaines applications particulières, notamment pour le traitement de paysages, il est nécessaire de rajouter un autres terme à la fonction de coût. En effet, 
 
 \begin{figure}[!h]
 \centering
@@ -133,10 +134,12 @@ blabla (TF/Fusion/coûts)
 
 \subsection{Quelques résultats}
 
+Quelques exemples de résultats sont présentés sur la figures ?? à ??.
+
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{"images/cycle"}
-\caption{legende (figure à changer)}
+\includegraphics[width=300pt]{"images/cycle"}
+\caption{Exemples de sorties du cycleGAN sur la banque d'image CelebA. La première ligne correspond aux images de la banque, la deuxième ligne correspond à la sortie du générateur. À gauche, il s'agit de la transformation \textit{portrait sans sourire} vers \textit{portrait avec sourire}. À droite, il s'agit de la transformation inverse.}
 \end{figure}
 
 \subsection{Limitations et ouverture}
