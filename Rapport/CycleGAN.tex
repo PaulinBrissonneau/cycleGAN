@@ -2,27 +2,71 @@
 
 \section{Présentation de la problématique}
 
+[AJOUTER DES REFS]
+
 Les cycleGAN sont des architectures de GAN qui permettent de répondre à une problématique bien spécifique : le \textbf{transfert de style non appairé}, que nous expliciterons.
 
 Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Quelques exemples sont présentés sur la figure ??.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{"images/image_test"}
+\includegraphics[width=100pt]{"images/image_test2"}
+\includegraphics[width=100pt]{"images/image_test3"}
+\caption{legende}
+\end{figure}
 
 Le transfert de style peut s'effectuer entre plusieurs \textit{classes de styles}, mais nous allons ici nous concentrer dans le cas binaire où l'on considère deux styles. La problématique est donc de transformer des images d'un style à l'autre, et ceci dans les deux sens.
 
 Le transfert de style (à deux classes), repose sur deux banques de données, que l'on notera A et B. Suivant les données auxquelles nous avons accès, il existe deux cas différents :
 \begin{itemize}
-  \item Dans le cas où nous connaissons un appairage entre les images de A et de B, le problème est un \textbf{transfert de style appairé}. Le but est donc d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes.
-  \textit{Par exemple, si A représente des bâtiments de jour, et B représente des bâtiments de nuit, il est possible de prendre la même photo de jour et de nuit. Ces deux photos constituent une paire dont chaque élément est d'un style différent.}
-  \item Dans le cas où chaque élément de A n'a pas de lien direct avec un élément de B en particulier, le problème est un \textbf{transfert de style non appairé}. Le but n'est plus d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes, mais d'apprendre le transfert entre le style de A et le style de B, sans avoir d'exemple d'une telle transformation. Il faut donc \textit{comprendre} à un niveau sémantique les style de A et B.
-  \textit{Par exemple, si vous voulez transformer une image de votre chien en image de chat, vous ne pouvez pas obtenir une banque d'image de chiens déguisés en chats. Vous devez donc travailler avec d'une part des images de chiens (A), d'autre part des images de chats (B), sans pouvoir former de paires entre A et B.}
-\end{itemize}
+  \item Dans le cas où nous connaissons un appairage entre les images de A et de B, le problème est un \textbf{transfert de style appairé}. Le but est donc d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes.\\
+  \textit{Par exemple, si A représente des bâtiments de jour, et B représente des bâtiments de nuit, il est possible de prendre la même photo de jour et de nuit. Ces deux photos constituent une paire dont chaque élément est d'un style différent.}.
+  \item Dans le cas où chaque élément de A n'a pas de lien direct avec un élément de B en particulier, le problème est un \textbf{transfert de style non appairé}. Le but n'est plus d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes, mais d'apprendre le transfert entre le style de A et le style de B, sans avoir d'exemple d'une telle transformation. Il faut donc \textit{comprendre} à un niveau sémantique les style de A et B.\\
+  \textit{Par exemple, si vous voulez transformer une image de votre chien en image de chat, vous ne pouvez pas obtenir une banque d'image de chiens déguisés en chats. Vous devez donc travailler avec d'une part des images de chiens (A), d'autre part des images de chats (B), sans pouvoir former de paires entre A et B.}\\
+   La différence entre ces deux cas est illustrée par la figure ??. 
+\end{itemize}\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{"images/image_test"}
+\includegraphics[width=100pt]{"images/image_test2"}
+\includegraphics[width=100pt]{"images/image_test3"}
+\caption{legende}
+\end{figure}
 
 Ces deux types de transfert de style se traitent différemment. Pour le transfert de style appairé, une structure de GAN classique suffit puisque le discriminateur peut aisément comparer l'image générée avec l'image \textit{idéale}. Ce problème, que nous ne développerons pas ici, est traité et manière efficace par différents algorithmes, dont \textbf{Pix2Pix}. Le transfert de style non appairé ne permet pas la comparaison à l'image-cible puisqu'il n'existe pas de paires. \textbf{Il faut donc utiliser d'autres architectures, comme par exemple le cycleGAN.}
 
 
 \section{Principe général du cycleGAN}
 
+En vertu des explications présentées au paragraphes précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où s'est données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement.
+
+Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent des images du style A et celles du style B. L'architecture est présenté par la figure ??.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{"images/cycleGAN_principe"}
+\caption{legende (figure à changer)}
+\end{figure}
+
+Comme on l'a entrevu dans le paragraphe précédent, une difficulté est que les données ne sont pas appairées, la fonction de coût ne peut donc pas venir de la comparaison directe de l'image générée à l'image souhaitée. Pour pallier à ce manque, deux fonctions de coûts principales et indépendantes sont utilisées.\\
+La première est celle d'un GAN classique : pour une transformation $A\rightarrowB$ (resp. $B\rightarrowA$), le discriminateur $D_B$ (resp. $D_A$) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}.\\
+Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seulement ce coût, comment peut-on s'assurer que l'image obtenue a encore un lien avec l'image de départ ? Pour garantir cela, il faut s'assurer de pouvoir reconstruire l'image de départ après lui avoir fait subir  la transformation $A\rightarrowB$ suivie de $B\rightarrowA$. En d'autres termes, cela revient à ajouter des conditions sur les générateurs G et F telles que $$\forall a \in A, F(G(a)) \approx a \\ et \forall b \in B, G(F(b))\approx b.$$
+Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}.\\
+
+Pour résumer le fonctionnement global du cycleGAN. Le générateur G qui assure la transformation $A\rightarrowB$ est optimisé pour tromper le discriminateur $D_B$ comme dans un GAN classique, mais aussi aussi pour que à F fixé, $F\circG=\mathbb{1}$. Symétriquement, il en est de même pour le générateur F qui assure la transformation $B\rightarrowA$. Les discriminateurs, quant à eux, sont mis à jour selon la même fonction de coût qu'un discriminateur de GAN classique. Les fonctions de coûts utilisées sont détaillées dans la partie suivante.
+
 
 \section{Les fonctions de coûts}
+
+\subsubsection{Coût adversaire : \textit{GAN Loss}}
+
+\subsubsection{Coût du cycle : \textit{Cycle Consistency Loss}}
+
+\subsubsection{Fonction de coût globale}
+
+\section{Les métriques d'évaluations}
 
 
 \section{Implémentation et résultats}
