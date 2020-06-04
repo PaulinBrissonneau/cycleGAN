@@ -28,15 +28,20 @@ De par leur caractère adversaires, les GAN requièrent un équilibre fin entre 
 
 \subsection{L'effondrement des modes}
 
-L'effondrement des modes survient quand le réseau générateur ne génère pas des images conforment à l'ensemble de la distribution des images réelles, mais seulement à une petite partie. L'effondrement des modes est très visible lorsque la distribution des images réelles forme des zones bien séparées, c'est à dire quand celle-ci comporte des classes bien définies. La manifestation de ce phénomène se traduit par des images générées qui se ressemblent toutes. La figure [ref figure] montre un exemple du phénomène sur la base de données MNIST et CelebA.
+L'effondrement des modes survient quand le réseau générateur ne génère pas des images conforment à l'ensemble de la distribution des images réelles, mais seulement à une petite partie. L'effondrement des modes est très visible lorsque la distribution des images réelles forme des zones bien séparées, c'est à dire quand celle-ci comporte des classes bien définies. La manifestation de ce phénomène se traduit par des images générées qui se ressemblent toutes. Les figures [ref figure] montrent des exemples du phénomène sur la base de données MNIST et CelebA.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=80pt]{"images/collapseA_1"}
-\includegraphics[width=80pt]{"images/collapseA_2"}
-\includegraphics[width=80pt]{"images/collapseB_1"}
-\includegraphics[width=80pt]{"images/collapseB_2"}
-\caption{Exemples d’effondrement des modes. À gauche sur la banque de chiffres MNIST, à droite sur la banque de visages CelebA.}
+\includegraphics[width=100pt]{"images/collapseA_1"}
+\includegraphics[width=100pt]{"images/collapseA_2"}
+\caption{Exemples d’effondrement des modes sur la banque de chiffres MNIST.}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{"images/collapseB_1"}
+\includegraphics[width=100pt]{"images/collapseB_2"}
+\caption{À gauche, un exemple d'effondrement des modes sur la banque d'image CelebA. À droite, une génération sans effondrement pour comparaison. On observe que sur l'image de gauche, tous les personnages ont la même tête.}
 \end{figure}
 
 
@@ -81,4 +86,11 @@ Ajouter du bruit sur les images de la base de donnée permet aussi se renforcer 
 
 
 \section{Implémentation et résultats}
-Blablablabla
+
+blablablabla
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=300pt]{"images/DCGAN"}
+\caption{nos résultats}
+\end{figure}

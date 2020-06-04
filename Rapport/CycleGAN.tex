@@ -9,11 +9,24 @@ Les cycleGAN sont des architectures de GAN qui permettent de répondre à une pr
 Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Quelques exemples sont présentés sur la figure ??.
 
 \begin{figure}[!h]
-\centering
-\includegraphics[width=100pt]{"images/image_test"}
-\includegraphics[width=100pt]{"images/image_test2"}
-\includegraphics[width=100pt]{"images/image_test3"}
+\begin{center}
+\begin{subfigure}{1\linewidth}
+\includegraphics[width=100pt]{"images/exemple1A"}
+\includegraphics[width=100pt]{"images/exemple1B"}
+\end{subfigure}
+\hfill
+\begin{subfigure}{1\linewidth}
+\includegraphics[width=100pt]{"images/exemple2A"}
+\includegraphics[width=100pt]{"images/exemple2B"}
+\end{subfigure}
+\hfill
+\begin{subfigure}{1\linewidth}
+\includegraphics[width=100pt]{"images/exemple3A"}
+\includegraphics[width=100pt]{"images/exemple3B"}
+\end{subfigure}
+\hfill
 \caption{legende}
+\end{center}
 \end{figure}
 
 Le transfert de style peut s'effectuer entre plusieurs \textit{classes de styles}, mais nous allons ici nous concentrer dans le cas binaire où l'on considère deux styles. La problématique est donc de transformer des images d'un style à l'autre, et ceci dans les deux sens.
@@ -29,10 +42,10 @@ Le transfert de style (à deux classes), repose sur deux banques de données, qu
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt]{"images/image_test"}
-\includegraphics[width=100pt]{"images/image_test2"}
-\includegraphics[width=100pt]{"images/image_test3"}
-\caption{legende}
+\includegraphics[width=100pt,valign=t]{"images/paire"}
+\hspace*{10mm}
+\includegraphics[width=100pt,valign=t]{"images/pairepas"}
+\caption{legende (pas beau !!}
 \end{figure}
 
 Ces deux types de transfert de style se traitent différemment. Pour le transfert de style appairé, une structure de GAN classique suffit puisque le discriminateur peut aisément comparer l'image générée avec l'image \textit{idéale}. Ce problème, que nous ne développerons pas ici, est traité et manière efficace par différents algorithmes, dont \textbf{Pix2Pix}. Le transfert de style non appairé ne permet pas la comparaison à l'image-cible puisqu'il n'existe pas de paires. \textbf{Il faut donc utiliser d'autres architectures, comme par exemple le cycleGAN.}
@@ -46,7 +59,7 @@ Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du styl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=300pt]{"images/cycleGAN_principe"}
+\includegraphics[width=200pt]{"images/cycleDouble"}
 \caption{legende (figure à changer)}
 \end{figure}
 
@@ -113,7 +126,7 @@ Pour certaines applications particulières, notamment pour le traitement de pays
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/Lident"}
-\caption{legende (figure à changer)}
+\caption{legende (ca vient de l'article)}
 \end{figure}
 
 
