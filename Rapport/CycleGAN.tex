@@ -71,11 +71,76 @@ Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assur
 
 \subsubsection{Coût adversaire : \textit{GAN Loss}}
 
+blablablala
+
+$$\begin{aligned}
+\mathcal{L}_{\mathrm{GAN}}\left(G, D_{Y}, X, Y\right) &=\mathbb{E}_{y \sim p_{\mathrm{data}}(y)}\left[\log D_{Y}(y)\right] +\mathbb{E}_{x \sim p_{\text {data }}(x)}\left[\log \left(1-D_{Y}(G(x))\right]\right.
+\end{aligned}$$
+
+blablablala
+
 \subsubsection{Coût du cycle : \textit{Cycle Consistency Loss}}
+
+blablablala [REF]
+
+$$\begin{aligned}
+\mathcal{L}_{\mathrm{cyc}}(G, F) &=\mathbb{E}_{x \sim p_{\text {data }}(x)}\left[\|F(G(x))-x\|_{1}\right] +\mathbb{E}_{y \sim p_{\text {data }}(y)}\left[\|G(F(y))-y\|_{1}\right]
+\end{aligned}$$
+
+blablablala
 
 \subsubsection{Fonction de coût globale}
 
+blablablala
+
+$$\begin{aligned}
+\mathcal{L}\left(G, F, D_{X}, D_{Y}\right) &=\mathcal{L}_{\mathrm{GAN}}\left(G, D_{Y}, X, Y\right) +\mathcal{L}_{\mathrm{GAN}}\left(F, D_{X}, Y, X\right) +\lambda \mathcal{L}_{\mathrm{cyc}}(G, F)
+\end{aligned}$$
+
+blablablala
+
+\subsubsection{Préservation de la couleur}
+
+
+
+blablablala Lidentity [REF]
+
+
+
+blablablala
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{"images/Lident"}
+\caption{legende (figure à changer)}
+\end{figure}
+
+
 \section{Les métriques d'évaluations}
+
+Perceptual studies 
+
+ou semantic segmentation metrics (si ground truth)
+
+FCN score [REF]
 
 
 \section{Implémentation et résultats}
+
+\subsection{Détails d'implémentation}
+
+blabla (TF/Fusion/coûts)
+
+\subsection{Quelques résultats}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{"images/cycle"}
+\caption{legende (figure à changer)}
+\end{figure}
+
+\subsection{Limitations et ouverture}
+
+blabla pour l'instant c'est bof, soit flou, soit pas hyper bien
+Trop long - fusion - enregistrer - en cours
+-- à appliquer
