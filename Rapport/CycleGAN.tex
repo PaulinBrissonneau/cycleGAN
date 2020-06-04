@@ -6,28 +6,14 @@
 
 Les cycleGAN sont des architectures de GAN qui permettent de répondre à une problématique bien spécifique : le \textbf{transfert de style non appairé}, que nous expliciterons.
 
-Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Quelques exemples sont présentés sur la figure ??.
+Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Le cycleGAN peut aussi résoudre des problèmes de segmentation d'images, en considérant la segmentation comme un style pour l'image. Quelques exemples sont présentés sur la figure ??.
 
 \begin{figure}[!h]
-\begin{center}
-\begin{subfigure}{1\linewidth}
-\includegraphics[width=100pt]{"images/exemple1A"}
-\includegraphics[width=100pt]{"images/exemple1B"}
-\end{subfigure}
-\hfill
-\begin{subfigure}{1\linewidth}
-\includegraphics[width=100pt]{"images/exemple2A"}
-\includegraphics[width=100pt]{"images/exemple2B"}
-\end{subfigure}
-\hfill
-\begin{subfigure}{1\linewidth}
-\includegraphics[width=100pt]{"images/exemple3A"}
-\includegraphics[width=100pt]{"images/exemple3B"}
-\end{subfigure}
-\hfill
+\centering
+\includegraphics[width=150pt,valign=t]{"images/cycle_exemples"}
 \caption{legende}
-\end{center}
 \end{figure}
+
 
 Le transfert de style peut s'effectuer entre plusieurs \textit{classes de styles}, mais nous allons ici nous concentrer dans le cas binaire où l'on considère deux styles. La problématique est donc de transformer des images d'un style à l'autre, et ceci dans les deux sens.
 
@@ -64,7 +50,16 @@ Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du styl
 \end{figure}
 
 Comme on l'a entrevu dans le paragraphe précédent, une difficulté est que les données ne sont pas appairées, la fonction de coût ne peut donc pas venir de la comparaison directe de l'image générée à l'image souhaitée. Pour pallier à ce manque, deux fonctions de coûts principales et indépendantes sont utilisées.\\
-La première est celle d'un GAN classique : pour une transformation $ A \rightarrow B $ (resp. $ B \rightarrow A $), le discriminateur $ D_B $ (resp. $ D_A $) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}.\\
+
+La première est celle d'un GAN classique : pour une transformation $ A \rightarrow B $ (resp. $ B \rightarrow A $), le discriminateur $ D_B $ (resp. $ D_A $) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}. La figure ?? montre la décomposition du cycleGAN en deux GAN. \\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{"images/cycle_ganG"}
+\hspace*{10mm}
+\includegraphics[width=150pt]{"images/cycle_ganF"}
+\caption{legende (figure à changer)}
+\end{figure}
 
 Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seulement ce coût, comment peut-on s'assurer que l'image obtenue a encore un lien avec l'image de départ ? Pour garantir cela, il faut s'assurer de pouvoir reconstruire l'image de départ après lui avoir fait subir  la transformation $ A \rightarrow B $ suivie de $ B \rightarrow A $. En d'autres termes, cela revient à ajouter des conditions sur les générateurs G et F telles que :
 
@@ -75,7 +70,17 @@ Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seu
 \end{split}
 \end{equation}
 
-Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}.\\
+Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}. Les deux égalités ci-dessus consiste en réalité à parcourir le cycle respectivement en avant et en arrière, ceci est décrite de manière schématique par la figure ??.\\
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=220pt]{"images/cycleBack"}
+
+\vspace{6mm}
+
+\includegraphics[width=220pt]{"images/cycleFor"}
+\caption{legende (figure à changer)}
+\end{figure}
 
 Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assure la transformation $ A \rightarrow B $) est optimisé pour tromper le discriminateur $ D_B $ comme dans un GAN classique, mais aussi aussi pour que à F fixé, $ F \circ G = \mathbb{1} $. Et symétriquement, il en est de même pour le générateur F (qui assure la transformation $ B \rightarrow A $). Les discriminateurs, quant à eux, sont mis à jour selon la même fonction de coût qu'un discriminateur de GAN classique. Les fonctions de coûts utilisées sont détaillées dans la partie suivante.
 
@@ -132,18 +137,22 @@ Pour certaines applications particulières, notamment pour le traitement de pays
 
 \section{Les métriques d'évaluations}
 
-Perceptual studies 
+Comme dans le GAN d'un GAN classique, évaluer la qualité de la sortie d'un cycleGAN n'est pas une chose facile. En effet, nous n'avons de métrique simple et universelle qui permettrait de juger de la crédibilité ou du réalisme d'une image. Pour tenter d'évaluer au mieux la qualité d'un cycleGAN, il existe plusieurs solutions.\\
 
-ou semantic segmentation metrics (si ground truth)
+La première, sans grande surprise, c'est de faire une étude de réalisme basée sur une enquête auprès de personne chargées de noter la qualité des images fournies, c'est ce que l'on appelle des études de perceptions (\textit{perceptual studies}). On comprend vite que ce n'est une très bonne solution : ces études restent subjectives, elles ne sont pas toujours reproductibles, et elles coûtent cher. Comme pour les GAN, on ne peut pas donc pas s'en servir pour poser une métrique universelle utilise pour comparer différents algorithmes.\\
 
-FCN score [REF]
+Pour quelques problèmes particuliers, on peut trouver des métriques convenables. C'est le cas par exemple si l'on considère un problème de segmentation et si les données son accompagnées de leurs segmentations réelles, appelée aussi \textit{ground truth}. Dans ce cas particulier, évaluer le cycleGAN revient simplement à évaluer de résultat de la segmentation par rapport au \textit{ground truth}. Il existe plusieurs métriques classiques pour évaluer les algorithmes de segmentation comme la précision par pixel à pixel ou la précision classes à classes, mais la métrique la plus courante pour cela est l'indice de Jaccard (ou \textit{IoU : Intersection over Union}). Cette métrique consiste à calculer, pour chaque classe de la segmentation, l'intersection de la zone prédite par l'algorithme avec la zone réelle, avant de normaliser par l'union des deux zones. C'est une métrique classique utilisée en segmentation, elle est définie ci-dessous.
+
+$$ \textit{Indice de Jacard : }J(A,B) = \frac{ \mid A \cap B \mid }{ \mid A \cup B \mid } $$
+
+Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer ininterprétable du résultat par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} [REF]). Sur une image générée par le cycleGAN, le FCN prédit une carte de labels, qui est équivalente à une segmentation de l'image. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. Il n'existe aucune métrique idéale.
 
 
 \section{Implémentation et résultats}
 
 \subsection{Détails d'implémentation}
 
-blabla (TF/Fusion/coûts)
+Nous avons
 
 \subsection{Quelques résultats}
 
@@ -155,8 +164,22 @@ Quelques exemples de résultats sont présentés sur la figures ?? à ??.
 \caption{Exemples de sorties du cycleGAN sur la banque d'image CelebA. La première ligne correspond aux images de la banque, la deuxième ligne correspond à la sortie du générateur. À gauche, il s'agit de la transformation \textit{portrait sans sourire} vers \textit{portrait avec sourire}. À droite, il s'agit de la transformation inverse.}
 \end{figure}
 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{"images/cycleRes2"}
+\caption{Exemples de sorties du cycleGAN sur la banque d'image [legende]}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{"images/cycleRes3"}
+\caption{Exemples de sorties du cycleGAN sur la banque d'image [legende]}
+\end{figure}
+
 \subsection{Limitations et ouverture}
 
 blabla pour l'instant c'est bof, soit flou, soit pas hyper bien
 Trop long - fusion - enregistrer - en cours
 -- à appliquer
+
+
