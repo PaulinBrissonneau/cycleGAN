@@ -1,4 +1,4 @@
-\chapter{Les GAN (Réseaux Adverses Génératifs) (pas fini et  pas relu hein}
+\chapter{Les GAN (Réseaux Adverses Génératifs)}
 
 \section{Principe général des GAN}
 Le principe général des GAN repose sur l'utilisation de deux réseaux, ayant des objectifs contraires, on dit qu'ils sont \textbf{adversaires}. Le premier réseau transforme du bruit en image, c'est le \textbf{générateur} (G). Le deuxième réseau prend en entrées des images et les classe en deux catégories, en leur associant leur probabilité d'être issues de la base de donnée : c'est donc un classifieur binaire, il est appelé \textbf{discriminateur} (D). Le plus souvent, le discriminateur sera alimenté par des images de deux sortes : celles provenant de la base de donnée (images réelles), et celles générée par le générateur, on rôle sera donc de dire si une image est réelle ou générée. Il s'agit ensuite d'entraîner G afin qu'il maximise la probabilité que D fasse une erreur, et D la justesse de sa classification
@@ -36,7 +36,7 @@ L'effondrement des modes survient quand le réseau générateur ne génère pas 
 \includegraphics[width=80pt]{"images/collapseA_2"}
 \includegraphics[width=80pt]{"images/collapseB_1"}
 \includegraphics[width=80pt]{"images/collapseB_2"}
-\caption{legende}
+\caption{Exemples d’effondrement des modes. À gauche sur la banque de chiffres MNIST, à droite sur la banque de visages CelebA.}
 \end{figure}
 
 
