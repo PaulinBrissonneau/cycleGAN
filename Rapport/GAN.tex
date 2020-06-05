@@ -9,18 +9,15 @@ L'architecture des GAN a été introduite pour la première fois par Ian Goodfel
 \section{Le DCGAN (Deep Convolutionnal Adversarial Network)}
 Le DCGAN est la première architecture de GAN qui a été proposée [ref GoodFellow]. Le générateur et le discriminateur sont tous les deux des \textbf{réseaux à convolutions} [ref].
 
-Cette architecture est caractérisée par les fonctions de coût de G et D. La fonction de coût de G à minimiser est la suivante : \begin{equation}
-   \mathbb{E}_{x \in dataset}(\log (D(x))) + \mathbb{E}_{z}(\log (1 - D(G(z)))
-\end{equation}
+Cette architecture est caractérisée par les fonctions de coût de G et D. La fonction de coût de G à minimiser est la suivante : $$\begin{aligned}
+\mathcal{L}_{\mathrm{DCAN}}\left(G, D, p_{\mathrm{data}}, p_{\mathrm{bruit}}\right) &=
+   \mathbb{E}_{x \sim p_{\mathrm{data}}}(\log (D(x))) + \mathbb{E}_{z \sim \mathrm{bruit}}(\log (1 - D(G(z)))
+\end{aligned}$$
 
-Pareillement, on donne comme fonction de coût pour D l'opposé de celle de G. L'architecture du DCGAN correspond alors à un jeu minmax. La théorie des équilibres de Nash donnent un unique état stable. Il correspond à un coût égal à $-\log 4$ pour G et $ \log 4$ pour D. Cette situation représente un discriminateur forcé d'associer une probabilité de 0,5 pour chaque image donnée en entrée, le générateur étant devenu trop fort.
+Pareillement, on donne comme fonction de coût pour D l'opposé de celle de G. L'architecture du DCGAN correspond alors à un jeu à somme nulle. La théorie des équilibres de Nash donne un unique état stable. Il correspond à un coût égal à $-\log 4$ pour G et $ \log 4$ pour D. Dans cette configuration, le discriminateur est forcé d'associer une probabilité de 0,5 pour chaque image donnée en entrée, le générateur étant devenu trop fort.
 
-Une variation intéressante sur le DCGAN est de poser $  \mathbb{E}_{x \in dataset}(\log (D(x))) + \mathbb{E}_{z}(\log (D(G(z)))$ comme fonction de coût en début d'apprentissage. L'intérêt de cette modification résulte d'un problème : le discrimateur a tendance à facilement distinguer les images générées par G de celles de la base de donnée en début d'apprentissage. Dans ce cas, le terme $\log (1 - D(G(z))$ sature vers 0. Le remplacer par $\log (1 - D(G(z))$ résoud ce problème.
+Une variation intéressante sur le DCGAN est de poser $  \mathbb{E}_{x \sim p_{\mathrm{data}}}(\log (D(x))) + \mathbb{E}_{z \sim \mathrm{bruit}}(\log (D(G(z)))$ comme fonction de coût en début d'apprentissage. L'intérêt de cette modification résulte d'un problème : le discrimateur a tendance à facilement distinguer les images générées par G de celles de la base de donnée en début d'apprentissage. Dans ce cas, le terme $\log (1 - D(G(z))$ sature vers 0. Le remplacer par $\log (1 - D(G(z))$ résoud ce problème.
 
-
-\section{Le W-GAN (GAN de Wasserstein)}
-
-blablabla
 
 \section{Étude de la convergence des GAN}
 
@@ -84,6 +81,36 @@ Comme expliqué plus haut, l'apprentissage des GAN repose sur un équilibre fin 
 
 Il existe des solutions pour lutter contre ce problème, et cela consiste souvent à rééquilibrer les puissances ou les vitesse de convergence des différents réseaux. On peut par exemple diminuer la complexité du discriminateur, diminuer le taux d'apprentissage du discriminateur, ou mettre à jouer plus souvent le générateur que le discriminateur.
 Ajouter du bruit sur les images de la base de donnée permet aussi se renforcer la stabilité de l'apprentissage. Par ailleurs, on peut noter que les GAN de Wassertein sont plus stables que les DCGAN, mais ne sont pas totalement immunisés aux problèmes de convergence.
+
+\section{Cadre théorique et WGAN}
+Nous allons essayer dans cette section de donner un cadre probabiliste et statistique rigoureux permettant d'expliquer le fonctionnement des GAN. Cette approche permettra de justifier l'algorithme WGAN qui permet de significativement réduire les problèmes d'apprentissage des GAN.
+
+\subsection{Approche bayésienne des GAN}
+L'objectif d'un GAN - la génération d'images suivant un dataset - peut être formalisé comme un problème d'optimisation bayésienne. Nous cherchons à approcher la distribution $p_{\mathrm{data}}$ d'une variable aléatoire $X: \Omega \longrightarrow \mathcal{X}$. Pour ce faire, on se donne une famille paramétrique de distributions $\mathcal{M}_{\mathbb{R}^{d}} = \{p_{\theta}, \theta \in \mathbb{R}^d\}$, ainsi qu'un prior $p_{\mathrm{bruit}}(z)$ relatif à une variable aléatoie $Z : \Omega \longrightarrow \mathcal{Z}$. On détermine ensuite la distribution souhaitée à l'aide de la formule de Bayes. $$\begin{aligned} p(\theta | \mathrm{data}) \propto p(z)p(\mathrm{data}|\theta)\end{aligned}$$
+
+Comme il est impossible de résoudre directement la formule de Bayes, il nous faut défnir une fonction de côut qui mesure la distance entre $p_{\theta}$ et $p_{\mathrm{data}}$, puis employer des algorithmes de descente du gradient. La famille $\mathcal{M}_{\mathbb{R}^d}$ prend alors naturellement la forme d'un réseau de neurones, que l'on écrit $g : \mathcal{Z} \times \mathbb{R}^{d} \longrightarrow \mathcal{X}$, ou en notation condensée $g_{\theta}(z)$ .
+
+\subsection{DCGAN}
+
+Le DCGAN utilise la métrique $\delta$ pour mesurer l'écart entre deux distributions $p_{\mathrm data}$ et $p_{\theta}$, définie par la relation suivante. 
+
+$$\begin{aligned} \delta(p_{\mathrm{data}}, p_{\theta}) = -\log 4 + 2 \mathrm{DJS}(p_{\mathrm{data}} || p_{\theta})\end{aligned}$$ où DJS est la divergence de Jensen-Shanon.
+
+On peut montrer [ref DCGAN] la relation suivante, en posant $\mathcal{F}$ l'ensemble des fonctions continues $\mathcal{X} \longrightarrow (0,1)$.
+
+$$\begin{aligned} \delta(p_{\mathrm{data}}, p_{\theta}) = \sup_{f\in`\mathcal{F}} \mathbb{E}_{x \sim p_{\mathrm{data}}}(\log (f(x))) + \mathbb{E}_{x \sim p_{\theta}}(\log (1 - f(x)))\end{aligned}$$
+
+On remarque alors si $f: \mathcal{X} \longrightarrow (0,1)$ est solution de ce problème on peut calculer $\nabla_{\theta} \delta$, dans l'optique d'optimiser $g_{\theta}(z)$. 
+
+$$\begin{aligned}\nabla_{\theta} \delta(p_{\mathrm{data}}, p_{\theta}) = \mathbb{E}_{z\sim p_{\mathrm{bruit}}(z)} \left( \frac{\nabla_{\theta}f(g_{\theta}(z))}{f(g_{\theta}(z)) -1} \right)\end{aligned}$$.
+
+Il nous reste encore à déterminer $f$. Il est intuitif de chercher à calculer $f$ comme un réseau de neurones $\{f_{w}, w \in \mathcal{W} \}$, qui peut être optimisé par rétropropagation à partir de  $\mathbb{E}_{x \sim p_{\mathrm{data}}}\left(\frac{\nabla_{w}f_{w}(x)}{f_{w}(x)}\right)+ \mathbb{E}_{z \sim p_{\mathrm{bruit}}}\left(\frac{\nabla_{\theta}f(g_{\theta}(z))}{f(g_{\theta}(z)) -1}\right)$.
+
+Ce formalisme nous renvoie donc à la définition du DCGAN par sa fonction de coût pour G (ici $g_{\theta}$) et D (ici $f_{w}$).
+
+\subsection{WGAN}
+
+Les Wasserstein GAN, ou WGAN, on été introduits en 2017 par Martin Arjovsky et al. [ref]
 
 
 \section{Implémentation et résultats}
