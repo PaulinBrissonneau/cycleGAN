@@ -1,29 +1,30 @@
 
+\chapter{Les réseaux de neurone à convolution}
 
-\chapter{Les réseaux à convolutions}
 
 \section{Présentation générale}
 
 \subsection{Introduction}
-L'architecture d'un multiperceptron se prête bien à des applications simplistes comme de la reconnaissance de chiffre. Cependant, dès que la complexité des données augmente ne serait-ce que légèrement, le MLP devient innefficace en un temps raisonnable pour pouvoir reconnaitre des objets . Heureusement, il existe une structure bien plus efficace qui est parfaitement adaptée à la reconnaissance d'image : le CNN (convolutional neural network). Dans cette partie, nous allons nous efforcer d'expliquer le fonctionnement de celui-ci ainsi que ses avantages. 
+L'architecture d'un multiperceptron se prête bien à des applications simplistes comme de la reconnaissance de chiffre. Cependant, dès que la complexité des données augmente ne serait-ce que légèrement, le MLP devient innefficace en un temps raisonnable pour pouvoir reconnaitre des objets . Heureusement, il existe une structure bien plus efficace qui est parfaitement adaptée à la reconnaissance d'image : le \textbf{CNN (convolutional neural network)}. L'idée de cette architecture a été introduite en 1980 [ref doc1]et a ensuite été améliorée pour aujourd'hui donner naissance à des réseaux comme AlexNet ou Inception. [ref doc]
 
 \subsection{Structure d'un CNN}
-La structure d'un CNN se rapproche de celle d'un multiperceptron dans la mesure où celui-ci est aussi organisé sous forme de couches. Cependant, certaines couches, nommées couche de convolution, ont un fonctionnement radicalement différent de celui d'une couche dense. \\
-\\
-Voici l'architecture d'un CNN :
+La structure d'un CNN se rapproche de celle d'un multiperceptron dans la mesure où celui-ci est aussi organisé sous forme de couches comme le montre la figure \ref{structure_1}. Cependant, certaines couches, nommées couche de convolution, ont un fonctionnement radicalement différent de celui d'une couche dense. \\
 
-{insérer image architecture CNN}\\
-\\
-Comme on peut le voir, l'image en entrée est d'abord traitée par une succession de couches de convolutions suivies d'une couche de pooling. Ensuite ce processus se répéte un certain nombre de fois et finalement le résultat passe par une couche dense(plus rarement plusieurs) afin de donner la bonne classification.
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{cnn/structure_CNN.png} 
+\caption{Structure simplifiée d'un CNN.}
+\label{structure_1}
+\end{figure}
+
+Ainsi, l'image en entrée est d'abord traitée par une succession de \textbf{couches de convolutions} suivies d'une \textbf{couche de pooling}. Ensuite ce processus se répéte un certain nombre de fois et finalement le résultat passe par une couche dense(plus rarement plusieurs) afin de donner la bonne classification.
 
 \subsection{Principe général}
-Le principe directeur se cachant derrière les couches de convolution est assez intuitif : on dispose d'un noyau(pattern) capable de reconnaître un motif en particulier. Il suffit alors de balayer l'image pixel par pixel(notion expliquée plus en détails ultérieurement) pour savoir où se trouvent précisément certains motifs sur l'image. En répétant ce procédé avec un grand nombre de noyaux différents, nous sommes dans la possibilité de pouvoir identifier la présence ou non de certains motifs caractéristiques de l'objet à reconnaître. \\
-Nous disposons ainsi d'une "carte" des différents motifs qu'il nous est possible de réduire en taille(étape de pooling) pour réduire le nombre de calculs effectués. 
-Le processus se répéte un certains nombre de fois jusqu'à ce que l'on considère que les données soient suffisamment bien réduites pour qu'un MLP puisse s'en charger. 
+Le principe directeur se cachant derrière les couches de convolution se base sur le fonctionnement même de notre vision : on dispose d'un noyau(pattern) capable de reconnaître un motif en particulier. Il suffit alors de balayer l'image pixel par pixel(notion expliquée plus en détails ultérieurement) pour savoir où se trouvent précisément certains motifs sur l'image. En répétant ce procédé avec un grand nombre de noyaux différents, nous sommes dans la possibilité de pouvoir identifier la présence ou non de certains motifs caractéristiques de l'objet à reconnaître. \\
+Nous disposons ainsi d'une "carte" des différents motifs qu'il nous est possible de réduire en taille(étape de pooling) pour réduire le nombre de calculs à effectuer. 
+Le processus se répète un certains nombre de fois jusqu'à ce que l'on considère que les données soient suffisamment bien réduites pour qu'un MLP puisse s'en charger. 
 
 \section{Formalisation d'un CNN}
-
-Une fois le principe directeur mis en évidence, nous pouvons nous atteler à la formalisation du CNN.
 
 \subsection{Le produit de convolution : un outil indispensable}
 
@@ -34,35 +35,93 @@ $\forall (x,y) \in [|0,W_I|] \times [|0,H_I|]$,  $(N \otimes I)_{x,y} = \sum_{i=
 \\
 Où l'on a posé $W_I,H_I$ la taille de l'image et $W_K,H_K$ la taille du noyau. \\
 \\
-Voici quelques exemples de l'effet du produit de convolution avec plusieurs noyaux :\\
-\\
-{insérer image chien de prairie}\\
-\\
+Voici quelques exemples de l'effet du produit de convolution avec plusieurs noyaux :
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{cnn/chien_prairie.png} 
+\caption{Effets de la convolution avec quelques noyaux.}
+\end{figure}
+
 Ainsi, cette opération nous permet de mettre en évidence des motifs élémentaires en activant la case correspondante si le motif est présent au niveau de celle-ci.
 
 \subsection{Le balayage de l'image : une histoire de Padding et de Stride}
 
 Pour pouvoir évaluer toute l'image, il va falloir la balayer avec le noyau. De manière assez logique, on commence par le placer sur le coin supérieur gauche de l'image, puis on affectue un produit de convolution. Ensuite, il suffit de faire glisser latéralement le noyau d'un pixel et de répéter l'opération. Une fois au bout de la ligne, on descend d'un pixel et on repart à gauche. \\
-Voici un exemple de balayage d'un noyau sur une image : \\
-\\
-{insérer image balayage image}\\
-\\
-On remarque alors que le résultat à une dimension plus petite que l'image d'origine : on a ici effectué ce que l'on appelle un \textbf{simple padding}. Cependant, on pourrait souhaiter que le résultat ait la même dimension : c'est du \textbf{same padding}. Pour cela, nous pouvons rajouter des gardes autour de l'image d'origine : on rajoute des zéros autour puis on effectue l'opération de convolution comme présenté sur cette image :\\
-\\
-{insérer image same padding}\\
-\\
-Il existe encore un paramètre permettant de personnaliser l'opération : le \textbf{stride}. Celui correspond au décalage à utiliser pour le noyau :\\
-\\
-{insérer image stride}\\
-\\ 
+Voici un exemple de balayage d'un noyau sur une image : 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=100pt]{cnn/convolution.png}
+\caption{Fonctionnement de la couche de convolution sur un exemple simple.}
+\end{figure}
+
+On remarque alors que le résultat à une dimension plus petite que l'image d'origine : on a ici effectué ce que l'on appelle un \textbf{simple padding}. Cependant, on pourrait souhaiter que le résultat ait la même dimension : cela est rendu possible grâce au \textbf{same padding}. Pour cela, nous pouvons rajouter des gardes autour de l'image d'origine : on rajoute des zéros autour puis on effectue l'opération de convolution comme présenté sur cette image :
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{cnn/same_padding.png}
+\caption{Fonctionnement de la couche de convolution avec du same padding.}
+\end{figure}
+
+Il existe encore un paramètre permettant de personnaliser l'opération : le \textbf{stride}. Celui correspond au décalage à utiliser pour le noyau :
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{cnn/stride.png}
+\caption{Fonctionnement de la couche de convolution avec un stride valant 2.}
+\end{figure}
+ 
 L'avantage d'avoir un stride plus grand que 1 est aussi son désavantage : en effet il va permettre d'avoir un résultat en sortie de plus petite dimension mais en contrepartie, il y a une perte d'information.
 
 \subsection{Généralisation en 3D}
 
-Les images en couleurs peuvent être représentées par une matrice 3D de profondeur 3. Pour pouvoir gérer ce cas, nous prenons des noyaux de de la même profondeur que l'image, puis nous appliquons séparément le produit de convolution sur les profondeurs correspondantes, le résulat final n'étant que la somme des résultats sur chaque profondeur. Puisqu'un schéma vaut bien plus qu'un texte :\\
-\\
-{insérer image 3D}\\
-\\
+Les images en couleurs peuvent être représentées par une matrice 3D de profondeur 3. Pour pouvoir gérer ce cas, nous prenons des noyaux de de la même profondeur que l'image, puis nous appliquons séparément le produit de convolution sur les profondeurs correspondantes, le résultat final n'étant que la somme des résultats sur chaque profondeur. 
 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{cnn/CNN_3D.png}
+\caption{Structure simplifiée d'un CNN}
+\end{figure}
+
+Notons cependant que ce résultat est très important car même si l'on considère que l'image n'a qu'une seule profondeur(image en niveau de gris par exemple), les données en entrée sur les autres couches de convolution sont dans l'immense majorité des cas en 3 dimensions. De manière intuitive, il est important de comprendre que la généralisation en 3D permet de détecter des motifs tridimensionnels au même titre qu'une opération de convolution simple permet d'identifier la présence d'un motif bidimensionnel. 
+
+\subsection{Couche de pooling}
+
+Les couches de pooling permettent de réduire la taille de la sortie au prix d'une perte d'information. Elles sont nécessaires dans la mesure où le nombre de calcul à effectuer sans elles rendrait le CNN  totalement inexploitable. On considère généralement deux types de couches de pooling :
+
+\begin{itemize}
+ \item max pooling : on applique un équivalent d'un noyau d'une opération de convolution qui ne retient que la valeur maximale de la zone sur laquelle il effectue les calculs. C'est la couche de pooling la plus utilisée.
+ 
+\item average pooling : le fonctionnement est le même que la couche de max pooling à l'exception que l'on applique la fonction moyenne au lieu de la fonction maximum. 
+\end{itemize}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt]{cnn/pooling.png}
+\caption{Comparaison sur un exemple simple entre la couche de max pooling et la couche avg pooling.}
+\end{figure}
+
+Il est à noter que la taille des noyaux est une variable et que plus celle-ci est grande, plus la taille de la sortie sera petite. 
+\subsection{Structure complète d'un CNN}
+
+La reconnaissance d'objet est le plus souvent complexe et nécessite de nombreux motifs à déceler pour pouvoir être efficace. Ainsi, si l'on avait un motif par couche, la taille du CNN serait gigantesque.Pour éviter cela, il suffit d'associer à chaque couche plusieurs noyaux (généralement une puissance de 2). En appliquant les processus précédant pour chacun des noyaux, on se retrouve avec un nombre de matrice en sortie égal au nombre de noyaux. On se contente alors de les empiler en rajoutant une dimension supplémentaire : on obtient alors en sortie de couche de convolution un bloc de profondeur le nombre de noyau contenant dans chacune des couches  le résultat du produit de convolution pour un noyau. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{cnn/structure_CNN_2.png}
+\caption{Structure complète d'un CNN : la première couche de convolution contient 64 noyaux et la deuxième 256.}
+\end{figure}
+
+On alterne ainsi entre couches de convolution pour prélever des motifs de plus en plus complexes et couches de pooling pour réduire la quantité de calculs. Les données étant ainsi pré-traitées, il suffit de les mettre en entrée d'une couche dense pour finalement avoir le résultat escompté.
+
+\subsection{Apprentissage d'un CNN}
+
+Le CNN, de par sa structure analogue à celle d'un MLP, a besoin d'une phase d'apprentissage dans le but d'apprendre à reconnaitre les motifs intéressants. Cela se fait par un processus de backpropagation. Cette partie étant essentiellement calculatoire, nous ne présenterons pas les opérations exactes à effectuer dans cette section mais nous vous invitons fortement à consulter le site suivant [https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/] pour de plus amples informations.
+ 
 \section{Implémentation et résultats}
 Blablabla
+
+
+https://www.cs.princeton.edu/courses/archive/spr08/cos598B/Readings/Fukushima1980.pdf
+
