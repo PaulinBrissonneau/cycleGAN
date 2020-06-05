@@ -149,18 +149,104 @@ Pour quelques problèmes particuliers, on peut trouver des métriques convenable
 
 $$ \textit{Indice de Jacard : }J(A,B) = \frac{ \mid A \cap B \mid }{ \mid A \cup B \mid } $$
 
-Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer ininterprétable du résultat par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} [REF]). Sur une image générée par le cycleGAN, le FCN prédit une carte de labels, qui est équivalente à une segmentation de l'image. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. Il n'existe aucune métrique idéale.
+Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer ininterprétable du résultat par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} [REF]). Sur une image générée par le cycleGAN, le FCN prédit une carte de segmentation. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. Il n'existe aucune métrique idéale.
 
 
 \section{Implémentation et résultats}
 
 \subsection{Détails d'implémentation}
 
-Nous avons
+Notre implémentation, comme pour les autres algorithmes, utilise TensorFlow 2.0. Nous avons globalement respecté la structure préconisée dans [REF], qui a été proposée par [Johnson  et  al.] mais avons adapté l'architecture à chacune de nos banques de données. L'architecture de base, comme décrite dans l'article est la suivante : \\
+
+\textbf{Pour le discriminateur}, nous avons utilisé un PatchGAN [22, 30, 29]. Avec les notations utilisées par TensorFlow :
+
+
+\[ \begin{array}{lcr}
+Conv2D(64, (4,4), strides=(2,2)) \\
+LeakyReLU(alpha=0.2) \\
+
+Conv2D(128, (4,4), strides=(2,2)) \\
+InstanceNormalization\\
+LeakyReLU(alpha=0.2)\\
+
+Conv2D(256, (4,4), strides=(2,2)) \\
+InstanceNormalization\\
+LeakyReLU(alpha=0.2)\\
+
+Conv2D(512, (4,4), strides=(2,2)) \\
+InstanceNormalization\\
+LeakyReLU(alpha=0.2)\\
+
+Conv2D(512, (4,4), strides=(2,2)) \\
+InstanceNormalization\\
+LeakyReLU(alpha=0.2)\\
+
+Conv2D(1, (4,4))\end{array}\]
+
+À noter que toutes les convolutions ont un \textit{padding} défini sur \textit{same}. La couche \textit{Instance Normalization} fait référence à la normalisation présentée dans [REF 53]. \\
+
+\textbf{Pour le générateur}, toujours comme dans l'article [], nous avons utilisé un réseau résiduel. Avec les notations utilisées par TensorFlow :\\
+
+Soit le bloc résiduel ($ResBlock$) de paramètre $n_{filters}$ défini par :
+
+
+\[ \begin{array}{lcr}
+Conv2D(n_{filters}, (3,3)) \\
+InstanceNormalization \\
+Activation('relu') \\
+Conv2D(n_{filters}, (3,3))\\
+InstanceNormalization\\
+Concatenate()([g, input_layer]) \end{array}\]
+
+Le générateur complet s'écrit :
+
+\[ \begin{array}{lcr}
+Conv2D(64, (7,7)) \\
+Activation('relu') \\
+
+Conv2D(128, (3,3)) \\
+InstanceNormalization\\
+Activation('relu')\\
+
+Conv2D(256, (3,3)) \\
+InstanceNormalization\\
+Activation('relu')\\\\
+
+N \times [ResBlock(n_{filters})]\\\\
+
+Conv2DTranspose(128, (3,3)) \\
+InstanceNormalization\\
+Activation('relu')\\
+
+Conv2DTranspose(64, (3,3)) \\
+InstanceNormalization\\
+Activation('relu')\\
+
+Conv2D(3, (7,7)) \\
+InstanceNormalization\\
+
+Activation('tanh') \end{array}\]
+
+À noter que toutes les convolutions ont un \textit{padding} défini sur \textit{same} et des \textit{strides} de $(2, 2)$.
+
+Le bloc résiduel été proposé par [REF 18]. Notons que $n_{filters}$ et $N$ sont des hyper-paramètres. Leur valeur dépend de la taille des images et de la puissance de calcul disponible. Sur les conseils de [REF], nous utilisons $n_{filters} = 256$ et $N \in [5, 10]$. Dans notre implémentation, tous les hyper-paramètres du modèle sont facilement modifiable depuis un unique fichier. \\
+
+
+Pour les paramètres d'apprentissage, nous avons suivi les conseils de l'article nous avons adapté les valeurs à chaque banque d'image en testant différentes valeurs. Nous avons, de manière générale, les valeurs nominales suivantes : \\
+
+\begin{itemize}
+  \item Nombre de passes : 150.
+  \item Taille des batch : 1.
+  \item Optimiseur : Adam
+  \item $\alpha_{Adam}$ : 0.0002 puis linéairement décroissant à partir de la passe 100
+  \item $\beta1_{Adam}$ : 0.5\\
+\end{itemize}
+
+Comme pour les GAN, la stabilité du modèle peut être améliorée en entraînant le discriminateur sur un historique des images générées. Cette technique a été proposée par Shrivastava  et  al.’s  strategy  [REF 46] et reprise par [REF] pour les cyclesGAN. Nous l'avons aussi implémenté. La taille du \textit{buffer} contenant l'historique des images générées est un nouvel hyperparamètres. Nous prenons, comme proposé dans [REF], $buffer_{max} = 50$.
 
 \subsection{Quelques résultats}
 
-Quelques exemples de résultats sont présentés sur la figures ?? à ??.
+Quelques exemples de nos résultats sont présentés sur les figures ?? à ??.
 
 \begin{figure}[!h]
 \centering
@@ -181,6 +267,8 @@ Quelques exemples de résultats sont présentés sur la figures ?? à ??.
 \end{figure}
 
 \subsection{Limitations et ouverture}
+
+
 
 blabla pour l'instant c'est bof, soit flou, soit pas hyper bien
 Trop long - fusion - enregistrer - en cours
