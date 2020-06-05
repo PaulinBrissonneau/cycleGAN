@@ -126,7 +126,11 @@ $\lambda$ est un hyper-paramètre. D'après [REF], $\lambda \approx 10$ donne le
 
 [REF]
 
-Pour certaines applications particulières, notamment pour le traitement de paysages, il est nécessaire de rajouter un autre terme à la fonction de coût. En effet, 
+Pour certaines applications particulières, notamment pour le traitement de paysages, il est nécessaire de rajouter un autre terme à la fonction de coût. En effet, comme on l'observe sur la figure ??, les couleurs globales des photos en entrée de sont pas retrouvées en sortie. Les images sont par exemple bleuies ou  jaunies. Dans [REF], l'équipe de recherche propose de contraindre encore plus l'espace dans lequel évolue les générateur du cycleGAN, une technique introduite par [Taigman et al. [49]]. L'idée consiste à ajouter un coût demi-cyclique qui tend à ce que $ F \approx \mathbb{1} $ et $ G \approx \mathbb{1} $. On rajoute donc un coût $\mathcal{L}_{\text {identity }}$ défini comme :
+
+$$\mathcal{L}_{\text {identity }}(G, F)=\mathbb{E}_{b \sim p_{\text {data}}(b)}\left[\|G(b)-b\|_{1}\right]+ \mathbb{E}_{a \sim p_{\text {data}}(a)}\left[\|F(a)-a\|_{1}\right]$$
+
+On comprend bien que c'est une limitation très forte, qui ne convient qu'à certains problèmes pour lesquels les images de sortie sont très proches des images d'entrée et pour lesquels la couleur ne doit pas beaucoup changer. Sous ces conditions, il se trouve que cette méthode conserve efficacement la composition des couleurs, comme peut l'attester la figure ??. 
 
 \begin{figure}[!h]
 \centering
@@ -137,9 +141,9 @@ Pour certaines applications particulières, notamment pour le traitement de pays
 
 \section{Les métriques d'évaluations}
 
-Comme dans le GAN d'un GAN classique, évaluer la qualité de la sortie d'un cycleGAN n'est pas une chose facile. En effet, nous n'avons de métrique simple et universelle qui permettrait de juger de la crédibilité ou du réalisme d'une image. Pour tenter d'évaluer au mieux la qualité d'un cycleGAN, il existe plusieurs solutions.\\
+Comme dans le cas d'un GAN classique, évaluer la qualité de la sortie d'un cycleGAN n'est pas une chose facile. En effet, nous n'avons de métrique simple et universelle qui permettrait de juger de la crédibilité ou du réalisme d'une image. Pour tenter d'évaluer au mieux la qualité d'un cycleGAN, il existe plusieurs solutions.\\
 
-La première, sans grande surprise, c'est de faire une étude de réalisme basée sur une enquête auprès de personne chargées de noter la qualité des images fournies, c'est ce que l'on appelle des études de perceptions (\textit{perceptual studies}). On comprend vite que ce n'est une très bonne solution : ces études restent subjectives, elles ne sont pas toujours reproductibles, et elles coûtent cher. Comme pour les GAN, on ne peut pas donc pas s'en servir pour poser une métrique universelle utilise pour comparer différents algorithmes.\\
+La première, sans grande surprise, c'est de faire une étude de réalisme basée sur une enquête auprès de personne chargées de noter la qualité des images fournies, c'est ce que l'on appelle des études de perceptions (\textit{perceptual studies}). On comprend vite que ce n'est une très bonne solution : ces études restent subjectives, elles ne sont pas toujours reproductibles, et elles coûtent cher. Comme pour les GAN, on ne peut pas donc pas s'en servir pour poser une métrique universelle pour comparer différents algorithmes.\\
 
 Pour quelques problèmes particuliers, on peut trouver des métriques convenables. C'est le cas par exemple si l'on considère un problème de segmentation et si les données son accompagnées de leurs segmentations réelles, appelée aussi \textit{ground truth}. Dans ce cas particulier, évaluer le cycleGAN revient simplement à évaluer de résultat de la segmentation par rapport au \textit{ground truth}. Il existe plusieurs métriques classiques pour évaluer les algorithmes de segmentation comme la précision par pixel à pixel ou la précision classes à classes, mais la métrique la plus courante pour cela est l'indice de Jaccard (ou \textit{IoU : Intersection over Union}). Cette métrique consiste à calculer, pour chaque classe de la segmentation, l'intersection de la zone prédite par l'algorithme avec la zone réelle, avant de normaliser par l'union des deux zones. C'est une métrique classique utilisée en segmentation, elle est définie ci-dessous.
 
