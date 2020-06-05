@@ -1,5 +1,6 @@
 
-\chapter{Les réseaux de neurone à convolution}
+
+\chapter{Les réseaux à convolutions}
 
 
 \section{Présentation générale}
@@ -12,7 +13,7 @@ La structure d'un CNN se rapproche de celle d'un multiperceptron dans la mesure 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{cnn/structure_CNN.png} 
+\includegraphics[width=200pt]{images/cnn/structure_CNN.png} 
 \caption{Structure simplifiée d'un CNN.}
 \label{structure_1}
 \end{figure}
@@ -39,7 +40,7 @@ Voici quelques exemples de l'effet du produit de convolution avec plusieurs noya
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt]{cnn/chien_prairie.png} 
+\includegraphics[width=100pt]{images/cnn/chien_prairie.png} 
 \caption{Effets de la convolution avec quelques noyaux.}
 \end{figure}
 
@@ -52,7 +53,7 @@ Voici un exemple de balayage d'un noyau sur une image :
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt]{cnn/convolution.png}
+\includegraphics[width=100pt]{images/cnn/convolution.png}
 \caption{Fonctionnement de la couche de convolution sur un exemple simple.}
 \end{figure}
 
@@ -60,7 +61,7 @@ On remarque alors que le résultat à une dimension plus petite que l'image d'or
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{cnn/same_padding.png}
+\includegraphics[width=200pt]{images/cnn/same_padding.png}
 \caption{Fonctionnement de la couche de convolution avec du same padding.}
 \end{figure}
 
@@ -68,7 +69,7 @@ Il existe encore un paramètre permettant de personnaliser l'opération : le \te
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{cnn/stride.png}
+\includegraphics[width=150pt]{images/cnn/stride.png}
 \caption{Fonctionnement de la couche de convolution avec un stride valant 2.}
 \end{figure}
  
@@ -80,7 +81,7 @@ Les images en couleurs peuvent être représentées par une matrice 3D de profon
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{cnn/CNN_3D.png}
+\includegraphics[width=150pt]{images/cnn/CNN_3D.png}
 \caption{Structure simplifiée d'un CNN}
 \end{figure}
 
@@ -98,7 +99,7 @@ Les couches de pooling permettent de réduire la taille de la sortie au prix d'u
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{cnn/pooling.png}
+\includegraphics[width=150pt]{images/cnn/pooling.png}
 \caption{Comparaison sur un exemple simple entre la couche de max pooling et la couche avg pooling.}
 \end{figure}
 
@@ -109,7 +110,7 @@ La reconnaissance d'objet est le plus souvent complexe et nécessite de nombreux
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{cnn/structure_CNN_2.png}
+\includegraphics[width=200pt]{images/cnn/structure_CNN_2.png}
 \caption{Structure complète d'un CNN : la première couche de convolution contient 64 noyaux et la deuxième 256.}
 \end{figure}
 
