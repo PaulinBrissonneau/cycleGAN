@@ -6,12 +6,13 @@
 
 Les cycleGAN sont des architectures de GAN qui permettent de répondre à une problématique bien spécifique : le \textbf{transfert de style non appairé}, que nous expliciterons.
 
-Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Le cycleGAN peut aussi résoudre des problèmes de segmentation d'images, en considérant la segmentation comme un style pour l'image. Quelques exemples sont présentés sur la figure ??.
+Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Le cycleGAN peut aussi résoudre des problèmes de segmentation d'images, en considérant la segmentation comme un style pour l'image. Quelques exemples sont présentés sur la figure \ref{cycle_exemples}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt,valign=t]{"images/cycle_exemples"}
 \caption{legende}
+\label{cycle_exemples}
 \end{figure}
 
 
@@ -23,7 +24,7 @@ Le transfert de style (à deux classes), repose sur deux banques de données, qu
   \textit{Par exemple, si A représente des bâtiments de jour, et B représente des bâtiments de nuit, il est possible de prendre la même photo de jour et de nuit. Ces deux photos constituent une paire dont chaque élément est d'un style différent.}.
   \item Dans le cas où chaque élément de A n'a pas de lien direct avec un élément de B en particulier, le problème est un \textbf{transfert de style non appairé}. Le but n'est plus d'apprendre et de généraliser le transfert d'une donnée de A à une donnée de B à partir d'exemples de paires déjà existantes, mais d'apprendre le transfert entre le style de A et le style de B, sans avoir d'exemple d'une telle transformation. Il faut donc \textit{comprendre} à un niveau sémantique les style de A et B.\\
   \textit{Par exemple, si vous voulez transformer une image de votre chien en image de chat, vous ne pouvez pas obtenir une banque d'image de chiens déguisés en chats. Vous devez donc travailler avec d'une part des images de chiens (A), d'autre part des images de chats (B), sans pouvoir former de paires entre A et B.}\\
-   La différence entre ces deux cas est illustrée par la figure ??. 
+   La différence entre ces deux cas est illustrée par la figure \ref{paire}. 
 \end{itemize}
 
 \begin{figure}[!h]
@@ -32,6 +33,7 @@ Le transfert de style (à deux classes), repose sur deux banques de données, qu
 \hspace*{10mm}
 \includegraphics[width=100pt,valign=t]{"images/pairepas"}
 \caption{legende (pas beau !!}
+\label{paire}
 \end{figure}
 
 Ces deux types de transfert de style se traitent différemment. Pour le transfert de style appairé, une structure de GAN classique suffit puisque le discriminateur peut aisément comparer l'image générée avec l'image \textit{idéale}. Ce problème, que nous ne développerons pas ici, est traité et manière efficace par différents algorithmes, dont \textbf{Pix2Pix}. Le transfert de style non appairé ne permet pas la comparaison à l'image-cible puisqu'il n'existe pas de paires. \textbf{Il faut donc utiliser d'autres architectures, comme par exemple le cycleGAN.}
@@ -41,17 +43,18 @@ Ces deux types de transfert de style se traitent différemment. Pour le transfer
 
 En vertu des explications présentées au paragraphes précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où s'est données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement.
 
-Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent des images du style A et celles du style B. L'architecture est présenté par la figure ??.
+Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent des images du style A et celles du style B. L'architecture est présentée par la figure \ref{cycleDouble}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/cycleDouble"}
 \caption{legende (figure à changer)}
+\label{cycleDouble}
 \end{figure}
 
 Comme on l'a entrevu dans le paragraphe précédent, une difficulté est que les données ne sont pas appairées, la fonction de coût ne peut donc pas venir de la comparaison directe de l'image générée à l'image souhaitée. Pour pallier à ce manque, deux fonctions de coûts principales et indépendantes sont utilisées.\\
 
-La première est celle d'un GAN classique : pour une transformation $ A \rightarrow B $ (resp. $ B \rightarrow A $), le discriminateur $ D_B $ (resp. $ D_A $) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}. La figure ?? montre la décomposition du cycleGAN en deux GAN. \\
+La première est celle d'un GAN classique : pour une transformation $ A \rightarrow B $ (resp. $ B \rightarrow A $), le discriminateur $ D_B $ (resp. $ D_A $) prédit si l'image est une image qui appartient réellement à la banque B (resp. A). Le coût associé au GAN ainsi défini est appelé \textit{Adversarial Loss} ou \textit{GAN Loss}. La figure \ref{cycle_ganGF} montre la décomposition du cycleGAN en deux GAN. \\
 
 \begin{figure}[!h]
 \centering
@@ -59,6 +62,7 @@ La première est celle d'un GAN classique : pour une transformation $ A \rightar
 \hspace*{10mm}
 \includegraphics[width=150pt]{"images/cycle_ganF"}
 \caption{legende (figure à changer)}
+\label{cycle_ganGF}
 \end{figure}
 
 Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seulement ce coût, comment peut-on s'assurer que l'image obtenue a encore un lien avec l'image de départ ? Pour garantir cela, il faut s'assurer de pouvoir reconstruire l'image de départ après lui avoir fait subir  la transformation $ A \rightarrow B $ suivie de $ B \rightarrow A $. En d'autres termes, cela revient à ajouter des conditions sur les générateurs G et F telles que :
@@ -70,7 +74,7 @@ Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seu
 \end{split}
 \end{equation}
 
-Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}. Les deux égalités ci-dessus consiste en réalité à parcourir le cycle respectivement en avant et en arrière, ceci est décrite de manière schématique par la figure ??.\\
+Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}. Les deux égalités ci-dessus consiste en réalité à parcourir le cycle respectivement en avant et en arrière, ceci est décrite de manière schématique par la figure \ref{cycleForBack}.\\
 
 \begin{figure}[!h]
 \centering
@@ -80,6 +84,7 @@ Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \te
 
 \includegraphics[width=220pt]{"images/cycleFor"}
 \caption{legende (figure à changer)}
+\label{cycleForBack}
 \end{figure}
 
 Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assure la transformation $ A \rightarrow B $) est optimisé pour tromper le discriminateur $ D_B $ comme dans un GAN classique, mais aussi aussi pour que à F fixé, $ F \circ G = \mathbb{1} $. Et symétriquement, il en est de même pour le générateur F (qui assure la transformation $ B \rightarrow A $). Les discriminateurs, quant à eux, sont mis à jour selon la même fonction de coût qu'un discriminateur de GAN classique. Les fonctions de coûts utilisées sont détaillées dans la partie suivante.
@@ -130,12 +135,13 @@ Pour certaines applications particulières, notamment pour le traitement de pays
 
 $$\mathcal{L}_{\text {identity }}(G, F)=\mathbb{E}_{b \sim p_{\text {data}}(b)}\left[\|G(b)-b\|_{1}\right]+ \mathbb{E}_{a \sim p_{\text {data}}(a)}\left[\|F(a)-a\|_{1}\right]$$
 
-On comprend bien que c'est une limitation très forte, qui ne convient qu'à certains problèmes pour lesquels les images de sortie sont très proches des images d'entrée et pour lesquels la couleur ne doit pas beaucoup changer. Sous ces conditions, il se trouve que cette méthode conserve efficacement la composition des couleurs, comme peut l'attester la figure ??. 
+On comprend bien que c'est une limitation très forte, qui ne convient qu'à certains problèmes pour lesquels les images de sortie sont très proches des images d'entrée et pour lesquels la couleur ne doit pas beaucoup changer. Sous ces conditions, il se trouve que cette méthode conserve efficacement la composition des couleurs, comme peut l'attester la figure \ref{Lident}. 
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/Lident"}
 \caption{legende (ca vient de l'article)}
+\label{Lident}
 \end{figure}
 
 
@@ -195,8 +201,8 @@ Conv2D(n_{filters}, (3,3)) \\
 InstanceNormalization \\
 Activation('relu') \\
 Conv2D(n_{filters}, (3,3))\\
-InstanceNormalization\\
-Concatenate()([g, input_layer]) \end{array}\]
+g = InstanceNormalization\\
+Concatenate()([g, input layer]) \end{array}\]
 
 Le générateur complet s'écrit :
 
@@ -246,24 +252,27 @@ Comme pour les GAN, la stabilité du modèle peut être améliorée en entraîna
 
 \subsection{Quelques résultats}
 
-Quelques exemples de nos résultats sont présentés sur les figures ?? à ??.
+Quelques exemples de nos résultats sont présentés sur les figures \ref{exemple_celebA} à \ref{exemple_zebres}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=300pt]{"images/cycle"}
 \caption{Exemples de sorties du cycleGAN sur la banque d'image CelebA. La première ligne correspond aux images de la banque, la deuxième ligne correspond à la sortie du générateur. À gauche, il s'agit de la transformation \textit{portrait sans sourire} vers \textit{portrait avec sourire}. À droite, il s'agit de la transformation inverse.}
+\label{exemple_celebA}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/cycleRes2"}
 \caption{Exemples de sorties du cycleGAN sur la banque d'image [legende]}
+\label{exemple_orange}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/cycleRes3"}
 \caption{Exemples de sorties du cycleGAN sur la banque d'image [legende]}
+\label{exemple_zebres}
 \end{figure}
 
 \subsection{Limitations et ouverture}
@@ -272,6 +281,6 @@ Les résultats que nous obtenons pour l'instant sont corrects mais restent mitig
 
 Cependant, étant donné que sur les premières passes, nous obtenons des résultats cohérent avec les implémentations de références, nous sommes plutôt confiants quand à la qualité de notre implémentation. Son caractère modulaire et sa paramétrabilité très facile permet de l'adapter à beaucoup de banque d'images différentes. C'est ce qui nous permet d'utiliser notre script pour des problèmes non abordés dans l'article de [REF], comme celebA. De plus, on peut l'utiliser de manière équivalente sur nos CPU personnels et sur le cluster de GPU Fusion.\\
 
-Une fois ces derniers détails réglés, dans peu de temps, nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons toujours définir.
+Une fois ces derniers détails réglés, dans peu de temps, nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons définir.
 
 
