@@ -2,11 +2,9 @@
 
 \section{Présentation de la problématique}
 
-[AJOUTER DES REFS]
 
-Les cycleGAN sont des architectures de GAN qui permettent de répondre à une problématique bien spécifique : le \textbf{transfert de style non appairé}, que nous expliciterons.
-
-Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Le cycleGAN peut aussi résoudre des problèmes de segmentation d'images, en considérant la segmentation comme un style pour l'image. Quelques exemples sont présentés sur la figure \ref{cycle_exemples}.
+Les cycleGAN sont des architectures de GAN, proposées par Zhu et al. \cite{zhu_unpaired_2018}, qui permettent de répondre à une problématique bien spécifique : le \textbf{transfert de style non appairé} \cite{gatys_image_2016}. Pour comprendre L’intérêt du cycleGAN, il faut bien comprendre le problème auquel il répond.
+Le transfert de style consiste à transformer des données d'un \textit{style à un autre}. Le terme de \textit{style} est à prendre au sens large et les données que l'on manipule peuvent être de natures diverses. Il peut s'agir par exemple de transformer des images de pommes en images d'orange, de transformer un paysage d'été en un paysage d'hiver, de transformer une musique classique en rock, ou encore de modifier l'expression les expressions faciales d'individus présents sur une image. Quelques exemples sont présentés sur la figure \ref{cycle_exemples}.
 
 \begin{figure}[!h]
 \centering
@@ -16,7 +14,7 @@ Le transfert de style consiste à transformer des données d'un \textit{style à
 \end{figure}
 
 
-Le transfert de style peut s'effectuer entre plusieurs \textit{classes de styles}, mais nous allons ici nous concentrer dans le cas binaire où l'on considère deux styles. La problématique est donc de transformer des images d'un style à l'autre, et ceci dans les deux sens.
+Le transfert de style peut s'effectuer entre plus que seulement deux \textit{classes de styles}, mais nous allons ici nous concentrer dans le cas binaire où l'on considère deux styles. La problématique est donc de transformer des images d'un style à l'autre, et ceci dans les deux sens.
 
 Le transfert de style (à deux classes), repose sur deux banques de données, que l'on notera A et B. Suivant les données auxquelles nous avons accès, il existe deux cas différents :
 \begin{itemize}
@@ -41,7 +39,7 @@ Ces deux types de transfert de style se traitent différemment. Pour le transfer
 
 \section{Principe général du cycleGAN}
 
-En vertu des explications présentées au paragraphes précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où s'est données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement.
+En vertu des explications présentées au paragraphes précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où s'est données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement. Le cycleGAN, peut aussi résoudre des problèmes de segmentation d'images, en considérant la segmentation comme un style pour l'image.
 
 Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent des images du style A et celles du style B. L'architecture est présentée par la figure \ref{cycleDouble}.
 
@@ -94,9 +92,7 @@ Pour résumer le fonctionnement global du cycleGAN. Le générateur G (qui assur
 
 \subsubsection{Coût adversaire : \textit{GAN Loss}}
 
-[REF]
-
-Comme précisé dans la partie précédente, le coût associé au caractère adversaire de l'apprentissage est celui d'un GAN classique. Avec les mêmes notations que dans le paragraphe précédent, en considérant le générateur G et son discriminateur associé $D_B$ associé, on a :
+Comme précisé dans la partie précédente, le coût associé au caractère adversaire de l'apprentissage est celui d'un GAN classique \cite{goodfellow_nips_2016}. Avec les mêmes notations que dans le paragraphe précédent, en considérant le générateur G et son discriminateur associé $D_B$ associé, on a :
 $$\begin{aligned}
 \mathcal{L}_{\mathrm{GAN}}\left(G, D_{B}, A, B\right) &=\mathbb{E}_{b \sim p_{\mathrm{data}}(b)}\left[\log D_{B}(b)\right] +\mathbb{E}_{a \sim p_{\text {data }}(a)}\left[\log \left(1-D_{B}(G(a))\right]\right.
 \end{aligned}$$
@@ -109,9 +105,7 @@ Pour l'autre GAN, c'est à dire le générateur F et sont discriminateur $D_A$, 
 
 \subsubsection{Coût du cycle : \textit{Cycle Consistency Loss}}
 
-[REF]
-
-Conformément aux explications données dans le paragraphe précédent, on cherche une fonction de coût qui assure que : $ F \circ G = \mathbb{1} $ et $ G \circ F = \mathbb{1} $. Ces deux égalité sont appelées respectivement \textit{backward cycle consistency} \textit{forkward cycle consistency} Il est important de noter que l'on veut un coût qui n'interviennent pas à une hauteur sémantique. On considère donc deux simples comparaisons pixel à pixel, une pour la \textit{backward cycle consistency} et une pour la \textit{forkward cycle consistency}, que l'on somme. La fonction de coût qui en découle est donc :
+Conformément aux explications données dans le paragraphe précédent, on cherche une fonction de coût qui assure que : $ F \circ G = \mathbb{1} $ et $ G \circ F = \mathbb{1} $. Ces deux égalité sont appelées respectivement \textit{backward cycle consistency} \textit{forkward cycle consistency} et ont sont utilisées de puis longtemps dans le suivi d'objets \cite{kalal_forward-backward_2010}. Il est important de noter que l'on veut un coût qui n'interviennent pas à une hauteur sémantique. On considère donc deux simples comparaisons pixel à pixel, une pour la \textit{backward cycle consistency} et une pour la \textit{forkward cycle consistency}, que l'on somme. La fonction de coût qui en découle est donc :
 
 $$\begin{aligned}
 \mathcal{L}_{\mathrm{cyc}}(G, F) &=\mathbb{E}_{a \sim p_{\text {data }}(a)}\left[\|F(G(a))-a\|_{1}\right] +\mathbb{E}_{b \sim p_{\text {data }}(b)}\left[\|G(F(b))-b\|_{1}\right]
@@ -125,13 +119,11 @@ $$\begin{aligned}
 \mathcal{L}_{\text{total}} &=\mathcal{L}_{\mathrm{GAN}}\left(G, D_{B}, A, B\right) +\mathcal{L}_{\mathrm{GAN}}\left(F, D_{A}, B, A\right) +\lambda \cdot \mathcal{L}_{\mathrm{cyc}}(G, F)
 \end{aligned}$$
 
-$\lambda$ est un hyper-paramètre. D'après [REF], $\lambda \approx 10$ donne les meilleurs résultats.
+$\lambda$ est un hyper-paramètre. D'après Zhu et al. \cite{zhu_unpaired_2018}, $\lambda \approx 10$ donne les meilleurs résultats.
 
 \subsubsection{Préservation de la couleur}
 
-[REF]
-
-Pour certaines applications particulières, notamment pour le traitement de paysages, il est nécessaire de rajouter un autre terme à la fonction de coût. En effet, comme on l'observe sur la figure ??, les couleurs globales des photos en entrée de sont pas retrouvées en sortie. Les images sont par exemple bleuies ou  jaunies. Dans [REF], l'équipe de recherche propose de contraindre encore plus l'espace dans lequel évolue les générateur du cycleGAN, une technique introduite par [Taigman et al. [49]]. L'idée consiste à ajouter un coût demi-cyclique qui tend à ce que $ F \approx \mathbb{1} $ et $ G \approx \mathbb{1} $. On rajoute donc un coût $\mathcal{L}_{\text {identity }}$ défini comme :
+Pour certaines applications particulières, notamment pour le traitement de paysages, il est nécessaire de rajouter un autre terme à la fonction de coût. En effet, comme on l'observe sur la figure \ref{Lident} les couleurs globales des photos en entrée de sont pas retrouvées en sortie. Les images sont par exemple bleuies ou  jaunies. Dans l'article de Zhu et al. \cite{zhu_unpaired_2018}, l'équipe propose de contraindre encore plus l'espace dans lequel évolue les générateur du cycleGAN, une technique introduite par Taigman et al. \cite{taigman_unsupervised_2016}. L'idée consiste à ajouter un coût demi-cyclique qui tend à ce que $ F \approx \mathbb{1} $ et $ G \approx \mathbb{1} $. On rajoute donc un coût $\mathcal{L}_{\text {identity }}$ défini comme :
 
 $$\mathcal{L}_{\text {identity }}(G, F)=\mathbb{E}_{b \sim p_{\text {data}}(b)}\left[\|G(b)-b\|_{1}\right]+ \mathbb{E}_{a \sim p_{\text {data}}(a)}\left[\|F(a)-a\|_{1}\right]$$
 
@@ -155,16 +147,16 @@ Pour quelques problèmes particuliers, on peut trouver des métriques convenable
 
 $$ \textit{Indice de Jacard : }J(A,B) = \frac{ \mid A \cap B \mid }{ \mid A \cup B \mid } $$
 
-Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer ininterprétable du résultat par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} [REF]). Sur une image générée par le cycleGAN, le FCN prédit une carte de segmentation. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. Il n'existe aucune métrique idéale.
+Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer ininterprétable du résultat par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} \cite{FCN}). Sur une image générée par le cycleGAN, le FCN prédit une carte de segmentation. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. Il n'existe aucune métrique idéale.
 
 
 \section{Implémentation et résultats}
 
 \subsection{Détails d'implémentation}
 
-Notre implémentation, comme pour les autres algorithmes, utilise TensorFlow 2.0. Nous avons globalement respecté la structure préconisée dans [REF], qui a été proposée par [Johnson  et  al.] mais avons adapté l'architecture à chacune de nos banques de données. L'architecture de base, comme décrite dans l'article est la suivante : \\
+Notre implémentation, comme pour les autres algorithmes, utilise TensorFlow 2.0. Nous avons globalement respecté la structure préconisée dans \cite{zhu_unpaired_2018}, qui a été proposée par Johnson  et  al. \cite{johnson_perceptual_2016} mais nous avons adapté l'architecture à chacune de nos banques de données. L'architecture de base, comme décrite dans l'article est la suivante : \\
 
-\textbf{Pour le discriminateur}, nous avons utilisé un PatchGAN [22, 30, 29]. Avec les notations utilisées par TensorFlow :
+\textbf{Pour le discriminateur}, nous avons utilisé un PatchGAN \cite{isola_image--image_2018-3}. Avec les notations utilisées par TensorFlow :
 
 
 \[ \begin{array}{lcr}
@@ -189,9 +181,9 @@ LeakyReLU(alpha=0.2)\\
 
 Conv2D(1, (4,4))\end{array}\]
 
-À noter que toutes les convolutions ont un \textit{padding} défini sur \textit{same}. La couche \textit{Instance Normalization} fait référence à la normalisation présentée dans [REF 53]. \\
+À noter que toutes les convolutions ont un \textit{padding} défini sur \textit{same}. La couche \textit{Instance Normalization} fait référence à la normalisation présentée dans \cite{ulyanov_instance_2017}. \\
 
-\textbf{Pour le générateur}, toujours comme dans l'article [], nous avons utilisé un réseau résiduel. Avec les notations utilisées par TensorFlow :\\
+\textbf{Pour le générateur}, toujours comme dans l'article de Zhu et al. \cite{zhu_unpaired_2018}, nous avons utilisé un réseau résiduel. Avec les notations utilisées par TensorFlow :\\
 
 Soit le bloc résiduel ($ResBlock$) de paramètre $n_{filters}$ défini par :
 
@@ -235,7 +227,7 @@ Activation('tanh') \end{array}\]
 
 À noter que toutes les convolutions ont un \textit{padding} défini sur \textit{same} et des \textit{strides} de $(2, 2)$.
 
-Le bloc résiduel été proposé par [REF 18]. Notons que $n_{filters}$ et $N$ sont des hyper-paramètres. Leur valeur dépend de la taille des images et de la puissance de calcul disponible. Sur les conseils de [REF], nous utilisons $n_{filters} = 256$ et $N \in [5, 10]$. Dans notre implémentation, tous les hyper-paramètres du modèle sont facilement modifiable depuis un unique fichier. \\
+Le bloc résiduel été proposé par He et al. \cite{he_deep_2015}. Notons que $n_{filters}$ et $N$ sont des hyper-paramètres. Leur valeur dépend de la taille des images et de la puissance de calcul disponible. Sur les conseils de Zhu et al., nous utilisons $n_{filters} = 256$ et $N \in [5, 10]$. Dans notre implémentation, tous les hyper-paramètres du modèle sont facilement modifiable depuis un unique fichier. \\
 
 
 Pour les paramètres d'apprentissage, nous avons suivi les conseils de l'article nous avons adapté les valeurs à chaque banque d'image en testant différentes valeurs. Nous avons, de manière générale, les valeurs nominales suivantes : \\
@@ -248,7 +240,7 @@ Pour les paramètres d'apprentissage, nous avons suivi les conseils de l'article
   \item $\beta1_{Adam}$ : 0.5\\
 \end{itemize}
 
-Comme pour les GAN, la stabilité du modèle peut être améliorée en entraînant le discriminateur sur un historique des images générées. Cette technique a été proposée par Shrivastava  et  al.’s  strategy  [REF 46] et reprise par [REF] pour les cyclesGAN. Nous l'avons aussi implémenté. La taille du \textit{buffer} contenant l'historique des images générées est un nouvel hyperparamètres. Nous prenons, comme proposé dans [REF], $buffer_{max} = 50$.
+Comme pour les GAN, la stabilité du modèle peut être améliorée en entraînant le discriminateur sur un historique des images générées. Cette technique a été proposée par Shrivastava  et  al. \cite{shrivastava_learning_2016} et reprise par Zhu et al. pour les cyclesGAN. Nous l'avons aussi implémenté. La taille du \textit{buffer} contenant l'historique des images générées est un nouvel hyperparamètres. Nous prenons, comme proposé dans l'article de Zhu et al., $buffer_{max} = 50$.
 
 \subsection{Quelques résultats}
 
@@ -279,8 +271,7 @@ Quelques exemples de nos résultats sont présentés sur les figures \ref{exempl
 
 Les résultats que nous obtenons pour l'instant sont corrects mais restent mitigés. En effet, ils sont convenables sur des images de petites dimensions qui ne demandent que peu de ressources. Sur les images de hautes dimension, les résultats pourraient être améliorés si nous pouvions exécuter nos scripts plus longtemps. Pour l'instant, nous sommes ralentit par le fait d'enregistrer correctement nos modèles pour pouvoir continuer l'apprentissage. Actuellement, la reprise de l'apprentissage ne se passe pas au mieux, ce qui fausse nos résultats.\\
 
-Cependant, étant donné que sur les premières passes, nous obtenons des résultats cohérent avec les implémentations de références, nous sommes plutôt confiants quand à la qualité de notre implémentation. Son caractère modulaire et sa paramétrabilité très facile permet de l'adapter à beaucoup de banque d'images différentes. C'est ce qui nous permet d'utiliser notre script pour des problèmes non abordés dans l'article de [REF], comme celebA. De plus, on peut l'utiliser de manière équivalente sur nos CPU personnels et sur le cluster de GPU Fusion.\\
+Cependant, étant donné que sur les premières passes, nous obtenons des résultats cohérent avec les implémentations de références, nous sommes plutôt confiants quand à la qualité de notre implémentation. Son caractère modulaire et sa paramétrabilité très facile permet de l'adapter à beaucoup de banque d'images différentes. C'est ce qui nous permet d'utiliser notre script pour des problèmes non abordés dans l'article de Zhu et al. \cite{zhu_unpaired_2018}, comme celebA. De plus, on peut l'utiliser de manière équivalente sur nos CPU personnels et sur le cluster de GPU Fusion.\\
 
-Une fois ces derniers détails réglés, dans peu de temps, nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons définir. \cite{lecun_efficient_1998}
-
+Une fois ces derniers détails réglés, dans peu de temps, nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons définir.
 
