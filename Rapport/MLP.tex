@@ -1,10 +1,45 @@
-\chapter{Le Multiperceptron}
+\chapter{Multi-Layer Perceptron}
 
-\section{Le perceptron simple}
-Le principe du perceptron est bla bla bla
+\section{Les neurones}
 
-\section{Le multiperceptron}
-Le principe du multiperceptron est bla bla bla
+Les technologies qui vont êtres présentées dans la suite se basent outes sur l'idée de neurone artificiel. McCulloh et Pitts le formalise en 1943 \cite{McCullohPitts}.
+Un neurone formel est composée de deux parties.\begin{itemize}
+\item La première consiste à faire la sommes pondérée par des poids des valeurs d'entrée du neurone auquel on peut éventuellement ajouter un biais. Les poids sont propres au neurone et à l'entrée du neurone considérée.
+\item La deuxième partie du neurone est la fonction d'activation. Cette fonction va s'appliquer sur le résultat de la somme pondérée. On choisit quasi-exclusivement des fonctions non-linéaires pour deux raisons : briser la linéarité (car sinon la fonction n'apporte rien de plus que les poids) et obtenir un résultat d'une certaine forme (par exemple une probabilité entre 0 et 1).
+McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent des neurones au résultat binaire à l'aide d'une fonction de'activation de Heavyside.
+
+\end{itemize}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt,valign=t]{"images/MLP/neurone_exemple"}
+\caption{Exemple de neurone dont les poids sont $w_1$ et $w_2$ la fonction de Heavyside de paramètre $\theta$ s'applique à la somme pour donner la sortie du neurone. Cette image provient de l'article wikipédia du neurone formel.}
+\label{neurone_exemple}
+\end{figure}
+
+Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ x_n \end{pmatrix}$  les entrées du neurone, $W = \begin{pmatrix} w_1\\ \vdots \\ w_n \end{pmatrix}$ les poids correspondants et $\phi$ la fonction d'activation, $b$ le biais, un neurone correspond à une fonction $N(x_1,...,x_n,w_1,...,w_n) = \phi(b+ \sum \limits{i}{} x_i w_i) = \phi(W^T  X+b)$
+
+\section{Le perceptron}
+En 1958, Frank Rosenblatt utilise l'idée de neurones artificiels pour inventer le perceptron. Son idée est d'utiliser les neurones pour reconnaître des patterns. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (ie les neurones ne sont pas reliés entre eux). Cela limite l'intérêt de ce perceptron : il ne peut apprendre que des pattern linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR.
+L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=150pt,valign=t]{"images/MLP/perceptron"}
+\caption{Exemple de perceptron à n entrée et p sorties. Il peut donc servir de classificateur à p classes}
+\label{perceptron}
+\end{figure}
+
+\section{Multi-Layer Perceptron}
+Un Multi-Layer Perceptron (MLP) est composé de différentes couches: \begin{itemize}
+\item La couche d'entrée qui correspond aux valeurs d'entrée de l'algorithme
+\item une couche de sortie qui correspond aux valeurs renvoyées par le MLP
+\item une ou plusieurs couches "cachées" (hidden layers) qui sont des couches de neurones reliées entre elles. Les sorties de la couche précédente servent d'entrée à la couche suivante.
+
+\end{itemize}
+
+Ecrivons formellement ceci. On va définir $N^(i)  = \begin{pmatrix} n_1^(i)\\ \vdots \\ n_{p_i}^(i) \end{pmatrix}$  et 
+$W_k^(i) = \begin{pmatrix} w_{1k}^i\\ \vdots \\ w_{p_ik}^i \end{pmatrix}$ les poids associés au $k^e$ neurone de la couche i. la  et $\phi_k^i$ la fonction d'activation de ce même neurone. 
+On notera que si le réseau possède $L+1$ couches (de $0$ à$ L$), $N^(0) = X$ et $N^(L) = Y$
 
 \section{Implémentation et résultats}
 Le principe du multiperceptron est bla bla bla
