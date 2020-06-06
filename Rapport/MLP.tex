@@ -56,20 +56,21 @@ La fonction de coût utilisée dans toute cette partie est $J = \sum \limits{k}{
 
 
 \subsubsection{Descente de gradient stochastique}
-Il s'agit de l'algorithme classique. On calcule la dérivée partielle de l'erreur par rapport à un poids $\frac{\partial J}{\partial w_jk^{(i)}}$ et on ajuste le coefficient de manière à diminuer J. Un coefficient $\alpha$ appelé taux d'apprentissage défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. 
+Il s'agit de l'algorithme classique.  $w_jk^{(i)}} \leftarrow w_jk^{(i)}} - \alpha \frac{\partial J}{\partial w_jk^{(i)}}$ . Un coefficient $\alpha$ appelé taux d'apprentissage défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt,valign=t]{"images/MLP/descentedegradientstochastique"}
+\includegraphics[width=130pt]{"images/MLP/descentedegradientstochastique"}
 \hspace*{10mm}
-\includegraphics[width=150pt]{"images/descentedegradientstochastiquepropre"}
-\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On voit bien ici que l'algorithme entraîne un blocage dans un minimum local.}
+\includegraphics[width=130pt]{"images/MLP/descentedegradientstochastiquepropre"}
+\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On voit bien ici que l'algorithme peut entraîner un blocage dans un minimum local.}
 \label{descentedegradientstochastique}
 \end{figure}
 
 
 
-\subsubsection{Descente de gradient stochastique}
+\subsubsection{Descente de gradient newtonienne}
+Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre qui sert à doser cette inertie. on note $\nu$ le terme de descente au pas précédent. $ w_jk^{(i)}} \leftarrow w_jk^{(i)}} - \alpha \frac{\partial J}{\partial w_jk^{(i)}}$
 	
 
 
