@@ -111,6 +111,14 @@ w_{jk}^{(i)}} \leftarrow w_{jk}^{(i)}} - \frac{\alpha}{\sqrt{\nu+\epsilon}}\frac
 \label{descentedegradientnewtonnienne}
 \end{figure}
 
+\subsection{Rétropropagation de l'erreur}
+
+On a vu les principaux algorithmes de descente de gradient. Cependant cela suppose de connaître l'erreur commise par le vecteur à mettre à jour. Or, dans le cas d'un réseau de neurones, cette erreur est calculée à la sortie du réseau, c'est-à-dire après la dernière couche. Il faut donc trouver un moyen de calculer \textbf{l'influence} de chaque poids, de chaque couche dans l'erreur commise. En d'autre terme, il faut \textbf{rétro-propager l'erreur, de la sortie vers l'entrée}.
+
+
+
+
+
 
 
 
