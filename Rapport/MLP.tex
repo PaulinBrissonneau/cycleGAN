@@ -70,7 +70,7 @@ Il s'agit de l'algorithme classique.  $w_jk^{(i)} \leftarrow w_jk^{(i)} - \alpha
 
 
 \subsubsection{Descente de gradient newtonienne}
-Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent. $ w_jk^{(i)} \leftarrow w_jk^{(i)} + \beta \nu - \frac{\partial J}{\partial w_jk^{(i)}$
+Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent. $ w_jk^{(i)} \leftarrow w_jk^{(i)} + \beta \nu - \frac{\partial J}{\partial w_{jk}^{(i)}}$
 	
 \begin{figure}[!h]
 \centering
@@ -82,18 +82,34 @@ Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'a
 \end{figure}
 
 \subsubsection{RMSProp}
+L'algorithme est le suivant : on choisit les hyperparamètre $\beta$ $\alpha$ et $\epsilon$ tel que epsilon soit petit mais non nul, on initialise $\nu$ à 0.
+A chaque pas on calcule :
+
+\begin{displaymath}
+\nu \leftarrow \beta \nu + (1-\beta) \frac{\partial J}{\partial w_{jk}^{(i)}} \\
+w_{jk}^{(i)}} \leftarrow w_{jk}^{(i)}} - \frac{\alpha}{\sqrt{\nu+\epsilon}}\frac{\partial J}{\partial w_{jk}^{(i)}}
+\end{displaymath}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonnienne"}
+\includegraphics[width=130pt]{"images/MLP/RMSProp"}
 \hspace*{10mm}
-\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
-\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
-\label{descentedegradientstochastique}
+\includegraphics[width=130pt]{"images/MLP/RMSPropPropre"}
+\caption{Exemple d'application de la descente de gradient newtonnienne. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible au minimum locaux mais peu aux grands gradients.}
+\label{RMSProp}
 \end{figure}
 
+\subsubsection{ADAM}
 
 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=130pt]{"images/MLP/adam"}
+\hspace*{10mm}
+\includegraphics[width=130pt]{"images/MLP/adampropre"}
+\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur.L'algorithme est peu sensible aux minimum locaux et beaucoup plus stable que la méthode de descente de gradient newtonnienne.}
+\label{descentedegradientnewtonnienne}
+\end{figure}
 
 
 
