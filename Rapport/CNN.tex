@@ -36,12 +36,13 @@ $\forall (x,y) \in [|0,W_I|] \times [|0,H_I|]$,  $(N \otimes I)_{x,y} = \sum_{i=
 \\
 Où l'on a posé $W_I,H_I$ la taille de l'image et $W_K,H_K$ la taille du noyau. \\
 \\
-Voici quelques exemples de l'effet du produit de convolution avec plusieurs noyaux :
+La figure \ref{chien_prairie} donne quelques exemples de l'effet du produit de convolution avec plusieurs noyaux.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=100pt]{images/cnn/chien_prairie.png} 
 \caption{Effets de la convolution avec quelques noyaux.}
+\label{chien_prairie}
 \end{figure}
 
 Ainsi, cette opération nous permet de mettre en évidence des motifs élémentaires en activant la case correspondante si le motif est présent au niveau de celle-ci.
@@ -49,40 +50,44 @@ Ainsi, cette opération nous permet de mettre en évidence des motifs élémenta
 \subsection{Le balayage de l'image : une histoire de Padding et de Stride}
 
 Pour pouvoir évaluer toute l'image, il va falloir la balayer avec le noyau. De manière assez logique, on commence par le placer sur le coin supérieur gauche de l'image, puis on affectue un produit de convolution. Ensuite, il suffit de faire glisser latéralement le noyau d'un pixel et de répéter l'opération. Une fois au bout de la ligne, on descend d'un pixel et on repart à gauche. \\
-Voici un exemple de balayage d'un noyau sur une image : 
+La figure \ref{convolution} donne un exemple de balayage d'un noyau sur une image.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=100pt]{images/cnn/convolution.png}
 \caption{Fonctionnement de la couche de convolution sur un exemple simple.}
+\label{convolution}
 \end{figure}
 
-On remarque alors que le résultat à une dimension plus petite que l'image d'origine : on a ici effectué ce que l'on appelle un \textbf{simple padding}. Cependant, on pourrait souhaiter que le résultat ait la même dimension : cela est rendu possible grâce au \textbf{same padding}. Pour cela, nous pouvons rajouter des gardes autour de l'image d'origine : on rajoute des zéros autour puis on effectue l'opération de convolution comme présenté sur cette image :
+On remarque alors que le résultat à une dimension plus petite que l'image d'origine : on a ici effectué ce que l'on appelle un \textbf{simple padding}. Cependant, on pourrait souhaiter que le résultat ait la même dimension : cela est rendu possible grâce au \textbf{same padding}. Pour cela, nous pouvons rajouter des gardes autour de l'image d'origine : on rajoute des zéros autour puis on effectue l'opération de convolution comme présenté sur la figure \ref{same_padding}
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{images/cnn/same_padding.png}
 \caption{Fonctionnement de la couche de convolution avec du same padding.}
+\label{same_padding}
 \end{figure}
 
-Il existe encore un paramètre permettant de personnaliser l'opération : le \textbf{stride}. Celui correspond au décalage à utiliser pour le noyau :
+Il existe encore un paramètre permettant de personnaliser l'opération : le \textbf{stride}. Celui correspond au décalage à utiliser pour le noyau. Ce processus est représenté sur la figure \ref{stride}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{images/cnn/stride.png}
 \caption{Fonctionnement de la couche de convolution avec un stride valant 2.}
+\label{stride}
 \end{figure}
  
 L'avantage d'avoir un stride plus grand que 1 est aussi son désavantage : en effet il va permettre d'avoir un résultat en sortie de plus petite dimension mais en contrepartie, il y a une perte d'information.
 
 \subsection{Généralisation en 3D}
 
-Les images en couleurs peuvent être représentées par une matrice 3D de profondeur 3. Pour pouvoir gérer ce cas, nous prenons des noyaux de de la même profondeur que l'image, puis nous appliquons séparément le produit de convolution sur les profondeurs correspondantes, le résultat final n'étant que la somme des résultats sur chaque profondeur. 
+Les images en couleurs peuvent être représentées par une matrice 3D de profondeur 3. Pour pouvoir gérer ce cas, nous prenons des noyaux de de la même profondeur que l'image, puis nous appliquons séparément le produit de convolution sur les profondeurs correspondantes, le résultat final n'étant que la somme des résultats sur chaque profondeur. Un exemple d'une telle opération est représenté par la figure \ref{CNN_3D}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{images/cnn/CNN_3D.png}
 \caption{Structure simplifiée d'un CNN}
+\label{CNN_3D}
 \end{figure}
 
 Notons cependant que ce résultat est très important car même si l'on considère que l'image n'a qu'une seule profondeur(image en niveau de gris par exemple), les données en entrée sur les autres couches de convolution sont dans l'immense majorité des cas en 3 dimensions. De manière intuitive, il est important de comprendre que la généralisation en 3D permet de détecter des motifs tridimensionnels au même titre qu'une opération de convolution simple permet d'identifier la présence d'un motif bidimensionnel. 
@@ -106,23 +111,82 @@ Les couches de pooling permettent de réduire la taille de la sortie au prix d'u
 Il est à noter que la taille des noyaux est une variable et que plus celle-ci est grande, plus la taille de la sortie sera petite. 
 \subsection{Structure complète d'un CNN}
 
-La reconnaissance d'objet est le plus souvent complexe et nécessite de nombreux motifs à déceler pour pouvoir être efficace. Ainsi, si l'on avait un motif par couche, la taille du CNN serait gigantesque.Pour éviter cela, il suffit d'associer à chaque couche plusieurs noyaux (généralement une puissance de 2). En appliquant les processus précédant pour chacun des noyaux, on se retrouve avec un nombre de matrice en sortie égal au nombre de noyaux. On se contente alors de les empiler en rajoutant une dimension supplémentaire : on obtient alors en sortie de couche de convolution un bloc de profondeur le nombre de noyau contenant dans chacune des couches  le résultat du produit de convolution pour un noyau. 
+La reconnaissance d'objet est le plus souvent complexe et nécessite de nombreux motifs à déceler pour pouvoir être efficace. Ainsi, si l'on avait un motif par couche, la taille du CNN serait gigantesque.Pour éviter cela, il suffit d'associer à chaque couche plusieurs noyaux (généralement une puissance de 2). En appliquant les processus précédant pour chacun des noyaux, on se retrouve avec un nombre de matrice en sortie égal au nombre de noyaux. On se contente alors de les empiler en rajoutant une dimension supplémentaire : on obtient alors en sortie de couche de convolution un bloc de profondeur le nombre de noyau contenant dans chacune des couches  le résultat du produit de convolution pour un noyau. La figure \ref{structure_CNN_2} illustre ce principe.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{images/cnn/structure_CNN_2.png}
 \caption{Structure complète d'un CNN : la première couche de convolution contient 64 noyaux et la deuxième 256.}
+\label{structure_CNN_2}
 \end{figure}
 
 On alterne ainsi entre couches de convolution pour prélever des motifs de plus en plus complexes et couches de pooling pour réduire la quantité de calculs. Les données étant ainsi pré-traitées, il suffit de les mettre en entrée d'une couche dense pour finalement avoir le résultat escompté.
 
 \subsection{Apprentissage d'un CNN}
 
-Le CNN, de par sa structure analogue à celle d'un MLP, a besoin d'une phase d'apprentissage dans le but d'apprendre à reconnaitre les motifs intéressants. Cela se fait par un processus de backpropagation. Cette partie étant essentiellement calculatoire, nous ne présenterons pas les opérations exactes à effectuer dans cette section mais nous vous invitons fortement à consulter le site suivant [https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/] pour de plus amples informations.
+Le CNN, de par sa structure analogue à celle d'un MLP, a besoin d'une phase d'apprentissage dans le but d'apprendre à reconnaitre les motifs intéressants. Cela se fait par un processus de backpropagation. Cette partie étant essentiellement calculatoire, nous ne présenterons pas les opérations exactes à effectuer dans cette section mais nous vous invitons fortement à consulter la littérature scientifique à ce sujet [ref site].
+
+ [https://www.jefkine.com/general/2016/09/05/backpropagation-in-convolutional-neural-networks/] pour de plus amples informations.
+ 
+\subsection{Dropout}
+
+Le principal problème de ce type d'architecture est le phénomène de sur-apprentissage. Pour palier à ce problème, des améliorations ont été proposées, notamment en 2014 par un article[ref doc dropout] composé par des chercheurs de l'université de Toronto. Les auteurs proposent en effet d'éteindre de manière aléatoire une certaine proportion de neurones pendant la phase de forwardpropagation (cette proportion constitue un paramètre du dropout). Ils ont nommé cette technique le \textbf{dropout}. Cela permet de réduire la co-adaptation entre les neurones, évitant ainsi qu'un neurone ne prenne trop d'importance dans le processus d'apprentissage, ce qui pourrait amener à du sur-apprentissage. Une explication visuel est proposée par la figure \ref{dropout}.
+ 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{images/cnn/dropout.png}
+\caption{A gauche : une structure MLP classique. A droite,un exemple de l'effet du dropout(paramètre ajusté à 50\%). (cité la source ?) }
+\label{dropout}
+\end{figure}
+
+La figure \ref{dropout_article} présente les résultats de ce même article. Les résultats sont plus que positifs dans la mesure où la qualité prédictive du réseau est grandement amélioré par le dropout.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{images/cnn/dropout_article.png}
+\caption{Résultats de l'article sur l'efficacité du dropout sur un réseau neuronal. (cité la source ?) }
+\label{dropout_article}
+\end{figure}
  
 \section{Implémentation et résultats}
-Blablabla
 
+\subsection{Implémentation}
+
+Nous avons une nouvelle fois utilisé TensorFlow 2.0 qui permet l'utilisation rapide de couches telles que celles de convolution, de pooling mais aussi de flatenning : c'est une couche permettant de faire la transition entre la dernière couche de convolution et la première couche dense. En d'autres termes, elle transforme les données en 3 dimensions en un tableau en 1 dimension.
+
+\[ \begin{array}{lcr}
+	Conv2D(64, 3, activation='relu') \\
+    Conv2D(32, 3, activation='relu') \\
+    Flatten() \\
+    Dense(128, activation='relu') \\
+    Dense(10, activation='softmax')\end{array}\]
+
+Nous avons de plus utilisé l'optimiseur ADAM pour effectuer la descente de gradient.
+
+\subsection{Résultats}
+
+Nous nous sommes intéressé à l'influence du \textbf{stride} et du \textbf{padding} sur les performances du CNN. La figure \ref{resultat_padding_stride} présente les résultats de notre analyse sur la base de données MNIST.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{images/cnn/cnn_padding_stride.png}
+\caption{Comparaison de l'efficacité de notre CNN en fonction des paramètres stride et padding. La base de données utilisée est MNIST.}
+\label{resultat_padding_stride}
+\end{figure}
+
+Nous pouvons conclure que sur cette base de données, l'utilisation d'un stride supérieur à 1 a comme effet de réduire les capacités prédictives du CNN. En effet, lorsque ce paramètre est trop élevé, la perte d'information est trop importante, nuisant aux performance de l'algorithme. Nous remarquons de plus que le padding n'a ici aucune influence. Cependant, ce résultat est à prendre avec prudence car les images de MNIST sont centrées avec des bords sombres.Ainsi il n'y a aucunes informations sur les bords, rendant le changement de padding quasiment inutile. 
+
+De même, nous avons testé l'influence du \textbf{dropout}. Les résultats sont présentés sur la figure \ref{resultat_dropout}.
+  
+\begin{figure}[!h]
+\centering
+\includegraphics[width=200pt]{images/cnn/resultat_dropout.png}
+\caption{Influence du dropout sur l'efficacité de nos réseaux. En haut, un CNN sur la base de données MNIST.En bas, un MLP sur la base de données Moon. Nous remarquons que les courbes sont toutes confondues, quelque soit le paramètre de dropout choisi.}
+\label{resultat_dropout}
+\end{figure}
+
+Les résultats sont beaucoup moins significatifs que ce que laisse présager l'article [ref]. Il semble donc que le dropout n'ai aucune influence sur les résultats de notre CNN. 
 
 https://www.cs.princeton.edu/courses/archive/spr08/cos598B/Readings/Fukushima1980.pdf
+
 
