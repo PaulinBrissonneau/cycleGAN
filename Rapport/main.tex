@@ -19,12 +19,60 @@
 
 %\addbibresource{biblio.bib}
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand\headrulewidth{1pt}
+\fancyhead[L]{Projet cycleGAN 2020}
+\fancyhead[R]{CentraleSupélec}
+\fancyfoot[R]{\today}
+
+
+
+
 \author{Paulin Brissonneau \and Thomas Kebaili \and Ilyas Moutawwakil \and Valentin Laurent \and Lilian Lecomte}
-\date{XX mai 2020}
+\date{\today}
 \title{Rapport sur le Projet CycleGan}
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
 \begin{document}
-\maketitle
+
+\begin{titlepage}
+  \begin{sffamily}
+  \begin{center}
+
+    \textsc{\Large CentraleSupélec}\\[2cm]
+    
+    \textsc{\huge Rapport de projet}\\[1cm]
+
+	\HRule \\[0.6cm]
+    \textsc{\Huge CycleGAN \\[0.2cm] \huge Transformer les chevaux\\en zèbres}\\[0.6cm]
+	\HRule \\[3cm]
+    
+ 
+  
+    \textsc{\large Paulin Brissonneau\\
+    	Thomas Kebaili\\
+    	Valentin Laurent\\
+    	Lilian Lecomte\\
+    	Ilyas Moutawwakil}\\[1cm]
+        
+    \textsc{\large Professeurs encadrants :\\
+        Joanna Tomasik\\
+        Arpad Rimmel}\\
+
+
+    \vfill
+
+    % Bottom of the page
+    {\textsc{\large\today}}
+
+  \end{center}
+  \end{sffamily}
+\end{titlepage}
+
+
+%\maketitle
 
 \tableofcontents
 
@@ -37,7 +85,7 @@
 
 \newpage
 
-%\bibliography{/home/paulin/Documents/code/IA/cycleGanGit/Rapport/zotero}
-%\bibliographystyle{ieeetr}
+\bibliography{/home/paulin/Documents/code/IA/cycleGanGit/Rapport/zotero}
+\bibliographystyle{ieeetr}
 
 \end{document}
