@@ -56,7 +56,7 @@ La fonction de coût utilisée dans toute cette partie est $J = \sum \limits{k}{
 
 
 \subsubsection{Descente de gradient stochastique}
-Il s'agit de l'algorithme classique.  $w_jk^{(i)}} \leftarrow w_jk^{(i)}} - \alpha \frac{\partial J}{\partial w_jk^{(i)}}$ . Un coefficient $\alpha$ appelé taux d'apprentissage défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. 
+Il s'agit de l'algorithme classique.  $w_jk^{(i)} \leftarrow w_jk^{(i)} - \alpha \frac{\partial J}{\partial w_jk^{(i)}}$ . Un coefficient $\alpha$ appelé taux d'apprentissage défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. 
 
 \begin{figure}[!h]
 \centering
@@ -70,13 +70,27 @@ Il s'agit de l'algorithme classique.  $w_jk^{(i)}} \leftarrow w_jk^{(i)}} - \alp
 
 
 \subsubsection{Descente de gradient newtonienne}
-Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre qui sert à doser cette inertie. on note $\nu$ le terme de descente au pas précédent. $ w_jk^{(i)}} \leftarrow w_jk^{(i)}} - \alpha \frac{\partial J}{\partial w_jk^{(i)}}$
+Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent. $ w_jk^{(i)} \leftarrow w_jk^{(i)} + \beta \nu - \frac{\partial J}{\partial w_jk^{(i)}$
 	
+\begin{figure}[!h]
+\centering
+\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonnienne"}
+\hspace*{10mm}
+\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
+\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
+\label{descentedegradientstochastique}
+\end{figure}
 
+\subsubsection{RMSProp}
 
-
-
-
+\begin{figure}[!h]
+\centering
+\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonnienne"}
+\hspace*{10mm}
+\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
+\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
+\label{descentedegradientstochastique}
+\end{figure}
 
 
 
