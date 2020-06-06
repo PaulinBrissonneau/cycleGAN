@@ -8,7 +8,7 @@ Le transfert de style consiste à transformer des données d'un \textit{style à
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt,valign=t]{"images/cycle_exemples"}
+\includegraphics[width=150pt,valign=t]{"images/cycle/cycle_exemples"}
 \caption{Exemples de transfert de style effectués par un cycleGAN. De haut en bas : transformation $pommes \leftrightarrow oranges$, transformation $paysages \, d'\acute{e} t \acute{e} \leftrightarrow paysages\,d'hiver$ et transformation $chevaux \leftrightarrow z\grave{e}bres$. Ces exemples sont tirés de l'article de Zhu et al. \cite{zhu_unpaired_2018}}
 \label{cycle_exemples}
 \end{figure}
@@ -29,9 +29,9 @@ Le transfert de style (à deux classes) repose sur deux banques de données que 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt,valign=t]{"images/paire"}
+\includegraphics[width=100pt,valign=t]{"images/cycle/paire"}
 \hspace*{10mm}
-\includegraphics[width=100pt,valign=t]{"images/pairepas"}
+\includegraphics[width=100pt,valign=t]{"images/cycle/pairepas"}
 \caption{Les deux types de transferts de style. À gauche, le transfert de style appairé où chaque donnée est associée à son équivalent dans un autre style. À droite, le transfert de style non appairé où les images n'ont pas d'équivalent dans l'autre style. Ces images sont tirées de l'article de Zhu et al. \cite{zhu_unpaired_2018}.}
 \label{paire}
 \end{figure}
@@ -47,7 +47,7 @@ Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du styl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{"images/cycleDouble"}
+\includegraphics[width=200pt]{"images/cycle/cycleDouble"}
 \caption{Structure globale du cycleGAN. Le générateur G créer des images du style de B à partir d'images du style de A. Le générateur F créer des images du style de A à partir d'images du style de B. Chaque banque d'images, associée à un style, possède son discriminateur.}
 \label{cycleDouble}
 \end{figure}
@@ -58,9 +58,9 @@ La première est celle d'un GAN classique : pour une transformation $ A \rightar
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/cycle_ganG"}
+\includegraphics[width=150pt]{"images/cycle/cycle_ganG"}
 \hspace*{10mm}
-\includegraphics[width=150pt]{"images/cycle_ganF"}
+\includegraphics[width=150pt]{"images/cycle/cycle_ganF"}
 \caption{Décomposition du cycleGAN en deux GAN distincts.}
 \label{cycle_ganGF}
 \end{figure}
@@ -78,11 +78,11 @@ Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \te
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=220pt]{"images/cycleBack"}
+\includegraphics[width=220pt]{"images/cycle/cycleBack"}
 
 \vspace{6mm}
 
-\includegraphics[width=220pt]{"images/cycleFor"}
+\includegraphics[width=220pt]{"images/cycle/cycleFor"}
 \caption{Décomposition du cycleGAN en deux GAN distincts et ajout des contraintes de consistance cyclique. En haut, la consistance cyclique arrière (\textit{backward cycle consistency}). En bas, la consistance cyclique avant (\textit{forward cycle consistency}).}
 \label{cycleForBack}
 \end{figure}
@@ -133,7 +133,7 @@ On comprend bien que c'est une limitation très forte, qui ne convient qu'à cer
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{"images/Lident"}
+\includegraphics[width=200pt]{"images/cycle/Lident"}
 \caption{Mise en évidence de la dégradation de la composition des couleurs, par Zhu et al. \cite{zhu_unpaired_2018}. À droite, l'effet de la fonction de coût $\mathcal{L}_{\text {identity }}$, qui améliore la cohérence des couleurs.}
 \label{Lident}
 \end{figure}
@@ -250,21 +250,21 @@ Quelques exemples de nos résultats sont présentés sur les figures \ref{exempl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=300pt]{"images/cycle"}
+\includegraphics[width=300pt]{"images/cycle/cycle"}
 \caption{Exemples de sorties de notre cycleGAN sur la banque d'images CelebA. La première ligne correspond aux images de la banque, la deuxième ligne correspond à la sortie du générateur. À gauche, il s'agit de la transformation \textit{portrait sans sourire} vers \textit{portrait avec sourire}. À droite, il s'agit de la transformation inverse.}
 \label{exemple_celebA}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/cycleRes2"}
+\includegraphics[width=150pt]{"images/cycle/cycleRes2"}
 \caption{Exemples de sorties de notre cycleGAN sur la banque d'images $pommes \leftrightarrow oranges$. À gauche, les images d'orange de la banque. À droite, les mêmes images dans le style des pommes en sortie de cycleGAN.}
 \label{exemple_orange}
 \end{figure}
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/cycleRes3"}
+\includegraphics[width=150pt]{"images/cycle/cycleRes3"}
 \caption{Exemple de sortie de notre cycleGAN sur la banque d'image $chevaux \leftrightarrow z\grave{e}bres$. À gauche, une image de chevaux de la banque. À droite, la même images dans le style des images zèbres en sortie de cycleGAN.}
 \label{exemple_zebres}
 \end{figure}
