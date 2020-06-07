@@ -23,8 +23,7 @@ Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ 
 
 
 \section{Le perceptron}
-En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer le perceptron \cite{rosenblatt_perceptron_1958}. Son idée est d'utiliser les neurones pour reconnaître des formes simples dans des images. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (c'est-à-dire que les différents neurones ne sont pas reliés entre eux). Cela limite l'intérêt du perceptron : il ne peut apprendre que des \textit{pattern} linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR \cite{MINSKY}.
-L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. 
+En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer le perceptron \cite{rosenblatt_perceptron_1958}. Son idée est d'utiliser les neurones pour reconnaître des formes simples dans des images. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (c'est-à-dire que les différents neurones ne sont pas reliés entre eux). Cela limite l'intérêt du perceptron : il ne peut apprendre que des \textit{pattern} linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR \cite{MINSKY}. L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. Le schéma d'un perceptron est donnée sur la figure \ref{perceptron}.
 
 \begin{figure}[!h]
 \centering
@@ -59,7 +58,8 @@ On notera que si le réseau possède $L+1$ couches (de $0$ à $ L$), $N^{(0)} = 
 Il existe de nombreuses fonctions d'activation avec chacune leurs avantages et leurs défauts. En voici quelques-unes.
 
 \subsubsection{Sigmoïde}
-Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de \textit{gradient vanishing}, c'est-à-dire que proche sa zone de saturation la gradient sera très vite trop faible. Cela portera défaut à l'apprentissage lors de l'application de la rétropropagation du gradient. La fonction introduit un hyperparamètre $\lambda$.
+Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de \textit{gradient vanishing}, c'est-à-dire que proche sa zone de saturation la gradient sera très vite trop faible. Cela portera défaut à l'apprentissage lors de l'application de la rétropropagation du gradient. La fonction introduit un hyperparamètre $\lambda$. Son allure est donnée par la figure \ref{sigmoide}.
+
 \begin{displaymath}
 \varphi_\lambda (x) = \frac{1}{1+e^{-\lambda x}}
 \end{displaymath}
@@ -73,7 +73,7 @@ Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'
 
 
 \subsubsection{Tangente hyperbolique}
-Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1. Elle souffre du même problème de \textit{gradient vanishing} que la sigmoïde.
+Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1. Elle souffre du même problème de \textit{gradient vanishing} que la sigmoïde. Son allure est donnée par la figure \ref{tanh}.
 \begin{displaymath}
 \varphi (x) = tanh(x)
 \end{displaymath}
@@ -87,13 +87,14 @@ Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1. Elle souffre 
 
 
 \subsubsection{Softmax}
-Cette fonction s'applique sur un vecteur, elle est souvent utilisée en sortie car elle permet d'obtenir des données interprétables comme des probabilités(entre 0 et 1 et dont la somme vaut 1)
+Cette fonction s'applique sur un vecteur, elle est souvent utilisée en sortie car elle permet d'obtenir des sorties homogènes à des probabilités (entre 0 et 1 et dont la somme sur les sorties vaut 1)
 \begin{displaymath}
 \varphi_\lambda (X)_j = \frac{e^{-x_j}}{\sum\limits_{k}  e^{-x_k}}
 \end{displaymath}
 
 \subsubsection{ReLu}
-Permet d'éviter le gradient vanishing, accélère les calculs mais peut mener à la mort des neurones(cf dropout).
+La ReLu (pour \textit{Rectified Linear Unit}) définie ci-dessous permet d'éviter le \textit{gradient vanishing} puisqu'elle ne possède pas de zone de saturation. Son inconvénient réside dans sa partie de gradient nul. En effet, si sa pré-activation (la somme pondérée de ses entrées) est négative, l'effet du neurone sur les couches suivantes sera nul. Autrement, le gradient de l'erreur commise par ce neurone sera nul, il ne pourra donc pas mettre à jour ses poids et restera dans cette position pendant tout l'apprentissage. On dit que le neurone \textit{meurt}. L'allure de la ReLu est donnée par la figure \ref{ReLu}.
+
 \begin{displaymath}
 \varphi (x) = max(0,x)
 \end{displaymath}
@@ -106,7 +107,8 @@ Permet d'éviter le gradient vanishing, accélère les calculs mais peut mener �
 \end{figure}
 
 \subsubsection{Et bien d'autres...}
-Il existe bien d'autres fonctions d'activation ayant divers effets. Ce champ de recherche est très actif : de nouvelles fonctions sont découvertes chaque année dont l'effet n'est pas toujours bien compris. On peut par exemple citer la Mish(2019)\cite{Mish} ou la softexponential(2016)\cite{Softexponential}
+Il existe beaucoup d'autres fonctions d'activation ayant divers effets. Ce champ de recherche est très actif : de nouvelles fonctions sont découvertes chaque année dont l'effet n'est pas toujours bien compris. On peut par exemple citer la fonction Mish (2019) \cite{misra_mish_2019-1} ou la softexponentielle(2016)  \cite{godfrey_continuum_2016}.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/mish2"}
@@ -118,14 +120,14 @@ Il existe bien d'autres fonctions d'activation ayant divers effets. Ce champ de 
 \section{Rétropropagation}
 \subsection{Principe}
 
-On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédentes et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour minimiser $J$ en modifiant les poids. Le principe de la rétropropagation de l'erreur est illustré par la figure \ref{backward}.
+On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédentes et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour minimiser $J$ en mettant à jour les poids par itérations successives. Le principe de la rétropropagation de l'erreur est illustré par la figure \ref{backward}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=140pt]{"images/MLP/forward"}
 \hspace*{5mm}
 \includegraphics[width=140pt]{"images/MLP/backward"}
-\caption{Principe global de la rétropropagation du gradient. À gauche, la propagation avant, qui permet de calculer la sortie du réseau en fonction de l'entrée. À droite, la rétropagation de l'erreur, qui permet de calculer l'influence de chaque poids sur l'erreur en sortie. Ces deux schémas proviennent d'un article de Lillicrap et al. \cite{lillicrap_backpropagation_2020}}.
+\caption{Principe de la rétropropagation du gradient. À gauche, la propagation avant, qui permet de calculer la sortie du réseau en fonction de l'entrée. À droite, la rétropagation de l'erreur, qui permet de calculer l'influence de chaque poids sur l'erreur en sortie. Ces deux schémas proviennent d'un article de Lillicrap et al. \cite{lillicrap_backpropagation_2020}}.
 \label{backward}
 \end{figure}
 
@@ -138,25 +140,31 @@ Cette fonction compte les erreurs proportionnellement à leur importance.
 MAE = \frac{1}{n} \sum\limits_{i = 0}^{n} |y_{th} - y_{mes}|
 \end{displaymath}
 
+où $y_{th}$ est la sortie théorique, et $y_{mes}$ est la sortie prédite par l'algorithme.
+
 \subsubsection{Mean Squared Error}
-Le plus souvent, on est prêt à tolérer de faibles erreus mais on refuse catégoriquement les aberrations. C'est exactement ce que fait l'erreur quadratique moyenne. Elle attribue un poids beaucoup plus important aux grandes déviations.
+Parfois, on est prêt à tolérer de faibles erreurs mais on refuse catégoriquement les aberrations. C'est exactement ce que fait l'erreur quadratique moyenne. Elle attribue un poids beaucoup plus important aux grandes déviations.
 \begin{displaymath}
 MSE = \frac{1}{n} \sum\limits_{i = 0}^{n} (y_{th} - y_{mes})^2
 \end{displaymath}
 
+où $y_{th}$ est la sortie théorique, et $y_{mes}$ est la sotie prédite par l'algorithme.
+
 \subsubsection{Entropie croisée}
-L'entropie croisée, introduite à l'origine pour mesurer la distance entre deux distributions de probabilités est très efficace pour les réseaux neuronaux (dans le cas d'un classificateur il s'agit en effet d'approximer une densité de probabilité).
+L'entropie croisée, introduite à l'origine pour mesurer la distance entre deux distributions de probabilités est très efficace pour les réseaux neuronaux dans le cas de la classification. En effet, dans ce cas il s'agit d'approximer une densité de probabilité.
 
 \begin{displaymath}
 Cross Entropy = - \sum\limits_{i = 0}^{n} y_{th}  log(y_{mes})
 \end{displaymath}
 
+où $y_{th}$ est la classe théorique, et $y_{mes}$ est la classe prédite par l'algorithme.
+
 \subsection{Algorithmes d'optimisation}
-La fonction de coût utilisée dans toute cette partie est $J = \sum\limits_{k} (y_{th} - y_{mes})^2)$
+La fonction de coût utilisée dans toute cette partie est $J = \sum\limits_{k} (y_{th} - y_{mes})^2$
 
 
 \subsubsection{Descente de gradient stochastique}
-Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \alpha \frac{\partial J}{\partial w_{jk}^{(i)}}$ . Un coefficient $\alpha$ appelé taux d'apprentissage défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. 
+Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \alpha \frac{\partial J}{\partial w_{jk}^{(i)}}$ . Un coefficient $\alpha$ appelé \textbf{taux d'apprentissage} défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. Un exemple d'application de la descente de gradient stochastique est donné par la figure \ref{descentedegradientstochastique}.
 
 \begin{figure}[!h]
 \centering
@@ -170,7 +178,8 @@ Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \a
 
 
 \subsubsection{Descente de gradient newtonienne}
-Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta_1$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent. $ w_j{k}^{(i)} \leftarrow w_{jk}^{(i)} + \beta_1 \nu - \frac{\partial J}{\partial w_{jk}^{(i)}}$
+Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta_1$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent : $$ w_j{k}^{(i)} \leftarrow w_{jk}^{(i)} + \beta_1 \nu - \frac{\partial J}{\partial w_{jk}^{(i)}}$$
+Un exemple d'application de la descente de gradient stochastique est donné par la figure \ref{descentedegradientnewtonnienne}.
 	
 \begin{figure}[!h]
 \centering
@@ -178,11 +187,11 @@ Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'a
 \hspace*{10mm}
 \includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
 \caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
-\label{descentedegradientstochastique}
+\label{descentedegradientnewtonnienne}
 \end{figure}
 
 \subsubsection{RMSProp}
-L'algorithme est le suivant : on choisit les hyperparamètre $\beta_2$ $\alpha$ et $\varepsilon$ tel que $\varepsilon$ soit petit mais non nul, on initialise $\nu$ à 0.
+L'algorithme, dont un exemple d'application est donné sur la figure \ref{RMSProp}, est le suivant : on choisit les hyperparamètre $\beta_2$ $\alpha$ et $\varepsilon$ tel que $\varepsilon$ soit petit mais non nul, on initialise $\nu$ à 0.
 A chaque pas on calcule :
 
 \begin{displaymath}
@@ -197,7 +206,7 @@ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\varepsilon}}\frac{
 \includegraphics[width=130pt]{"images/MLP/RMSProp"}
 \hspace*{10mm}
 \includegraphics[width=130pt]{"images/MLP/RMSPropPropre"}
-\caption{Exemple d'application de RMSProp. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible au minimum locaux mais peu aux grands gradients.}
+\caption{Exemple d'application de RMSProp. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible aux minimumx locaux mais peu aux grands gradients.}
 \label{RMSProp}
 \end{figure}
 
@@ -214,6 +223,7 @@ s \leftarrow \beta_2 s + (1-\beta_2) (\frac{\partial J}{\partial w_{jk}^{(i)}})^
 \begin{displaymath}
 w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\epsilon}}\frac{\partial J}{\partial w_{jk}^{(i)}}
 \end{displaymath}
+Un n exemple d'application est donné sur la figure \ref{ADAM}.
 
 \begin{figure}[!h]
 \centering
@@ -228,22 +238,25 @@ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\epsilon}}\frac{\pa
 
 \subsubsection{Comparatif des algorithmes}
 
+Pour comparer les différents algorithmes, nous pouvons représenter sur un seul dessin leurs convergences. Le résultat est présenté par la figure \ref{Comparatifoptimiseurs}.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[width=130pt]{"images/MLP/comparatifoptimiseurs"}
-\caption{Comparaison des 4 algorithmes présentés La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On observe que ADAM est clairement meilleur que les autres.}
+\caption{Comparaison des 4 algorithmes présentés. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On observe que ADAM est clairement meilleur que les autres.}
 \label{Comparatifoptimiseurs}
 \end{figure}
 
 \subsection{Les batchs}
-Souvent la dérivée $\frac{\partial J}{\partial w_{jk}^{(i)}}$ n'est pas calculée sur une seule entrée. Afin d'obtenir une estimation plus précise du gradient de J, on le moyenne sur n entrées. On appelle cela la méthode par batchs. Il est bon de remarquer que le choix de n n'est pas anodin. Il s'agit ici encore d'un hyperparamètre à régler qui influe sur la convergence du réseau. L'influence de la taille des batchs sera étudiée plus loin.
+Souvent la dérivée $\frac{\partial J}{\partial w_{jk}^{(i)}}$ n'est pas calculée sur une seule entrée. Afin d'obtenir une estimation plus précise du gradient de $J$, on le moyenne sur $n$ entrées. On appelle cela la méthode par batchs. Il est bon de remarquer que le choix de $n$ n'est pas anodin. Il s'agit ici encore d'un hyperparamètre à régler qui influe sur la convergence du réseau. L'influence de la taille des batchs sera étudiée plus loin.
 
 
 
 \section{Implémentation et résultats}
 \subsection{Avant-propos}
-Nous avons étudié l'impact de différents hyperparamètres sur les résultats du MLP. Sauf mention contraire, le jeu de donnée utilisé est MNIST. MNIST est un ensemble d'images en niveau de gris de chiffres écrits à la main. Le MLP est alors utilisé en tant que classificateur. Il doit reconnaître à partir de l'entrée du niveau de gris des pixels quel est le chiffre dessiné. Les résultats de précision sont calculés sur un jeu de données de test composé de données choisies aléatoirement avant l’entraînement et n'étant pas utilisées pour celui-ci. Afin de mesurer l'effet des hyperparamètres, on trace toujours les courbes avec tous les hyperparamètres égaux sauf celui qui varie.
-Les MLP utilisés pour les mesures ont été réalisés from scratch. La configuration à partir de laquelle on fait varier les hyperparamètres à été obtenu par ajustement à la main et ne prétend pas être optimale. Toutefois, les valeurs observées été de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur un grand nombre de lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
+Nous avons étudié l'impact de différents hyperparamètres sur les résultats du MLP. Sauf mention contraire, le jeu de donnée utilisé est MNIST. MNIST est un ensemble d'images en niveau de gris de chiffres écrits à la main. Le MLP est alors utilisé en tant que classificateur. Il doit reconnaître, à partir du niveau de gris des pixels, quel est le chiffre dessiné. La tâche typique de l'algorithme est présentée par une interface simple sur la figure \ref{MNIST_exemple}.\\
+Les résultats de précision sont calculés sur un jeu de données de test composé de données choisies aléatoirement avant l’entraînement et n'étant pas utilisées pour celui-ci. Afin de mesurer l'effet des hyperparamètres, on trace toujours les courbes avec tous les hyperparamètres égaux sauf celui qui varient.
+Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. La configuration à partir de laquelle on fait varier les hyperparamètres à été obtenue par ajustement par essais-erreurs et ne prétend pas être optimale. Toutefois, les valeurs observées étaient de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur 50 lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
 
 \begin{figure}[!h]
 \centering
@@ -253,17 +266,18 @@ Les MLP utilisés pour les mesures ont été réalisés from scratch. La configu
 \end{figure}
 
 \subsection{Effet du nombre de neurone par couche}
-On s'intéresse ici à la largeur du réseau i.e. le nombre de neurones par couches.
+On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de neurones par couches. Les résultats sont présentés sur la figure \ref{MLP_largeur}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/MLP_largeur"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. On observe que si trop peu de neurones ne permet pas une classification satisfaisante,  trop de neurones est contre productif. Il s'agit alors de trouver le juste milieu.\\ }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. On observe  à la fois que prendre trop peu de neurones ne permet pas une classification satisfaisante, et à la fois que prendre trop de neurones est contre productif. Il s'agit alors de trouver le juste milieu.\\ }
 \label{MLP_largeur}
 \end{figure}
 
 \subsection{Effet du nombre de couches de neurones}
-On s'intéresse ici à la profondeur du réseau.
+On s'intéresse ici à la profondeur du réseau. Les résultats sont présentés sur la figure \ref{MLP_profondeur}.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/MLP_profondeur"}
@@ -275,38 +289,39 @@ On s'intéresse ici à la profondeur du réseau.
 Comme vu précédemment la taille des batchs influe grandement sur l'algorithme.
 
 \subsubsection{Méthode stochastique}
-Il s'agit du cas où le batch est de taille 1. On met à jour les poids pour chaque exemple parcouru. On observe alors une forte instabilité lié au fait que le gradient peut fortement varier d'un exemple à l'autre.
+Il s'agit du cas où le batch est de taille 1. On met à jour les poids pour chaque exemple parcouru. On observe alors sur la figure \ref{batch1} une forte instabilité liée au fait que le gradient peut fortement varier d'un exemple à l'autre.
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch1"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec batch\_size = 1 . Un epoch correspond au passage d'un batch dans l'algorithme. }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 1 . Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch1}
 \end{figure}
 
 
 \subsubsection{Méthode par batch}
-On illustre ici avec de très grands batch. On moyenne le gradient dans cet exemple sur 2048 images. On n'observe plus l'instabilité initiale. Cependant de grands batch augmentent la sensibilité aux minima locaux et mène parfois à une saturation de la fonction de coût. De plus, un epoch correpond au passage d'un batch dans l'algorithme. Ainsi avec de très grands batch, le calcul de chaque pas peu devenir très long. Souvent, une grande taille de batch est associée à un fort taux d'apprentissage (car on estime mieux le gradient).
+On illustre ici avec de très grands batch. On moyenne le gradient dans cet exemple sur 2048 images. Sur la figure \ref{batch2}, on n'observe plus l'instabilité initiale. Cependant de grands batch augmentent la sensibilité aux minima locaux et mène parfois à une saturation de la fonction de coût. De plus, un epoch correpond au passage d'un batch dans l'algorithme. Ainsi avec de très grands batch, le calcul de chaque pas peu devenir très long. Souvent, une grande taille de batch est associée à un fort taux d'apprentissage (car on estime mieux le gradient).
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch2048"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 2048. Un epoch correspond au passage d'un batch dans l'algorithme. }
-\label{batch1}
+\label{batch2}
 \end{figure}
 
 \subsubsection{Méthode par mini-batch}
-On choisit des batch de taille plus restreinte (ici 32 images). On réduit l'instabilité pour qu'elle ne gêne pas trop la convergence, de plus le coût de calcul reste raisonnable. Enfin on garde une légère instabilité qui rend l'algorithme plus résistant aux minima locaux.
+On choisit des batch de taille plus restreinte (ici 32 images). On réduit l'instabilité pour qu'elle ne gêne pas trop la convergence, de plus le coût de calcul reste raisonnable. Enfin on garde une légère instabilité qui rend l'algorithme plus résistant aux minima locaux. Le résultat est présenté sur la figure \ref{batch3}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch32"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 32. Un epoch correspond au passage d'un batch dans l'algorithme. }
-\label{batch1}
+\label{batch3}
 \end{figure}
 
 
 \subsection{Initialisation des poids}
 Si l'on veut faire évoluer les poids du réseau, il faut bien les initialiser. Ainsi, on peut s'intéresser à l'effet de leur initialisation sur l'apprentissage.
-On commence par s'intéresser à un initialisation par loi normale. La moyenne et l'écart-type sont alors deux hyperparamètres. On remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
+On commence par s'intéresser à un initialisation par loi normale. La moyenne et l'écart-type sont alors deux hyperparamètres. Grâce aux résultats présentés par la figure \ref{MLP_initnormale}, on remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
+
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/MLP_initnormale"}
@@ -314,7 +329,7 @@ On commence par s'intéresser à un initialisation par loi normale. La moyenne e
 \label{MLP_initnormale}
 \end{figure}
 
-On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les bornes sont alors deux hyperparamètres. Ici encore, il est important de choisir des valeurs judicieuses.
+On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les bornes sont alors deux hyperparamètres. Ici encore, la figure \ref{MLP_inituni} montre qu'il est important de choisir des valeurs judicieuses.
 
 
 \begin{figure}[!h]
