@@ -2,9 +2,9 @@
 
 \section{Les neurones}
 
-Les technologies qui vont êtres présentées dans la suite se basent outes sur l'idée de neurone artificiel, aussi appelé neurone formel. McCulloh et Pitts le formalise en 1943 \cite{mcculloch_logical_1943}.
-Un neurone formel est composée de deux parties.\begin{itemize}
-\item La première consiste à faire la sommes pondérée par des poids des valeurs d'entrée du neurone auxquelles on peut éventuellement ajouter un biais. Les poids sont propres au neurone et il y a un poids par entrée.
+Les technologies qui vont êtres présentées dans la suite se basent toutes sur l'idée de neurone artificiel, aussi appelé neurone formel. McCulloh et Pitts le formalise en 1943 \cite{mcculloch_logical_1943}.
+Un neurone formel est composé de deux parties.\begin{itemize}
+\item La première consiste à faire la somme pondérée par des poids des valeurs d'entrée du neurone auxquelles on peut éventuellement ajouter un biais. Les poids sont propres au neurone et il y a un poids par entrée.
 \item La deuxième partie du neurone est la fonction d'activation. Cette fonction va s'appliquer sur le résultat de la somme pondérée. On choisit quasi-exclusivement des fonctions non-linéaires pour deux raisons : briser la linéarité (car dans le cas contraire le réseau serait assimilable à une seule matrice) et obtenir un résultat d'une certaine forme (par exemple une probabilité entre 0 et 1).
 \end{itemize}
 McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent des neurones au résultat binaire à l'aide d'une fonction d'activation de Heavyside. Un tel neurone formel est représenté par la figure \ref{neurone_exemple}.
@@ -23,12 +23,12 @@ Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ 
 
 
 \section{Le perceptron}
-En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer le perceptron \cite{rosenblatt_perceptron_1958}. Son idée est d'utiliser les neurones pour reconnaître des formes simples dans des images. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (c'est-à-dire que les différents neurones ne sont pas reliés entre eux). Cela limite l'intérêt du perceptron : il ne peut apprendre que des \textit{pattern} linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR \cite{MINSKY}. L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. Le schéma d'un perceptron est donnée sur la figure \ref{perceptron}.
+En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer le perceptron \cite{rosenblatt_perceptron_1958}. Son idée est d'utiliser les neurones pour reconnaître des formes simples dans des images. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (c'est-à-dire que les différents neurones ne sont pas reliés entre eux). Cela limite l'intérêt du perceptron : il ne peut apprendre que des \textit{pattern} linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR \cite{MINSKY}. L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. Le schéma d'un perceptron est donné sur la figure \ref{perceptron}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt,valign=t]{"images/MLP/perceptron"}
-\caption{Exemple de perceptron à $n$ entrée et $p$ sorties. Il peut donc servir de classificateur à $p$ classes.}
+\caption{Exemple de perceptron à $n$ entrées et $p$ sorties. Il peut donc servir de classificateur à $p$ classes.}
 \label{perceptron}
 \end{figure}
 
@@ -54,11 +54,11 @@ On notera que si le réseau possède $L+1$ couches (de $0$ à $ L$), $N^{(0)} = 
 
 
 
-\subsection{Quelques fonctions d'activations}
+\subsection{Quelques fonctions d'activation}
 Il existe de nombreuses fonctions d'activation avec chacune leurs avantages et leurs défauts. En voici quelques-unes.
 
 \subsubsection{Sigmoïde}
-Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de \textit{gradient vanishing}, c'est-à-dire que proche sa zone de saturation la gradient sera très vite trop faible. Cela portera défaut à l'apprentissage lors de l'application de la rétropropagation du gradient. La fonction introduit un hyperparamètre $\lambda$. Son allure est donnée par la figure \ref{sigmoide}.
+Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de \textit{gradient vanishing}, c'est-à-dire que proche de sa zone de saturation le gradient sera très vite trop faible. Cela portera défaut à l'apprentissage lors de l'application de la rétropropagation du gradient. La fonction introduit un hyperparamètre $\lambda$. Son allure est donnée par la figure \ref{sigmoide}.
 
 \begin{displaymath}
 \varphi_\lambda (x) = \frac{1}{1+e^{-\lambda x}}
@@ -120,7 +120,7 @@ Il existe beaucoup d'autres fonctions d'activation ayant divers effets. Ce champ
 \section{Rétropropagation}
 \subsection{Principe}
 
-On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédentes et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour minimiser $J$ en mettant à jour les poids par itérations successives. Le principe de la rétropropagation de l'erreur est illustré par la figure \ref{backward}.
+On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédente et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour minimiser $J$ en mettant à jour les poids par itérations successives. Le principe de la rétropropagation de l'erreur est illustré par la figure \ref{backward}.
 
 \begin{figure}[!h]
 \centering
@@ -148,7 +148,7 @@ Parfois, on est prêt à tolérer de faibles erreurs mais on refuse catégorique
 MSE = \frac{1}{n} \sum\limits_{i = 0}^{n} (y_{th} - y_{mes})^2
 \end{displaymath}
 
-où $y_{th}$ est la sortie théorique, et $y_{mes}$ est la sotie prédite par l'algorithme.
+où $y_{th}$ est la sortie théorique, et $y_{mes}$ est la sortie prédite par l'algorithme.
 
 \subsubsection{Entropie croisée}
 L'entropie croisée, introduite à l'origine pour mesurer la distance entre deux distributions de probabilités est très efficace pour les réseaux neuronaux dans le cas de la classification. En effet, dans ce cas il s'agit d'approximer une densité de probabilité.
@@ -164,7 +164,7 @@ La fonction de coût utilisée dans toute cette partie est $J = \sum\limits_{k} 
 
 
 \subsubsection{Descente de gradient stochastique}
-Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \alpha \frac{\partial J}{\partial w_{jk}^{(i)}}$ . Un coefficient $\alpha$ appelé \textbf{taux d'apprentissage} défini l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. Un exemple d'application de la descente de gradient stochastique est donné par la figure \ref{descentedegradientstochastique}.
+Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \alpha \frac{\partial J}{\partial w_{jk}^{(i)}}$ . Un coefficient $\alpha$ appelé \textbf{taux d'apprentissage} définit l'ampleur de la modification du poids. Plus $\alpha$ est grand, plus le pas est important. Ainsi un taux d'apprentissage trop faible entraînera une convergence trop lente ou un blocage dans un minimum local mais un taux trop élevé risque de ne jamais converger. Un exemple d'application de la descente de gradient stochastique est donné par la figure \ref{descentedegradientstochastique}.
 
 \begin{figure}[!h]
 \centering
@@ -191,7 +191,7 @@ Un exemple d'application de la descente de gradient stochastique est donné par 
 \end{figure}
 
 \subsubsection{RMSProp}
-L'algorithme, dont un exemple d'application est donné sur la figure \ref{RMSProp}, est le suivant : on choisit les hyperparamètre $\beta_2$ $\alpha$ et $\varepsilon$ tel que $\varepsilon$ soit petit mais non nul, on initialise $\nu$ à 0.
+L'algorithme, dont un exemple d'application est donné sur la figure \ref{RMSProp}, est le suivant : on choisit les hyper-paramètres $\beta_2$ $\alpha$ et $\varepsilon$ tel que $\varepsilon$ soit petit mais non nul, on initialise $\nu$ à 0.
 A chaque pas on calcule :
 
 \begin{displaymath}
@@ -206,7 +206,7 @@ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\varepsilon}}\frac{
 \includegraphics[width=130pt]{"images/MLP/RMSProp"}
 \hspace*{10mm}
 \includegraphics[width=130pt]{"images/MLP/RMSPropPropre"}
-\caption{Exemple d'application de RMSProp. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible aux minimumx locaux mais peu aux grands gradients.}
+\caption{Exemple d'application de RMSProp. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible aux minima locaux mais peu aux grands gradients.}
 \label{RMSProp}
 \end{figure}
 
@@ -230,7 +230,7 @@ Un n exemple d'application est donné sur la figure \ref{ADAM}.
 \includegraphics[width=130pt]{"images/MLP/adam"}
 \hspace*{10mm}
 \includegraphics[width=130pt]{"images/MLP/adampropre"}
-\caption{Exemple d'application de ADAM. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur.L'algorithme est peu sensible aux minimum locaux et beaucoup plus stable que la méthode de descente de gradient newtonnienne.}
+\caption{Exemple d'application de ADAM. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est peu sensible aux minima locaux et beaucoup plus stable que la méthode de descente de gradient newtonnienne.}
 \label{ADAM}
 \end{figure}
 
@@ -248,15 +248,15 @@ Pour comparer les différents algorithmes, nous pouvons représenter sur un seul
 \end{figure}
 
 \subsection{Les batchs}
-Souvent la dérivée $\frac{\partial J}{\partial w_{jk}^{(i)}}$ n'est pas calculée sur une seule entrée. Afin d'obtenir une estimation plus précise du gradient de $J$, on le moyenne sur $n$ entrées. On appelle cela la méthode par batchs. Il est bon de remarquer que le choix de $n$ n'est pas anodin. Il s'agit ici encore d'un hyperparamètre à régler qui influe sur la convergence du réseau. L'influence de la taille des batchs sera étudiée plus loin.
+Souvent la dérivée $\frac{\partial J}{\partial w_{jk}^{(i)}}$ n'est pas calculée sur une seule entrée. Afin d'obtenir une estimation plus précise du gradient de $J$, on le moyenne sur $n$ entrées. On appelle cela la méthode par batchs. Il est bon de remarquer que le choix de $n$ n'est pas anodin. Il s'agit ici encore d'un hyper-paramètre à régler qui influe sur la convergence du réseau. L'influence de la taille des batchs sera étudiée plus loin.
 
 
 
 \section{Implémentation et résultats}
 \subsection{Avant-propos}
-Nous avons étudié l'impact de différents hyperparamètres sur les résultats du MLP. Sauf mention contraire, le jeu de donnée utilisé est MNIST. MNIST est un ensemble d'images en niveau de gris de chiffres écrits à la main. Le MLP est alors utilisé en tant que classificateur. Il doit reconnaître, à partir du niveau de gris des pixels, quel est le chiffre dessiné. La tâche typique de l'algorithme est présentée par une interface simple sur la figure \ref{MNIST_exemple}.\\
+Nous avons étudié l'impact de différents hyperparamètres sur les résultats du MLP. Sauf mention contraire, le jeu de données utilisé est MNIST. MNIST est un ensemble d'images en niveau de gris de chiffres écrits à la main. Le MLP est alors utilisé en tant que classificateur. Il doit reconnaître, à partir du niveau de gris des pixels, quel est le chiffre dessiné. La tâche typique de l'algorithme est présentée par une interface simple sur la figure \ref{MNIST_exemple}.\\
 Les résultats de précision sont calculés sur un jeu de données de test composé de données choisies aléatoirement avant l’entraînement et n'étant pas utilisées pour celui-ci. Afin de mesurer l'effet des hyperparamètres, on trace toujours les courbes avec tous les hyperparamètres égaux sauf celui qui varient.
-Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. La configuration à partir de laquelle on fait varier les hyperparamètres à été obtenue par ajustement par essais-erreurs et ne prétend pas être optimale. Toutefois, les valeurs observées étaient de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur 50 lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
+Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. La configuration à partir de laquelle on fait varier les hyper-paramètres a été obtenue par ajustement par essais-erreurs et ne prétend pas être optimale. Toutefois, les valeurs observées étaient de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur 50 lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
 
 \begin{figure}[!h]
 \centering
@@ -265,8 +265,8 @@ Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. L
 \label{MNIST_exemple}
 \end{figure}
 
-\subsection{Effet du nombre de neurone par couche}
-On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de neurones par couches. Les résultats sont présentés sur la figure \ref{MLP_largeur}.
+\subsection{Effet du nombre de neurones par couche}
+On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de neurones par couche. Les résultats sont présentés sur la figure \ref{MLP_largeur}.
 
 \begin{figure}[!h]
 \centering
@@ -293,13 +293,13 @@ Il s'agit du cas où le batch est de taille 1. On met à jour les poids pour cha
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch1"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 1 . Un epoch correspond au passage d'un batch dans l'algorithme. }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 1. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch1}
 \end{figure}
 
 
 \subsubsection{Méthode par batch}
-On illustre ici avec de très grands batch. On moyenne le gradient dans cet exemple sur 2048 images. Sur la figure \ref{batch2}, on n'observe plus l'instabilité initiale. Cependant de grands batch augmentent la sensibilité aux minima locaux et mène parfois à une saturation de la fonction de coût. De plus, un epoch correpond au passage d'un batch dans l'algorithme. Ainsi avec de très grands batch, le calcul de chaque pas peu devenir très long. Souvent, une grande taille de batch est associée à un fort taux d'apprentissage (car on estime mieux le gradient).
+On illustre ici avec de très grands batch. On moyenne le gradient dans cet exemple sur 2048 images. Sur la figure \ref{batch2}, on n'observe plus l'instabilité initiale. Cependant de grands batch augmentent la sensibilité aux minima locaux et mène parfois à une saturation de la fonction de coût. De plus, une passe correspond au passage d'un batch dans l'algorithme. Ainsi, avec de très grands batch, le calcul de chaque pas peut devenir très long. Souvent, une grande taille de batch est associée à un fort taux d'apprentissage (car on estime mieux le gradient).
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch2048"}
@@ -320,7 +320,7 @@ On choisit des batch de taille plus restreinte (ici 32 images). On réduit l'ins
 
 \subsection{Initialisation des poids}
 Si l'on veut faire évoluer les poids du réseau, il faut bien les initialiser. Ainsi, on peut s'intéresser à l'effet de leur initialisation sur l'apprentissage.
-On commence par s'intéresser à un initialisation par loi normale. La moyenne et l'écart-type sont alors deux hyperparamètres. Grâce aux résultats présentés par la figure \ref{MLP_initnormale}, on remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
+On commence par s'intéresser à une initialisation par loi normale. La moyenne et l'écart-type sont alors deux hyper-paramètres. Grâce aux résultats présentés par la figure \ref{MLP_initnormale}, on remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
 
 \begin{figure}[!h]
 \centering
@@ -342,11 +342,11 @@ On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les 
 On remarque d'ailleurs que dans le cas optimal la courbe d'apprentissage est similaire pour les deux lois.
 
 \subsection{Taux d'apprentissage}
-Le taux d'apprentissage est un hyperparamètre très important, il va déterminer la vitesse d'apprentissage et conditionner sa stabilité. Un taux d'apprentissage trop important risque de provoquer des oscillations dans la descente de gradient, voire même de faire diverger l'apprentissage. Alors qu'un taux d'apprentissage trop faible donnera un apprentissage lent. L'influence du taux d'apprentissage est donnée par la figure \ref{taux_app}.
+Le taux d'apprentissage est un hyper-paramètre très important, il va déterminer la vitesse d'apprentissage et conditionner sa stabilité. Un taux d'apprentissage trop important risque de provoquer des oscillations dans la descente de gradient, voire même de faire diverger l'apprentissage. Alors qu'un taux d'apprentissage trop faible donnera un apprentissage lent. L'influence du taux d'apprentissage est donnée par la figure \ref{taux_app}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=250pt]{"images/MLP/taux_app"}
-\caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais ont moyennés sur 50 essais, sur les premiers batch seulement, ce qui explique que l'on atteint pas une bonne précision.}
+\caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais sont moyennés sur 50 essais, sur les premiers batchs seulement, ce qui explique que l'on n'atteint pas une bonne précision.}
 \label{taux_app}
 \end{figure}

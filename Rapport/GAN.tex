@@ -2,9 +2,9 @@
 \chapter{Les GAN (Réseaux Adverses Génératifs)}
 
 \section{Principe général des GAN}
-Le principe général des GAN repose sur l'utilisation de deux réseaux, ayant des objectifs contraires, on dit qu'ils sont \textbf{adversaires}. Le premier réseau transforme du bruit en image, c'est le \textbf{générateur} (G). Le deuxième réseau prend en entrées des images et les classe en deux catégories en leur associant leur probabilité d'être issues de la base de donnée. C'est donc un classifieur binaire, il est appelé \textbf{discriminateur} (D). Le plus souvent, le discriminateur sera alimenté par des images de deux sortes : celles provenant de la base de donnée (images réelles), et celles générées par le générateur, son rôle sera donc de dire si une image est réelle ou générée. Il s'agit ensuite d'entraîner G afin qu'il maximise la probabilité que D fasse une erreur, et d'optimiser D afin qu'il améliore la justesse de sa classification.
+Le principe général des GAN repose sur l'utilisation de deux réseaux, ayant des objectifs contraires, on dit qu'ils sont \textbf{adversaires}. Le premier réseau transforme du bruit en image, c'est le \textbf{générateur} (G). Le deuxième réseau prend en entrée des images et les classe en deux catégories en leur associant leur probabilité d'être issues de la base de données C'est donc un classifieur binaire, il est appelé \textbf{discriminateur} (D). Le plus souvent, le discriminateur sera alimenté par des images de deux sortes : celles provenant de la base de données (images réelles), et celles générées par le générateur. Son rôle sera donc de dire si une image est réelle ou générée. Il s'agit ensuite d'entraîner G afin qu'il maximise la probabilité que D fasse une erreur, et d'optimiser D afin qu'il améliore la justesse de sa classification.
 
-L'architecture des GAN a été introduite pour la première fois par Ian Goodfellow \cite{goodfellow_generative_2014} en 2014. Cet article innovant montrait déjà un gain de performance pour la génération d'images suivant une base de donnée. Mais l'atout majeur des GAN sont leur adaptabilité à tous types de données.
+L'architecture des GAN a été introduite pour la première fois par Ian Goodfellow \cite{goodfellow_generative_2014} en 2014. Cet article innovant montrait déjà un gain de performance pour la génération d'images suivant une base de données. Mais l'atout majeur des GAN sont leur adaptabilité à tous types de données.
 
 
 \section{Le DCGAN (Deep Convolutionnal Adversarial Network)}
@@ -15,7 +15,7 @@ Le DCGAN utilise la fonction de coût proposée par Goodfellow \cite{goodfellow_
 
 Pareillement, on donne comme fonction de coût pour D l'opposé de celle de G. L'architecture du DCGAN correspond alors à un jeu à somme nulle. La théorie des équilibres de Nash donne un unique état stable. Il correspond à un coût égal à $-\log 4$ pour G et $ \log 4$ pour D. Dans cette configuration, le discriminateur est forcé d'associer une probabilité de 0,5 pour chaque image donnée en entrée, le générateur étant devenu trop fort.
 
-Une variation intéressante sur le DCGAN est de poser $  \mathbb{E}_{x \sim p_{\mathrm{data}}}(\log (D(x))) + \mathbb{E}_{z \sim \mathrm{bruit}}(\log (D(G(z)))$ comme fonction de coût en début d'apprentissage. L'intérêt de cette modification résulte d'un problème : le discriminateur a tendance à facilement distinguer les images générées par G de celles de la base de donnée en début d'apprentissage. Dans ce cas, le terme $\log (1 - D(G(z))$ sature vers 0. Le remplacer par $\log (1 - D(G(z))$ résout ce problème.
+Une variation intéressante sur le DCGAN est de poser $  \mathbb{E}_{x \sim p_{\mathrm{data}}}(\log (D(x))) + \mathbb{E}_{z \sim \mathrm{bruit}}(\log (D(G(z)))$ comme fonction de coût en début d'apprentissage. L'intérêt de cette modification résulte d'un problème : le discriminateur a tendance à facilement distinguer les images générées par G de celles de la base de données en début d'apprentissage. Dans ce cas, le terme $\log (1 - D(G(z))$ sature vers 0. Le remplacer par $\log (1 - D(G(z))$ résout ce problème.
 
 
 \section{Étude de la convergence des GAN}
@@ -32,12 +32,12 @@ De par leur caractère d'adversaires, les GAN requièrent un équilibre fin entr
 \label{mode_collapse}
 \includegraphics[width=100pt]{"images/GAN/collapseB_1"}
 \includegraphics[width=100pt]{"images/GAN/collapseB_2"}
-\caption{À gauche, un exemple d'effondrement des modes sur la banque d'image CelebA. À droite, une génération sans effondrement pour comparaison. On observe que sur l'image de gauche, tous les personnages ont la même tête.}
+\caption{À gauche, un exemple d'effondrement des modes sur la banque d'images CelebA. À droite, une génération sans effondrement pour comparaison. On observe que sur l'image de gauche, tous les personnages ont la même tête.}
 \label{mode_collapse_celeb}
 \end{figure}
 
 
-L'effondrement des modes survient quand le réseau générateur ne génère pas des images conforment à l'ensemble de la distribution des images réelles, mais seulement à une petite partie. L'effondrement des modes est très visible lorsque la distribution des images réelles forme des zones bien séparées, c'est à dire quand celle-ci comporte des classes bien définies. La manifestation de ce phénomène se traduit par des images générées qui se ressemblent toutes. Les figures \ref{mode_collapse} et \ref{mode_collapse_celeb} montrent des exemples du phénomène sur la base de données MNIST et CelebA.
+L'effondrement des modes survient quand le réseau générateur ne génère pas des images conformes à l'ensemble de la distribution des images réelles, mais seulement à une petite partie. L'effondrement des modes est très visible lorsque la distribution des images réelles forme des zones bien séparées, c'est à dire quand celle-ci comporte des classes bien définies. La manifestation de ce phénomène se traduit par des images générées qui se ressemblent toutes. Les figures \ref{mode_collapse} et \ref{mode_collapse_celeb} montrent des exemples du phénomène sur la base de données MNIST et CelebA.
 
 
 Pour mieux comprendre le phénomène, il est intéressant de regarder la distribution des images de MNIST dans son ensemble. Cela est possible grâce à des algorithmes de réduction de dimension. Attention, la réduction de dimension se fait dans l'espace des pixels, et non pas dans un espace sémantique. La visualisation ne permet donc pas de séparer efficacement les différentes classes, elle permet seulement un aperçu de la distribution des images de la banque. Les figures \ref{tsne1} et \ref{tsne2} présentent une visualisation de MNIST par transformation t-SNE \cite{van_der_maaten_visualizing_2008}.
@@ -54,13 +54,13 @@ Pour mieux comprendre le phénomène, il est intéressant de regarder la distrib
 \label{tsne2}
 \end{figure}
 
-L'ensemble de points rouges correspond à un ensemble d'images générées par le réseau générateur lors de l'effondrement des modes. Sur les données MNIST, on observe différents groupes de points (des \textit{clusters}), ce sont les \textbf{modes} inhérents à la base de donnée MNIST : les chiffres de 1 à 9. Ce qu'il est intéressant de noter, c'est que les points générés sont rassemblés autour de un ou plusieurs pôles denses très localisés, qui ne sont pas répartis dans tout l'espace. Cela traduit l'effondrement des modes : les images générées ne couvrent qu'une petite partie de la distribution de la base de donnée d’entraînement.\\
+L'ensemble de points rouges correspond à un ensemble d'images générées par le réseau générateur lors de l'effondrement des modes. Sur les données MNIST, on observe différents groupes de points (des \textit{clusters}), ce sont les \textbf{modes} inhérents à la base de données MNIST : les chiffres de 1 à 9. Ce qu'il est intéressant de noter, c'est que les points générés sont rassemblés autour de un ou plusieurs pôles denses très localisés, qui ne sont pas répartis dans tout l'espace. Cela traduit l'effondrement des modes : les images générées ne couvrent qu'une petite partie de la distribution de la base de données d’entraînement.\\
 
 Il n'y a pas de solution simple, directe et universelle pour lutter contre l'effondrement des modes, mais quelques solutions ont été proposées :
 \begin{itemize}
   \item La pénalisation de la similarité des images en sortie de générateur, c'est la \textit{minibatch discrimination}. Cela consiste à ajouter un terme à la fonction de coût pour traduire la similarité (il peut s'agir de calculer une similarité pixel à pixel, ou d'estimer la similarité sémantique grâce un autre réseau de neurones).
-  \item Le \textit{one-side label smoothing}. Cela consiste à changer l'objectif du discriminateur : son objectif ne sera plus de discriminer les fausses images avec une probabilité de 1, mais une probabilité plus faible, par exemple 0.9. Cela permet d'éviter la sur-confiance, et permet de laisser le générateur explorer tous l'espace des images réelles.
-  \item Certaines architectures sont plus résistantes que d'autres à l'effondrement des modes. Par exemple, les GAN de Wasserstein [\ref{WGAN}] ne présentent ce problème. 
+  \item Le \textit{one-side label smoothing}. Cela consiste à changer l'objectif du discriminateur : son objectif ne sera plus de discriminer les fausses images avec une probabilité de 1, mais une probabilité plus faible, par exemple 0.9. Cela permet d'éviter la sur-confiance, et permet de laisser le générateur explorer tout l'espace des images réelles.
+  \item Certaines architectures sont plus résistantes que d'autres à l'effondrement des modes. Par exemple, les GAN de Wasserstein [\ref{WGAN}] ne présentent pas ce problème. 
 \end{itemize}
 
 
@@ -79,13 +79,13 @@ Comme expliqué plus haut, l'apprentissage des GAN repose sur un équilibre fin 
 
 
 Il existe des solutions pour lutter contre ce problème, et cela consiste souvent à rééquilibrer les puissances ou les vitesses de convergence des différents réseaux. On peut par exemple diminuer la complexité du discriminateur, diminuer le taux d'apprentissage du discriminateur, ou mettre à jouer plus souvent le générateur que le discriminateur.
-Ajouter du bruit sur les images de la base de donnée permet aussi se renforcer la stabilité de l'apprentissage. Par ailleurs, on peut noter que les GAN de Wassertein sont plus stables que les DCGAN, mais ne sont pas totalement immunisés aux problèmes de convergence.
+Ajouter du bruit sur les images de la base de données permet aussi se renforcer la stabilité de l'apprentissage. Par ailleurs, on peut noter que les GAN de Wassertein sont plus stables que les DCGAN, mais ne sont pas totalement immunisés aux problèmes de convergence.
 
 \section{Cadre théorique et WGAN}
 Nous allons essayer dans cette section de donner un cadre probabiliste et statistique rigoureux permettant d'expliquer le fonctionnement des GAN. Cette approche permettra de justifier l'algorithme WGAN qui permet de significativement réduire les problèmes d'apprentissage des GAN.
 
 \subsection{Approche bayésienne des GAN}
-L'objectif d'un GAN - la génération d'images suivant un dataset - peut être formalisé comme un problème d'optimisation bayésienne. Nous cherchons à approcher la distribution $p_{\mathrm{data}}$ d'une variable aléatoire $X: \Omega \longrightarrow \mathcal{X}$. Pour ce faire, on se donne une famille paramétrique de distributions $\mathcal{M}_{\mathbb{R}^{d}} = \{p_{\theta}, \theta \in \mathbb{R}^d\}$, ainsi qu'un prior $p_{\mathrm{bruit}}(z)$ relatif à une variable aléatoie $Z : \Omega \longrightarrow \mathcal{Z}$. On détermine ensuite la distribution souhaitée à l'aide de la formule de Bayes. $$\begin{aligned} p(\theta | \mathrm{data}) \propto p_{\mathrm{bruit}}(z)p(\mathrm{data}|\theta)\end{aligned}$$
+L'objectif d'un GAN - la génération d'images suivant un dataset - peut être formalisé comme un problème d'optimisation bayésienne. Nous cherchons à approcher la distribution $p_{\mathrm{data}}$ d'une variable aléatoire $X: \Omega \longrightarrow \mathcal{X}$. Pour ce faire, on se donne une famille paramétrique de distributions $\mathcal{M}_{\mathbb{R}^{d}} = \{p_{\theta}, \theta \in \mathbb{R}^d\}$, ainsi qu'un prior $p_{\mathrm{bruit}}(z)$ relatif à une variable aléatoire $Z : \Omega \longrightarrow \mathcal{Z}$. On détermine ensuite la distribution souhaitée à l'aide de la formule de Bayes. $$\begin{aligned} p(\theta | \mathrm{data}) \propto p_{\mathrm{bruit}}(z)p(\mathrm{data}|\theta)\end{aligned}$$
 
 Comme il est impossible de résoudre directement la formule de Bayes, il nous faut défnir une fonction de côut qui mesure la distance entre $p_{\theta}$ et $p_{\mathrm{data}}$, puis employer des algorithmes de descente du gradient. La famille $\mathcal{M}_{\mathbb{R}^d}$ prend alors naturellement la forme d'un réseau de neurones, que l'on écrit $g : \mathcal{Z} \times \mathbb{R}^{d} \longrightarrow \mathcal{X}$, ou en notation condensée $g_{\theta}(z)$ .
 
@@ -113,18 +113,18 @@ $$\begin{aligned}
 
 \subsection{WGAN} \label{WGAN}
 
-Les Wasserstein GAN, ou WGAN, on été introduits en 2017 par Arjovsky et al. \cite{arjovsky_wasserstein_2017}. Les auteurs y introduise une nouvelle distance, la distance 1-Wasserstein (qu'on appelera ici distance Wassertein), définie par la relation suivante:
+Les Wasserstein GAN, ou WGAN, on été introduits en 2017 par Arjovsky et al. \cite{arjovsky_wasserstein_2017}. Les auteurs y introduisent une nouvelle distance, la distance 1-Wasserstein (qu'on appelera ici distance Wassertein), définie par la relation suivante:
 
 $$\begin{aligned}
 W(p_{\mathrm{data}}, p_{\theta}) = \inf_{\gamma \in \Pi (p_{\mathrm{data}}, p_{\theta})} \mathbb{E}_{(x, y) \sim \gamma} (||x - y||)
 \end{aligned}$$
-Avec $\Pi (p_{\mathrm{data}}, p_{\theta})$ l'ensemble des densité de distributions jointes $\gamma (x, y)$ de lois marginales respectivement $p_{\mathrm{data}}$ et $p_{\theta}$. On peut réecrire ce résultat à l'aide de la formulation duale du théorème de Kantorovich \cite{villani_optimal_2006}.
+Avec $\Pi (p_{\mathrm{data}}, p_{\theta})$ l'ensemble des densités de distributions jointes $\gamma (x, y)$ de lois marginales respectivement $p_{\mathrm{data}}$ et $p_{\theta}$. On peut réecrire ce résultat à l'aide de la formulation duale du théorème de Kantorovich \cite{villani_optimal_2006}.
 
 
 $$\begin{aligned}
 W(p_{\mathrm{data}}, p_{\theta}) = \sup_{f \in L_{1}}\left(\mathbb{E}_{x\sim p_{\mathrm{data}}} [f(x)] - \mathbb{E}_{x\sim p_{\theta}} [f(x)]\right)
 \end{aligned}$$
- Avec $L_{1}$ l'ensemble des fonctions 1-lipschitziennes $\mathcal{X} \longrightarrow \mathbb{R}$. On obtient donc une équation assez similaire à celle du paragraphe \ref{DCGAN_prob}. Nous allons estimer $f$ par un réseau de neurones $\{f_{w}, w \in \mathcal{W} \}$ qui sera optimisé à l'aide du gradient $\mathbb{E}_{x\sim p_{\mathrm{data}}} \left[\nabla_{w}f_{w}(x)\right] - \mathbb{E}_{z\sim p_{\mathrm{bruit}}} \left[\nabla_{w}f_{w}(g_{\theta}(z))\right]$. De même, à $f$ fixé, $g_{\theta}(z)$ s'optimise par rétropagation du gradient selon $\theta$.
+ Avec $L_{1}$ l'ensemble des fonctions 1-lipschitziennes $\mathcal{X} \longrightarrow \mathbb{R}$. On obtient donc une équation assez similaire à celle du paragraphe \ref{DCGAN_prob}. Nous allons estimer $f$ par un réseau de neurones $\{f_{w}, w \in \mathcal{W} \}$ qui sera optimisé à l'aide du gradient $\mathbb{E}_{x\sim p_{\mathrm{data}}} \left[\nabla_{w}f_{w}(x)\right] - \mathbb{E}_{z\sim p_{\mathrm{bruit}}} \left[\nabla_{w}f_{w}(g_{\theta}(z))\right]$. De même, à $f$ fixé, $g_{\theta}(z)$ s'optimise par rétropropagation du gradient selon $\theta$.
  
  \subsection{Avantages comparatif du WGAN par rapport au DCGAN}
  
@@ -132,7 +132,7 @@ Maintenant que nous savons ce qu'est un WGAN, il s'agit de comprendre son avanta
 
 Ensuite, à chaque boucle d'apprentissage, le WGAN peut mieux optimiser le discriminateur avant de faire apprendre le générateur. En effet, pour un WGAN, meilleur est le discriminateur, meilleur est le gradient utilisé pour l'apprentissage du générateur. Ceci permet de résoudre le problème d'instabilité au début de l'apprentissage rencontré dans les DCGAN, pour lesquels un discriminateur trop bon fait saturer le gradient du générateur à 0.
 
-Finalement, la capacité du WGAN d'entraîner d'abord le discrimnateur empêche le phénomène du mode collapse. En effet, la cause du mode collapse est que pour un discriminateur fixé, le meilleur générateur est celui qui ne génère que les points de $\mathcal{X}$ de plus grande valeur pour le discriminateur.
+Finalement, la capacité du WGAN d'entraîner d'abord le discriminateur empêche le phénomène du mode collapse. En effet, la cause du mode collapse est que pour un discriminateur fixé, le meilleur générateur est celui qui ne génère que les points de $\mathcal{X}$ de plus grande valeur pour le discriminateur.
 
 \section{Implémentation et résultats}
 
