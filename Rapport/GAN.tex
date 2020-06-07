@@ -136,17 +136,71 @@ Finalement, la capacité du WGAN d'entraîner d'abord le discrimnateur empêche 
 
 \section{Implémentation et résultats}
 
-Nous avons implémenté avec succès pour la base MNIST les algorithmes DCGAN et WGAN. Les résultats présentés ici ont été obtenus au bout de 50 itérations. Les deux alogrithmes permettent d'obtenir un résultat correct, bien qu'on observe que le WGAN est plus performant.
+Nous avons implémenté avec succès l'algorithme WGAN pour la base de donnée MNIST, et  DCGAN pour les banques de données MNIST et CelebA. 
+
+\subsection{Détails de l'implémentation}
+
+Nous avons utilisé la même structure de réseau pour le DCGAN et le WGAN, en changeant uniquement la fonction de coût.
+
+
+\textbf{Pour le discriminateur},
+\[ \begin{array}{lcr}
+Conv2D(64, (5,5), strides=(2,2)) \\
+LeakyReLU() \\
+Dropout\\
+
+Conv2D(128, (5,5), strides=(2,2)) \\
+BatchNormalization\\
+LeakyReLU()\\
+Dropout\\
+
+Conv2D(256, (5,5), strides=(2,2)) \\
+BatchNormalization\\
+LeakyReLU()\\
+Dropout\\
+
+
+Flatten()\\
+Dense(1)\\
+LeakyReLU()\\
+
+\end{array}\]
+
+\textbf{Pour le générateur,} 
+
+\[ \begin{array}{lcr}
+Dense(240)\\
+LeakyRelu()\\
+Reshape((10, 8, 3))\\
+
+Conv2DTranspose(256, (5,5), strides=(2,2)) \\
+BatchNormalization\\
+LeakyReLU() \\
+
+
+Conv2DTranspose(64, (5,5), strides=(2,2)) \\
+BatchNormalization\\
+LeakyReLU() \\
+
+Conv2DTranspose(3, (5,5), strides=(2,2)) \\
+
+\end{array}\]
+
+\subsection{MNIST}
+
+Nous présentons ici les résultats obtenus après 50 passes sur la base de données MNIST, à l'aide des algorihtmes DCGAN et WGAN. On observe que nous avons eu plus de mal dans l'implémentation du WGAN, et n'arrivons pas à obtenir le gain de performance prédit par l'article \cite{arjovsky_wasserstein_2017}.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=100pt]{"images/GAN/MNIST_DCGAN"}
 \includegraphics[width=100pt]{"images/GAN/MNIST_WGAN"}
-\caption{A gauche, 9 images générées par le DCGAN. A droite, 9 images générées par le WGAN}
+\caption{A gauche, 16 images générées par le DCGAN. A droite, 16 images générées par le WGAN}
 \label{mnist_gan}
 \end{figure}
 
-Finalement, nous avons entraîné un DCGAN sur la base CelebA.
+\subsection{CelebA}
+
+Nous présentons ici les résultats obtenus après 400 passes sur la base de données CelebA. Nous avons donc réussi à construire avec succès un générateur de visages réalistes sans mode collapse.
 
 \begin{figure}[!h]
 \centering
