@@ -9,7 +9,7 @@ Le transfert de style consiste à transformer des données d'un \textit{style à
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt,valign=t]{"images/cycle/cycle_exemples"}
-\caption{Exemples de transfert de style effectués par un cycleGAN. De haut en bas : transformation $pommes \leftrightarrow oranges$, transformation $paysages \, d'\acute{e} t \acute{e} \leftrightarrow paysages\,d'hiver$ et transformation $chevaux \leftrightarrow z\grave{e}bres$. Ces exemples sont tirés de l'article de Zhu et al. \cite{zhu_unpaired_2018}}
+\caption{Exemples de transfert de style effectués par un cycleGAN. De haut en bas : transformation $pommes \leftrightarrow oranges$, transformation $paysages \, d'\acute{e} t \acute{e} \leftrightarrow paysages\,d'hiver$ et transformation $chevaux \leftrightarrow z\grave{e}bres$. Ces exemples sont tirés de l'article de Zhu et al. \cite{zhu_unpaired_2018}.}
 \label{cycle_exemples}
 \end{figure}
 
@@ -41,7 +41,9 @@ Ces deux types de transferts de style se traitent différemment. Pour le transfe
 
 \section{Principe général du cycleGAN}
 
-En vertu des explications présentées au paragraphe précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où ces données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement. On comprend donc qu'en considérant la segmentation comme un style pour l'image, le cycleGAN peut aussi résoudre des problèmes de segmentation.
+En vertu des explications présentées au paragraphe précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où ces données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement.
+
+Par ailleurs, on remarque qu'en considérant la segmentation comme un style pour l'image, le cycleGAN peut aussi résoudre des problèmes de segmentation, même si il existe des algorithmes beaucoup plus efficaces pour la segmentation.\\
 
 Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent les images du style A et celles du style B. L'architecture est présentée par la figure \ref{cycleDouble}.
 
