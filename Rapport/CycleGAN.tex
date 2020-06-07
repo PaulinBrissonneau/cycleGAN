@@ -43,7 +43,7 @@ Ces deux types de transferts de style se traitent différemment. Pour le transfe
 
 En vertu des explications présentées au paragraphe précédent, le problème se présente ainsi : nous avons une banque de données structurées A, et une banque de données structurées B, de même nature, dont les styles sont différents. Dans la suite, nous nous placerons dans le cas où ces données sont des images. Le but est de transformer les images de A pour leur donner le style des images de B, et inversement.
 
-Par ailleurs, on remarque qu'en considérant la segmentation comme un style pour l'image, le cycleGAN peut aussi résoudre des problèmes de segmentation, même si il existe des algorithmes beaucoup plus efficaces pour la segmentation.\\
+Par ailleurs, on remarque qu'en considérant la segmentation comme un style pour l'image, le cycleGAN peut aussi résoudre des problèmes de segmentation, même si il existe des algorithmes beaucoup plus efficaces spécialisés sur ce problème.\\
 
 Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du style A au style B, l'autre du style B au style A. Plus précisément, il y a deux générateurs, un générateur qui prend des images de la banque A et doit générer des images du style de B (noté G), l'autre qui prend des images de la banque B et doit générer des images du style de A (noté F). Il y a aussi deux discriminateurs, notés $D_A$ et $D_B$, qui respectivement discriminent les images du style A et celles du style B. L'architecture est présentée par la figure \ref{cycleDouble}.
 
@@ -76,7 +76,7 @@ Comme on peut s'y attendre, cela ne suffit pas. En effet, si l'on considère seu
 \end{split}
 \end{equation}
 
-Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}. Les deux égalités ci-dessus consistent en réalité à parcourir le cycle respectivement en avant et en arrière, elles sont appelées respectivement \textit{backward cycle consistency} et \textit{forkward cycle consistency} et sont utilisées depuis longtemps dans le suivi d'objets \cite{kalal_forward-backward_2010}. Ceci est décrit de manière schématique par la figure \ref{cycleForBack}.\\
+Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \textit{Cycle Consistency Loss}. Les deux égalités ci-dessus consistent en réalité à parcourir le cycle respectivement en avant et en arrière, elles sont appelées respectivement \textit{backward cycle consistency} et \textit{forward cycle consistency} et sont utilisées depuis longtemps dans le suivi d'objets \cite{kalal_forward-backward_2010}. Ceci est décrit de manière schématique par la figure \ref{cycleForBack}.\\
 
 \begin{figure}[!h]
 \centering
@@ -101,9 +101,9 @@ $$\begin{aligned}
 \mathcal{L}_{\mathrm{GAN}}\left(G, D_{B}, A, B\right) &=\mathbb{E}_{b \sim p_{\mathrm{data}}(b)}\left[\log D_{B}(b)\right] +\mathbb{E}_{a \sim p_{\text {data }}(a)}\left[\log \left(1-D_{B}(G(a))\right]\right.
 \end{aligned}$$
 
-Comme dans le cas d'un GAN classique, le générateur tend à minimiser ce coût et le discriminateur tend à la minimiser.
+Comme dans le cas d'un GAN classique, le générateur tend à minimiser ce coût et le discriminateur tend à le maximiser.
 
-Pour l'autre GAN, c'est à dire le générateur F et son discriminateur $D_A$, on a de même : $$\begin{aligned}
+Pour l'autre GAN, c'est-à-dire le générateur F et son discriminateur $D_A$, on a de même : $$\begin{aligned}
 \mathcal{L}_{\mathrm{GAN}}\left(F, D_{A}, B, A\right) &=\mathbb{E}_{a \sim p_{\mathrm{data}}(a)}\left[\log D_{A}(a)\right] +\mathbb{E}_{b \sim p_{\text {data }}(b)}\left[\log \left(1-D_{A}(G(b))\right]\right.
 \end{aligned}$$
 
@@ -136,22 +136,23 @@ On comprend bien que c'est une limitation très forte, qui ne convient qu'à cer
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/cycle/Lident"}
-\caption{Mise en évidence de la dégradation de la composition des couleurs, par Zhu et al. \cite{zhu_unpaired_2018}. À droite, l'effet de la fonction de coût $\mathcal{L}_{\text {identity }}$, qui améliore la cohérence des couleurs.}
+\caption{Mise en évidence de la dégradation de la composition des couleurs, par Zhu et al. \cite{zhu_unpaired_2018}. À droite, l'effet de la fonction de coût $\mathcal{L}_{\text {identity }}$ qui améliore la cohérence des couleurs.}
 \label{Lident}
 \end{figure}
 
 
 \section{Les métriques d'évaluations}
 
-Comme dans le cas d'un GAN classique, évaluer la qualité de la sortie d'un cycleGAN n'est pas une chose facile. En effet, nous n'avons pas de métrique simple et universelle qui permettrait de juger de la crédibilité ou du réalisme d'une image. Pour tenter d'évaluer au mieux la qualité d'un cycleGAN, il existe plusieurs solutions.\\
+Comme dans le cas d'un GAN classique, évaluer la qualité de la sortie d'un cycleGAN n'est pas une chose facile. En effet, nous n'avons pas de métrique simple et universelle qui permettrait de juger de la crédibilité ou du réalisme d'une image. Pour tenter d'évaluer au mieux la qualité d'un cycleGAN il existe plusieurs solutions.\\
 
-La première, sans grande surprise, c'est de faire une étude de réalisme basée sur une enquête auprès de personne chargées de noter la qualité des images fournies, c'est ce que l'on appelle des études de perceptions (\textit{perceptual studies}). On comprend vite que ce n'est une très bonne solution : ces études restent subjectives, elles ne sont pas toujours reproductibles, et elles coûtent cher. Comme pour les GAN, on ne peut pas donc pas s'en servir pour poser une métrique universelle pour comparer différents algorithmes.\\
+La première, sans grande surprise, c'est de faire une étude de réalisme basée sur une enquête auprès de personnes chargées de noter la qualité des images fournies, c'est ce que l'on appelle des études de perceptions (\textit{perceptual studies}). On comprend vite que ce n'est une très bonne solution : ces études restent subjectives, elles ne sont pas toujours reproductibles, et elles coûtent cher. Comme pour les GAN, on ne peut pas donc pas s'en servir pour poser une métrique universelle pour comparer différents algorithmes.\\
 
-Pour quelques problèmes particuliers, on peut trouver des métriques convenables. C'est le cas par exemple si l'on considère un problème de segmentation et si les données sont accompagnées de leurs segmentations réelles, appelées aussi \textit{ground truth}. Dans ce cas particulier, évaluer le cycleGAN revient simplement à évaluer de résultat de la segmentation par rapport au \textit{ground truth}. Il existe plusieurs métriques classiques pour évaluer les algorithmes de segmentation comme la précision par pixel à pixel ou la précision classes à classes, mais la métrique la plus courante pour cela est l'indice de Jaccard (ou \textit{IoU : Intersection over Union}). Cette métrique consiste à calculer, pour chaque classe de la segmentation, l'intersection de la zone prédite par l'algorithme avec la zone réelle, avant de normaliser par l'union des deux zones. C'est une métrique classique utilisée en segmentation, elle est définie ci-dessous.
+Pour quelques problèmes particuliers on peut trouver des métriques convenables. C'est le cas par exemple si l'on considère un problème de segmentation et si les données sont accompagnées de leurs segmentations réelles, appelées aussi \textit{ground truth}. Dans ce cas particulier, évaluer le cycleGAN revient simplement à évaluer de résultat de la segmentation par rapport au \textit{ground truth}. Il existe plusieurs métriques classiques pour évaluer les algorithmes de segmentation comme par exemple la précision par pixel à pixel ou la précision classes à classes, mais la métrique la plus courante pour cela est l'indice de Jaccard (ou \textit{IoU : Intersection over Union}). Cette métrique consiste à calculer, pour chaque classe de la segmentation, l'intersection de la zone prédite par l'algorithme avec la zone réelle, avant de normaliser par l'union des deux zones. C'est une métrique classique utilisée en segmentation, elle est définie ci-dessous.
 
 $$ \textit{Indice de Jacard : }J(A,B) = \frac{ \mid A \cap B \mid }{ \mid A \cup B \mid } $$
 
-Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer l'interprétable des images de sortie par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} \cite{long_fully_2014}). Sur une image générée par le cycleGAN, le FCN prédit une carte de segmentation. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard. Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. En somme, il n'existe aucune métrique idéale pour évaluer les cycleGAN.
+Cependant, dans le cas général le problème n'est pas un problème de segmentation, mais un problème de génération d'images réalistes suivant un style, et la métrique précédente n'est pas utilisable. Il en existe d'autres, par exemple le \textbf{score FCN}. Le score FCN consiste à évaluer l'interprétabilité des images de sortie par un algorithme classique de segmentation sémantique (ici le FCN, pour \textit{Fully Convolutional Networks for Semantic Segmentation} \cite{long_fully_2014}). Sur une image générée par le cycleGAN, le FCN prédit une carte de segmentation. Cette carte de segmentation est ensuite comparée à l’image d’entrée avec des métriques classiques que l'on a évoquées au-dessus, en particulier l'indice de Jaccard.\\
+Notons que le score FCN ne permet pas de vérifier que le style de l'image est correct, mais seulement d'évaluer grossièrement la caractère réaliste de l'image, à travers l'interprétabilité de l'image par un autre algorithme. En somme, il n'existe aucune métrique idéale pour évaluer les cycleGAN.
 
 
 \section{Implémentation et résultats}
@@ -234,7 +235,7 @@ Activation(tanh) \end{array}\]
 Notons que $n_{filters}$ et $N$ sont des hyper-paramètres. Leur valeur dépend de la taille des images et de la puissance de calcul disponible. Sur les conseils de Zhu et al., nous utilisons $n_{filters} = 256$ et $N \in [5, 10]$. Dans notre implémentation, tous les hyper-paramètres du modèle sont facilement modifiables depuis un unique fichier. \\
 
 
-Pour les paramètres d'apprentissage, nous avons suivi les conseils de l'article nous avons adapté les valeurs à chaque banque d'image en testant différentes valeurs possibles. Nous avons, de manière générale, les valeurs nominales suivantes : \\
+Pour les paramètres d'apprentissage, nous avons aussi suivi les conseils de l'article puis nous avons adapté les valeurs à chaque banque d'image en testant différentes valeurs possibles. Nous avons, de manière générale, les valeurs nominales suivantes : \\
 
 \begin{itemize}
   \item Nombre de passes : 150
@@ -273,9 +274,9 @@ Quelques exemples de nos résultats sont présentés sur les figures \ref{exempl
 
 \subsection{Limitations et ouverture}
 
-Les résultats que nous obtenons pour l'instant sont corrects mais restent mitigés. En effet, ils sont convenables sur des images de petites dimensions qui ne demandent que peu de ressources. Sur les images de hautes dimension, les résultats pourraient être améliorés si nous pouvions exécuter nos scripts plus longtemps. Pour l'instant, nous sommes ralentit par le fait d'enregistrer correctement nos modèles pour pouvoir continuer l'apprentissage. Actuellement, la reprise de l'apprentissage ne se passe pas au mieux, ce qui fausse nos résultats.\\
+Les résultats que nous obtenons pour l'instant sont corrects mais restent mitigés. En effet, ils sont convenables sur des images de petites dimensions qui ne demandent que peu de ressources. Sur les images de hautes dimension, les résultats pourraient être améliorés si nous pouvions exécuter nos scripts plus longtemps. Pour l'instant, nous sommes ralentis par le fait d'enregistrer correctement nos modèles pour pouvoir continuer l'apprentissage. Actuellement, la reprise de l'apprentissage ne se passe pas au mieux, ce qui fausse nos résultats.\\
 
-Cependant, étant donné que sur les premières passes nous obtenons des résultats cohérent avec les implémentations de références, nous sommes plutôt confiants quand à la qualité de notre implémentation. Son caractère modulaire et sa paramétrabilité très facile permettent de l'adapter à beaucoup de banques d'images différentes très rapidement. C'est ce qui nous permet d'utiliser notre script pour des problèmes non abordés dans l'article de Zhu et al. \cite{zhu_unpaired_2018}, comme les sourires sur CelebA. De plus, on peut l'utiliser de manière équivalente sur nos CPU personnels et sur le cluster de GPU Fusion.\\
+Cependant, étant donné que sur les premières passes nous obtenons des résultats cohérent avec les implémentations de référence, nous sommes plutôt confiants quand à la qualité de notre implémentation. Son caractère modulaire et sa paramétrabilité très facile permettent de l'adapter à beaucoup de banques d'images différentes très rapidement. C'est ce qui nous permet d'utiliser notre script pour des problèmes non abordés dans l'article de Zhu et al. \cite{zhu_unpaired_2018}, comme les sourires sur CelebA. De plus, on peut l'utiliser de manière équivalente sur nos CPU personnels et sur le cluster de GPU Fusion.\\
 
-Une fois ces derniers détails d'implémentations réglés (dans peu de temps) nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons définir.
+Une fois les derniers détails d'implémentations réglés (dans peu de temps) nous pourrons utiliser notre programme pour étudier un nouveau problème, que nous devons définir.
 
