@@ -2,59 +2,64 @@
 
 \section{Les neurones}
 
-Les technologies qui vont êtres présentées dans la suite se basent outes sur l'idée de neurone artificiel. McCulloh et Pitts le formalise en 1943 \cite{McCullohPitts}.
+Les technologies qui vont êtres présentées dans la suite se basent outes sur l'idée de neurone artificiel, aussi appelé neurone formel. McCulloh et Pitts le formalise en 1943 \cite{mcculloch_logical_1943}.
 Un neurone formel est composée de deux parties.\begin{itemize}
-\item La première consiste à faire la sommes pondérée par des poids des valeurs d'entrée du neurone auquel on peut éventuellement ajouter un biais. Les poids sont propres au neurone et à l'entrée du neurone considérée.
-\item La deuxième partie du neurone est la fonction d'activation. Cette fonction va s'appliquer sur le résultat de la somme pondérée. On choisit quasi-exclusivement des fonctions non-linéaires pour deux raisons : briser la linéarité (car sinon la fonction n'apporte rien de plus que les poids) et obtenir un résultat d'une certaine forme (par exemple une probabilité entre 0 et 1).
+\item La première consiste à faire la sommes pondérée par des poids des valeurs d'entrée du neurone auxquelles on peut éventuellement ajouter un biais. Les poids sont propres au neurone et il y a un poids par entrée.
+\item La deuxième partie du neurone est la fonction d'activation. Cette fonction va s'appliquer sur le résultat de la somme pondérée. On choisit quasi-exclusivement des fonctions non-linéaires pour deux raisons : briser la linéarité (car dans le cas contraire le réseau serait assimilable à une seule matrice) et obtenir un résultat d'une certaine forme (par exemple une probabilité entre 0 et 1).
 \end{itemize}
-McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent des neurones au résultat binaire à l'aide d'une fonction de'activation de Heavyside.
+McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent des neurones au résultat binaire à l'aide d'une fonction d'activation de Heavyside. Un tel neurone formel est représenté par la figure \ref{neurone_exemple}.
 
 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt,valign=t]{"images/MLP/neurone_exemple"}
-\caption{Exemple de neurone dont les poids sont $w_1$ et $w_2$ la fonction de Heavyside de paramètre $\theta$ s'applique à la somme pour donner la sortie du neurone. Cette image provient de l'article wikipédia du neurone formel.}
+\includegraphics[width=200pt,valign=t]{"images/MLP/neurone_exemple2"}
+\caption{Exemple de neurone dont les poids sont les coefficents $w_1$ à $w_2$, et le biais est $w_0$. La fonction de Heavyside s'applique à la somme pour donner une sortie du neurone dans $\{0, 1\}$. Cette image provient d'un article de Benharir et al. \cite{benharir_approche_2014]}.}
 \label{neurone_exemple}
 \end{figure}
 
-Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ x_n \end{pmatrix}$  les entrées du neurone, $W = \begin{pmatrix} w_1\\ \vdots \\ w_n \end{pmatrix}$ les poids correspondants et $\varphi$ la fonction d'activation, $b$ le biais, un neurone correspond à une fonction $N(x_1,...,x_n,w_1,...,w_n) = \varphi(b+ \sum\limits_{i} x_i w_i) = \varphi(W^T  X+b)$
+Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ x_n \end{pmatrix}$  les entrées du neurone, $W = \begin{pmatrix} w_1\\ \vdots \\ w_n \end{pmatrix}$ les poids correspondants et $\varphi$ la fonction d'activation, $b$ le biais, un neurone correspond à une fonction $N$ telle que : $$N(x_1,...,x_n,w_1,...,w_n) = \varphi(b+ \sum\limits_{i} x_i w_i) = \varphi(W^T  X+b)$$
 
 
 
 \section{Le perceptron}
-En 1958, Frank Rosenblatt utilise l'idée de neurones artificiels pour inventer le perceptron\cite{}. Son idée est d'utiliser les neurones pour reconnaître des patterns. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (ie les neurones ne sont pas reliés entre eux). Cela limite l'intérêt de ce perceptron : il ne peut apprendre que des pattern linéairement séparables. Minsky\cite{MINSKY} démontre par exemple que le perceptron est incapable d'effectuer un XOR.
+En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer le perceptron \cite{rosenblatt_perceptron_1958}. Son idée est d'utiliser les neurones pour reconnaître des formes simples dans des images. Cependant dans cette forme simple, il conserve les neurones tels que définis en 1943 avec la fonction de Heavyside et une seule couche de neurones (c'est-à-dire que les différents neurones ne sont pas reliés entre eux). Cela limite l'intérêt du perceptron : il ne peut apprendre que des \textit{pattern} linéairement séparables. Minsky démontre par exemple que le perceptron est incapable d'effectuer un XOR \cite{MINSKY}.
 L'idée est d'ajuster les poids pour que la sortie du neurone soit 1 si et seulement si l'entrée est dans l'ensemble que l'on cherche à reconnaître. 
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt,valign=t]{"images/MLP/perceptron"}
-\caption{Exemple de perceptron à n entrée et p sorties. Il peut donc servir de classificateur à p classes.}
+\caption{Exemple de perceptron à $n$ entrée et $p$ sorties. Il peut donc servir de classificateur à $p$ classes.}
 \label{perceptron}
 \end{figure}
 
-\section{Multi-Layer Perceptron}
-Un Multi-Layer Perceptron (MLP) est composé de différentes couches: \begin{itemize}
-\item La couche d'entrée qui correspond aux valeurs d'entrée de l'algorithme
-\item une couche de sortie qui correspond aux valeurs renvoyées par le MLP
-\item une ou plusieurs couches "cachées" (hidden layers) qui sont des couches de neurones reliées entre elles. Les sorties de la couche précédente servent d'entrée à la couche suivante.
+\section{Perceptron multicouche}
+Un \textbf{perceptron multicouche}, \textbf{mutliperceptron}, ou \textbf{MLP} (pour \textit{Multi-Layer Perceptron}) est composé de différentes couches: \begin{itemize}
+\item La couche d'entrée qui correspond aux valeurs des données.
+\item Une couche de sortie qui correspond aux valeurs renvoyées par le MLP.
+\item Une ou plusieurs couches cachées (\textit{hidden layers}) qui sont des couches de neurones reliées entre elles. À chaque couche, les sorties correspondent aux entrées de la couche suivante.
 
 \end{itemize}
 
-Ecrivons formellement ceci. On va définir $N^{(i)}  = \begin{pmatrix} 1\\ n_1^{(i)}\\ \vdots \\ n_{p_i}^{(i)} \end{pmatrix}$ la sortie de la $i^e$ couche. Le 1 permets la présence d'un biais.  
-Définissons également $W^{(i)} = \begin{pmatrix} w_{1,1}^{(i)}& \hdots & w_{1, p_i} \\  \vdots & \ddots &  \vdots \\ w_{p_i1}^{(i)}  \hdots & w_{p_ip_i} \end{pmatrix}$ la matrice des poidsde la couche i, $\varphi_k^{(i)}$ la fonction d'activation de ce même neurone et $\Phi^{(i)}((x_1,...,x_{p_i}) \to (\varphi_1^{(i)}(x_1), ... \varphi^{(i)}_{p_i}(x_{p_i})$. 
-On notera que si le réseau possède $L+1$ couches (de $0$ à $ L$), $N^{(0)} = X$ et $N^{(L)} = Y$
+Écrivons formellement ceci. On définit $N$ la sortie de la $i^e$ couche :
+$$N^{(i)}  = \begin{pmatrix} 1\\ n_1^{(i)}\\ \vdots \\ n_{p_i}^{(i)} \end{pmatrix}$$  Le 1 permet la présence d'un biais.\\ 
+Définissons également $W^{(i)}$ la matrice des poids de la couche i.
 
-Dès lors, $\forall i \in [1,L], N^{(i)} = \Phi^{(i)}(W^{(i)}N^{(i-1)}) $
+$$W^{(i)} = \begin{pmatrix} w_{1,1}^{(i)}& \hdots & w_{1, p_i} \\  \vdots & \ddots &  \vdots \\ w_{p_i1}^{(i)}  \hdots & w_{p_ip_i} \end{pmatrix}$$
+
+Soit $\varphi_k^{(i)}$ la fonction d'activation de ce même neurone et $\Phi^{(i)}((x_1,...,x_{p_i}) \to (\varphi_1^{(i)}(x_1), ... \varphi^{(i)}_{p_i}(x_{p_i})$.\\
+
+On notera que si le réseau possède $L+1$ couches (de $0$ à $ L$), $N^{(0)} = X$ et $N^{(L)} = Y$. Dès lors, $$\forall i \in [1,L], N^{(i)} = \Phi^{(i)}(W^{(i)}N^{(i-1)}). $$
 
 
 
 
 
 \subsection{Quelques fonctions d'activations}
-Il existe de nombreuses fonctions d'activation avec chacune leurs intérêts et défauts. En voici quelques-unes.
+Il existe de nombreuses fonctions d'activation avec chacune leurs avantages et leurs défauts. En voici quelques-unes.
+
 \subsubsection{Sigmoïde}
- Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de gradient vanishing (cf plus loin). Elle introduit un hyperparamètre $\lambda$.
+Cette fonction permet d'avoir des valeurs de sortie entre 0 et 1 mais souffre d'un problème de \textit{gradient vanishing}, c'est-à-dire que proche sa zone de saturation la gradient sera très vite trop faible. Cela portera défaut à l'apprentissage lors de l'application de la rétropropagation du gradient. La fonction introduit un hyperparamètre $\lambda$.
 \begin{displaymath}
 \varphi_\lambda (x) = \frac{1}{1+e^{-\lambda x}}
 \end{displaymath}
@@ -68,7 +73,7 @@ Il existe de nombreuses fonctions d'activation avec chacune leurs intérêts et 
 
 
 \subsubsection{Tangente hyperbolique}
-Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1 mais souffre d'un problème de gradient vanishing (cf plus loin)
+Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1. Elle souffre du même problème de \textit{gradient vanishing} que la sigmoïde.
 \begin{displaymath}
 \varphi (x) = tanh(x)
 \end{displaymath}
@@ -95,7 +100,7 @@ Permet d'éviter le gradient vanishing, accélère les calculs mais peut mener �
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/ReLu2"}
+\includegraphics[width=150pt]{"images/MLP/reLu2"}
 \caption{Fonction reLu}
 \label{ReLu}
 \end{figure}
