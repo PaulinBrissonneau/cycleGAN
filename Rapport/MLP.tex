@@ -18,7 +18,7 @@ McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent
 \label{neurone_exemple}
 \end{figure}
 
-Ainsi formellement en utilisant les notant $X = \begin{pmatrix} x_1\\ \vdots \\ x_n \end{pmatrix}$  les entrées du neurone, $W = \begin{pmatrix} w_1\\ \vdots \\ w_n \end{pmatrix}$ les poids correspondants et $\varphi$ la fonction d'activation, $b$ le biais, un neurone correspond à une fonction $N$ telle que : $$N(x_1,...,x_n,w_1,...,w_n) = \varphi(b+ \sum\limits_{i} x_i w_i) = \varphi(W^T  X+b)$$
+Ainsi formellement, en notant $X = \begin{pmatrix} x_1\\ \vdots \\ x_n \end{pmatrix}$  les entrées du neurone, $W = \begin{pmatrix} w_1\\ \vdots \\ w_n \end{pmatrix}$ les poids correspondants, $b$ le biais et $\varphi$ la fonction d'activation, un neurone correspond à une fonction $N$ telle que : $$N(x_1,...,x_n,w_1,...,w_n) = \varphi(b+ \sum\limits_{i} x_i w_i) = \varphi(W^T  X+b)$$
 
 
 
@@ -44,9 +44,9 @@ Un \textbf{perceptron multicouche}, \textbf{mutliperceptron}, ou \textbf{MLP} (p
 $$N^{(i)}  = \begin{pmatrix} 1\\ n_1^{(i)}\\ \vdots \\ n_{p_i}^{(i)} \end{pmatrix}$$  Le 1 permet la présence d'un biais.\\ 
 Définissons également $W^{(i)}$ la matrice des poids de la couche i.
 
-$$W^{(i)} = \begin{pmatrix} w_{1,1}^{(i)}& \hdots & w_{1, p_i} \\  \vdots & \ddots &  \vdots \\ w_{p_i1}^{(i)}  \hdots & w_{p_ip_i} \end{pmatrix}$$
+$$W^{(i)} = \begin{pmatrix} w_{1,1}^{(i)}& \hdots & w_{1, p_i}^{(i)} \\  \vdots & \ddots &  \vdots \\ w_{p_i1}^{(i)}  & \hdots & w_{p_ip_i}^{(i)} \end{pmatrix}$$
 
-Soit $\varphi_k^{(i)}$ la fonction d'activation de ce même neurone et $\Phi^{(i)}((x_1,...,x_{p_i}) \to (\varphi_1^{(i)}(x_1), ... \varphi^{(i)}_{p_i}(x_{p_i})$.\\
+Soit $\varphi_k^{(i)}$ la fonction d'activation de ce même neurone et $\Phi^{(i)}((x_1,...,x_{p_i})) \to (\varphi_1^{(i)}(x_1), ... \varphi^{(i)}_{p_i}(x_{p_i}))$.\\
 
 On notera que si le réseau possède $L+1$ couches (de $0$ à $ L$), $N^{(0)} = X$ et $N^{(L)} = Y$. Dès lors, $$\forall i \in [1,L], N^{(i)} = \Phi^{(i)}(W^{(i)}N^{(i-1)}). $$
 
@@ -87,7 +87,7 @@ Cette fonction permet d'avoir des valeurs de sortie entre -1 et 1. Elle souffre 
 
 
 \subsubsection{Softmax}
-Cette fonction s'applique sur un vecteur, elle est souvent utilisée en sortie car elle permet d'obtenir des sorties homogènes à des probabilités (entre 0 et 1 et dont la somme sur les sorties vaut 1)
+Cette fonction s'applique sur un vecteur, elle est souvent utilisée en sortie car elle permet d'obtenir des sorties homogènes à des probabilités (entre 0 et 1 et dont la somme sur les sorties vaut 1).
 \begin{displaymath}
 \varphi_\lambda (X)_j = \frac{e^{-x_j}}{\sum\limits_{k}  e^{-x_k}}
 \end{displaymath}
@@ -178,15 +178,15 @@ Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \a
 
 
 \subsubsection{Descente de gradient newtonienne}
-Ici, on ajoute un terme d'inertie à la modification du poids cela entraîne l'apparition d'un nouvel hyperparamètre $\beta_1$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent : $$ w_j{k}^{(i)} \leftarrow w_{jk}^{(i)} + \beta_1 \nu - \frac{\partial J}{\partial w_{jk}^{(i)}}$$
-Un exemple d'application de la descente de gradient stochastique est donné par la figure \ref{descentedegradientnewtonnienne}.
+Ici, on ajoute un terme d'inertie à la modification du poids. Cela entraîne l'apparition d'un nouvel hyperparamètre $\beta_1$ qui sert à doser cette inertie. On note $\nu$ le terme de descente au pas précédent : $$ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} + \beta_1 \nu - \frac{\partial J}{\partial w_{jk}^{(i)}}$$
+Un exemple d'application de la descente de gradient newtonienne est donné par la figure \ref{descentedegradientnewtonnienne}.
 	
 \begin{figure}[!h]
 \centering
 \includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonnienne"}
 \hspace*{10mm}
 \includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
-\caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
+\caption{Exemple d'application de la descente de gradient newtonienne. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
 \label{descentedegradientnewtonnienne}
 \end{figure}
 
@@ -211,8 +211,8 @@ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\varepsilon}}\frac{
 \end{figure}
 
 \subsubsection{ADAM}
-Il s'agit d'une combinaison de RMSProp et de la descente de gradient newtonnienne.
-L'algorithme est le suivant : on choisit les hyperparamètre $\beta_1$ $\beta_2$  $\alpha$ et $\epsilon$ tel que epsilon soit petit mais non nul, on initialise $\nu$ et $s$ à 0.
+Il s'agit d'une combinaison de RMSProp et de la descente de gradient newtonienne.
+L'algorithme est le suivant : on choisit les hyperparamètre $\beta_1$, $\beta_2$,  $\alpha$, et $\varepsilon$ tel que $\varepsilon$ soit petit mais non nul, on initialise $\nu$ et $s$ à 0.
 A chaque pas on calcule :
 \begin{displaymath}
 \nu \leftarrow \beta_1 \nu + (1-\beta_1) \frac{\partial J}{\partial w_{jk}^{(i)}} \\
@@ -221,9 +221,9 @@ A chaque pas on calcule :
 s \leftarrow \beta_2 s + (1-\beta_2) (\frac{\partial J}{\partial w_{jk}^{(i)}})^2 \\
 \end{displaymath}
 \begin{displaymath}
-w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\epsilon}}\frac{\partial J}{\partial w_{jk}^{(i)}}
+w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\varepsilon}}\frac{\partial J}{\partial w_{jk}^{(i)}}
 \end{displaymath}
-Un n exemple d'application est donné sur la figure \ref{ADAM}.
+Un exemple d'application est donné sur la figure \ref{ADAM}.
 
 \begin{figure}[!h]
 \centering
@@ -255,8 +255,8 @@ Souvent la dérivée $\frac{\partial J}{\partial w_{jk}^{(i)}}$ n'est pas calcul
 \section{Implémentation et résultats}
 \subsection{Avant-propos}
 Nous avons étudié l'impact de différents hyperparamètres sur les résultats du MLP. Sauf mention contraire, le jeu de données utilisé est MNIST. MNIST est un ensemble d'images en niveau de gris de chiffres écrits à la main. Le MLP est alors utilisé en tant que classificateur. Il doit reconnaître, à partir du niveau de gris des pixels, quel est le chiffre dessiné. La tâche typique de l'algorithme est présentée par une interface simple sur la figure \ref{MNIST_exemple}.\\
-Les résultats de précision sont calculés sur un jeu de données de test composé de données choisies aléatoirement avant l’entraînement et n'étant pas utilisées pour celui-ci. Afin de mesurer l'effet des hyperparamètres, on trace toujours les courbes avec tous les hyperparamètres égaux sauf celui qui varient.
-Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. La configuration à partir de laquelle on fait varier les hyper-paramètres a été obtenue par ajustement par essais-erreurs et ne prétend pas être optimale. Toutefois, les valeurs observées étaient de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur 50 lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
+Les résultats de précision sont calculés sur un jeu de données de test composé de données choisies aléatoirement avant l’entraînement et n'étant pas utilisées pour celui-ci. Afin de mesurer l'effet des hyperparamètres, on trace toujours les courbes avec tous les hyperparamètres égaux sauf celui qui varie.
+Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. La configuration à partir de laquelle on fait varier les hyperparamètres à été obtenue par ajustement par essais-erreurs et ne prétend pas être optimale. Toutefois, les valeurs observées étaient de l'ordre de celles trouvées dans la littérature. Les données sont moyennées sur 50 lancers de l'algorithme et l'intervalle de confiance à 95\% est indiqué.
 
 \begin{figure}[!h]
 \centering
