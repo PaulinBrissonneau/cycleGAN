@@ -61,7 +61,7 @@ Il existe de nombreuses fonctions d'activation avec chacune leurs intérêts et 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/Sigmoide"}
+\includegraphics[width=150pt]{"images/MLP/sigmoide"}
 \caption{Fonction sigmoïde(Wikipedia)\\}
 \label{sigmoide}
 \end{figure}
@@ -113,9 +113,16 @@ Il existe bien d'autres fonctions d'activation ayant divers effets. Ce champ de 
 \section{Rétropropagation}
 \subsection{Principe}
 
-On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédentes et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour miniser $J$ en modifiant les poids.
- 	
-A DEVELOPPER POTENTIELLEMENT DEMAIN MAIS IL FAUT UN SCHEMA SINON CEST INCOMPREHENSIBLE
+On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce que renvoie notre MLP et ce qu'il devrait renvoyer. Notre objectif est donc de la minimiser afin d'obtenir la plus grande précision possible. Pour cela on va agir sur les seuls paramètres modifiables : les poids. On va ainsi calculer le gradient $\nabla J$ à l'aide des dérivées partielles par rapport aux poids de la dernière couche de neurones. Dès lors, par la règle de la chaîne, on peut calculer les dérivées partielles par rapport aux poids de la couche précédentes et ainsi de suite. Ces dérivées partielles seront utilisées par les algorithmes d'optimisation pour minimiser $J$ en modifiant les poids. Le principe de la rétropropagation de l'erreur est illustré par la figure \ref{backward}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=140pt]{"images/MLP/forward"}
+\hspace*{5mm}
+\includegraphics[width=140pt]{"images/MLP/backward"}
+\caption{Principe global de la rétropropagation du gradient. À gauche, la propagation avant, qui permet de calculer la sortie du réseau en fonction de l'entrée. À droite, la rétropagation de l'erreur, qui permet de calculer l'influence de chaque poids sur l'erreur en sortie. Ces deux schémas proviennent d'un article de Lillicrap et al. \cite{lillicrap_backpropagation_2020}}.
+\label{backward}
+\end{figure}
 
 \subsection{Les fonctions de coûts}
 Il en existe plusieurs, voici les principales.
@@ -277,7 +284,7 @@ On illustre ici avec de très grands batch. On moyenne le gradient dans cet exem
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch2048"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec batch\_size = 2048. Un epoch correspond au passage d'un batch dans l'algorithme. }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 2048. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch1}
 \end{figure}
 
@@ -287,14 +294,14 @@ On choisit des batch de taille plus restreinte (ici 32 images). On réduit l'ins
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/batch32"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec batch\_size = 32. Un epoch correspond au passage d'un batch dans l'algorithme. }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 32. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch1}
 \end{figure}
 
 
 \subsection{Initialisation des poids}
 Si l'on veut faire évoluer les poids du réseau, il faut bien les initialiser. Ainsi, on peut s'intéresser à l'effet de leur initialisation sur l'apprentissage.
-On commence par s'intéresser à un initialisation par loi normale. La moyenne et l'ecart-type sont alors deux hyperparamètres. On remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
+On commence par s'intéresser à un initialisation par loi normale. La moyenne et l'écart-type sont alors deux hyperparamètres. On remarque bien qu'il est important de choisir des valeurs raisonnables pour obtenir une convergence.
 \begin{figure}[!h]
 \centering
 \includegraphics[width=150pt]{"images/MLP/MLP_initnormale"}
@@ -315,5 +322,11 @@ On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les 
 On remarque d'ailleurs que dans le cas optimal la courbe d'apprentissage est similaire pour les deux lois.
 
 \subsection{Taux d'apprentissage}
-Le taux d'apprentissage est un hyperparamètre très important
-IL FAUDRAIT UNE FIGURE PROPRE ICI
+Le taux d'apprentissage est un hyperparamètre très important, il va déterminer la vitesse d'apprentissage et conditionner sa stabilité. Un taux d'apprentissage trop important risque de provoquer des oscillations dans la descente de gradient, voire même de faire diverger l'apprentissage. Alors qu'un taux d'apprentissage trop faible donnera un apprentissage lent. L'influence du taux d'apprentissage est donnée par la figure \ref{taux_app}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=250pt]{"images/MLP/taux_app"}
+\caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais ont moyennés sur 50 essais, sur les premiers batch seulement, ce qui explique que l'on atteint pas une bonne précision.}
+\label{taux_app}
+\end{figure}
