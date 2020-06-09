@@ -16,7 +16,7 @@
 \usepackage{subcaption}
 \usepackage[export]{adjustbox}
 %\usepackage[backend=biber,style=alphabetic,sorting=ynt]{biblatex}
-
+\usepackage[hidelinks]{hyperref}
 %\addbibresource{biblio.bib}
 
 \usepackage{fancyhdr}
@@ -24,7 +24,7 @@
 \renewcommand\headrulewidth{1pt}
 \fancyhead[L]{Projet cycleGAN 2020}
 \fancyhead[R]{CentraleSupélec}
-\fancyfoot[R]{\today}
+
 
 
 
@@ -63,7 +63,7 @@
 
 
     \vfill
-
+	{\textsc{\large\today}}
   \end{center}
   \end{sffamily}
 \end{titlepage}
@@ -82,7 +82,7 @@
 
 \newpage
 
-\bibliography{/home/paulin/Documents/code/IA/cycleGanGit/Rapport/zotero}
+\bibliography{zotero}
 \bibliographystyle{ieeetr}
 
 \end{document}
