@@ -8,7 +8,7 @@ Le transfert de style consiste à transformer des données d'un \textit{style à
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt,valign=t]{"images/cycle/cycle_exemples"}
+\includegraphics[width=200pt,valign=t]{"images/cycle/cycle_exemples"}
 \caption{Exemples de transfert de style effectués par un cycleGAN. De haut en bas : transformation $pommes \leftrightarrow oranges$, transformation $paysages \, d'\acute{e} t \acute{e} \leftrightarrow paysages\,d'hiver$ et transformation $chevaux \leftrightarrow z\grave{e}bres$. Ces exemples sont tirés de l'article de Zhu et al. \cite{zhu_unpaired_2018}.}
 \label{cycle_exemples}
 \end{figure}
@@ -29,9 +29,9 @@ Le transfert de style (à deux classes) repose sur deux banques de données que 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt,valign=t]{"images/cycle/paire"}
+\includegraphics[width=120pt,valign=t]{"images/cycle/paire"}
 \hspace*{10mm}
-\includegraphics[width=100pt,valign=t]{"images/cycle/pairepas"}
+\includegraphics[width=120pt,valign=t]{"images/cycle/pairepas"}
 \caption{Les deux types de transferts de style. À gauche, le transfert de style appairé où chaque donnée est associée à son équivalent dans un autre style. À droite, le transfert de style non appairé où les images n'ont pas d'équivalent dans l'autre style. Ces images sont tirées de l'article de Zhu et al. \cite{zhu_unpaired_2018}.}
 \label{paire}
 \end{figure}
@@ -49,7 +49,7 @@ Le cycleGAN repose sur deux GAN, tête-bêche, l'un permettant de passer du styl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{"images/cycle/cycleDouble"}
+\includegraphics[width=250pt]{"images/cycle/cycleDouble"}
 \caption{Structure globale du cycleGAN. Le générateur G créé des images du style de B à partir d'images du style de A. Le générateur F créé des images du style de A à partir d'images du style de B. Chaque banque d'images, associée à un style, possède son discriminateur.}
 \label{cycleDouble}
 \end{figure}
@@ -80,11 +80,11 @@ Le coût qui en découle (et qui sera détaillé dans la suite), est appelé \te
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=220pt]{"images/cycle/cycleBack"}
+\includegraphics[width=250pt]{"images/cycle/cycleBack"}
 
 \vspace{6mm}
 
-\includegraphics[width=220pt]{"images/cycle/cycleFor"}
+\includegraphics[width=250pt]{"images/cycle/cycleFor"}
 \caption{Décomposition du cycleGAN en deux GAN distincts et ajout des contraintes de consistance cyclique. En haut, la consistance cyclique arrière (\textit{backward cycle consistency}). En bas, la consistance cyclique avant (\textit{forward cycle consistency}).}
 \label{cycleForBack}
 \end{figure}

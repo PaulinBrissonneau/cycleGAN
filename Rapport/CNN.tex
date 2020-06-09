@@ -13,7 +13,7 @@ La structure d'un CNN se rapproche de celle d'un multiperceptron dans la mesure 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{images/cnn/structure_CNN.png} 
+\includegraphics[width=300pt]{images/cnn/structure_CNN.png} 
 \caption{Structure simplifiée d'un CNN. L'image est tirée de \cite{jefkine_backpropagation_2016} }
 \label{structure_1}
 \end{figure}
@@ -40,7 +40,7 @@ La figure \ref{chien_prairie} donne quelques exemples de l'effet du produit de c
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=100pt]{images/cnn/chien_prairie.png} 
+\includegraphics[width=150pt]{images/cnn/chien_prairie.png} 
 \caption{Effets de la convolution avec quelques noyaux. L'image provient de Wikipedia.}
 \label{chien_prairie}
 \end{figure}
@@ -71,7 +71,7 @@ Il existe encore un paramètre permettant de personnaliser l'opération : le \te
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{images/cnn/stride.png}
+\includegraphics[width=200pt]{images/cnn/stride.png}
 \caption{Fonctionnement de la couche de convolution avec un stride valant 2. À gauche, le résultat de l'opération. À droite, une façon différente de voir les choses : le noyau balaye toute la matrice avec un pas de 1 mais ne garde les valeurs que pour les déplacements pairs. L'image est tirée de l'article de Dumoulin et al. \cite{dumoulin_guide_2018}.}
 \label{stride}
 \end{figure}
@@ -84,7 +84,7 @@ Les images en couleurs peuvent être représentées par une matrice 3D de profon
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{images/cnn/CNN_3D.png}
+\includegraphics[width=200pt]{images/cnn/CNN_3D.png}
 \caption{Exemple de convolution en 3D. L'image est tirée de l'article \textit{1D and 3D Convolution} de S.Verma \cite{verma_understanding_2020}.}
 \label{CNN_3D}
 \end{figure}
@@ -140,7 +140,7 @@ Le principal problème de ce type d'architecture est le phénomène de sur-appre
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt]{images/cnn/dropout.png}
+\includegraphics[width=300pt]{images/cnn/dropout.png}
 \caption{A gauche, une structure MLP classique. A droite, un exemple de l'effet du dropout(paramètre ajusté à 50\%). Cette image vient de l'article de Srivastava et al. \cite{srivastava_dropout_nodate}.}
 \label{dropout}
 \end{figure}
@@ -176,7 +176,7 @@ Nous avons tout d'abord voulu tester la taille des noyaux pour voir quelle influ
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{images/cnn/resultat_noyau.png}
+\includegraphics[width=200pt]{images/cnn/resultat_noyau.png}
 \caption{Comparaison de la précision de notre CNN en fonction de la taille des noyaux. En ordonnée la précision, en abscisse la taille des noyaux. La base de données utilisée est MNIST.}
 \label{resultat_noyaux}
 \end{figure}
@@ -187,7 +187,7 @@ Nous nous sommes, de plus, intéressés à l'influence du \textbf{stride} et du 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=230pt]{images/cnn/CNN_padding_stride.png}
+\includegraphics[width=300pt]{images/cnn/CNN_padding_stride.png}
 \caption{Comparaison de la précision de notre CNN en fonction des paramètres stride et padding. En ordonnée la précision, en abscisse le nombre de batchs d’entraînement. La base de données utilisée est MNIST.}
 \label{resultat_padding_stride}
 \end{figure}
@@ -198,7 +198,7 @@ De même, nous avons testé l'influence du \textbf{dropout}. Les résultats sont
   
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=260pt]{images/cnn/resultat_dropout.png}
+\includegraphics[width=340pt]{images/cnn/resultat_dropout.png}
 \caption{Influence du dropout sur l'efficacité de nos réseaux. En haut, un CNN sur la base de données MNIST. En bas, un MLP sur la base de données Moon. Nous remarquons que les courbes sont toutes confondues, quel que soit le paramètre de dropout choisi.}
 \label{resultat_dropout}
 \end{figure}

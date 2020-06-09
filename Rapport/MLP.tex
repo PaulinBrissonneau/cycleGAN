@@ -13,7 +13,7 @@ McCulloh et Pitts dans leur première ébauche du neurone formel considérèrent
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=200pt,valign=t]{"images/MLP/neurone_exemple2"}
+\includegraphics[width=300pt,valign=t]{"images/MLP/neurone_exemple2"}
 \caption{Exemple de neurone dont les poids sont les coefficents $w_1$ à $w_2$, et le biais est $w_0$. La fonction de Heavyside s'applique à la somme pour donner une sortie du neurone dans $\{0, 1\}$. Cette image provient d'un article de Benharir et al. \cite{benharir_approche_2014}.}
 \label{neurone_exemple}
 \end{figure}
@@ -27,7 +27,7 @@ En 1958, Frank Rosenblatt utilise l'idée des neurones artificiels pour inventer
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt,valign=t]{"images/MLP/perceptron"}
+\includegraphics[width=250pt,valign=t]{"images/MLP/perceptron"}
 \caption{Exemple de perceptron à $n$ entrées et $p$ sorties. Il peut donc servir de classificateur à $p$ classes.}
 \label{perceptron}
 \end{figure}
@@ -124,9 +124,9 @@ On définit une fonction de coût $J$. Cette fonction mesure l'écart entre ce q
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=140pt]{"images/MLP/forward"}
+\includegraphics[width=160pt]{"images/MLP/forward"}
 \hspace*{5mm}
-\includegraphics[width=140pt]{"images/MLP/backward"}
+\includegraphics[width=160pt]{"images/MLP/backward"}
 \caption{Principe de la rétropropagation du gradient. À gauche, la propagation avant, qui permet de calculer la sortie du réseau en fonction de l'entrée. À droite, la rétropagation de l'erreur, qui permet de calculer l'influence de chaque poids sur l'erreur en sortie. Ces deux schémas proviennent d'un article de Lillicrap et al. \cite{lillicrap_backpropagation_2020}}.
 \label{backward}
 \end{figure}
@@ -168,9 +168,9 @@ Il s'agit de l'algorithme classique.  $w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \a
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/descentedegradientstochastique"}
-\hspace*{10mm}
-\includegraphics[width=130pt]{"images/MLP/descentedegradientstochastiquepropre"}
+\includegraphics[width=160pt]{"images/MLP/descentedegradientstochastique"}
+\hspace*{5mm}
+\includegraphics[width=160pt]{"images/MLP/descentedegradientstochastiquepropre"}
 \caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On voit bien ici que l'algorithme peut entraîner un blocage dans un minimum local.}
 \label{descentedegradientstochastique}
 \end{figure}
@@ -183,9 +183,9 @@ Un exemple d'application de la descente de gradient stochastique est donné par 
 	
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonnienne"}
-\hspace*{10mm}
-\includegraphics[width=130pt]{"images/MLP/descentedegradientnewtonniennepropre"}
+\includegraphics[width=160pt]{"images/MLP/descentedegradientnewtonnienne"}
+\hspace*{5mm}
+\includegraphics[width=160pt]{"images/MLP/descentedegradientnewtonniennepropre"}
 \caption{Exemple d'application de la descente de gradient stochastique. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On remarque que l'algorithme est bien plus instable mais explore plus et ne reste pas forcément bloqué dans les minimum locaux.}
 \label{descentedegradientnewtonnienne}
 \end{figure}
@@ -203,9 +203,9 @@ w_{jk}^{(i)} \leftarrow w_{jk}^{(i)} - \frac{\alpha}{\sqrt{s+\varepsilon}}\frac{
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/RMSProp"}
-\hspace*{10mm}
-\includegraphics[width=130pt]{"images/MLP/RMSPropPropre"}
+\includegraphics[width=160pt]{"images/MLP/RMSProp"}
+\hspace*{5mm}
+\includegraphics[width=160pt]{"images/MLP/RMSPropPropre"}
 \caption{Exemple d'application de RMSProp. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est sensible aux minima locaux mais peu aux grands gradients.}
 \label{RMSProp}
 \end{figure}
@@ -227,9 +227,9 @@ Un n exemple d'application est donné sur la figure \ref{ADAM}.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/adam"}
-\hspace*{10mm}
-\includegraphics[width=130pt]{"images/MLP/adampropre"}
+\includegraphics[width=160pt]{"images/MLP/adam"}
+\hspace*{5mm}
+\includegraphics[width=160pt]{"images/MLP/adampropre"}
 \caption{Exemple d'application de ADAM. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. L'algorithme est peu sensible aux minima locaux et beaucoup plus stable que la méthode de descente de gradient newtonnienne.}
 \label{ADAM}
 \end{figure}
@@ -242,7 +242,7 @@ Pour comparer les différents algorithmes, nous pouvons représenter sur un seul
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=130pt]{"images/MLP/comparatifoptimiseurs"}
+\includegraphics[width=220pt]{"images/MLP/comparatifoptimiseurs"}
 \caption{Comparaison des 4 algorithmes présentés. La figure représente le cheminement de la valeur des deux poids. La hauteur représente l'erreur. On observe que ADAM est clairement meilleur que les autres.}
 \label{Comparatifoptimiseurs}
 \end{figure}
@@ -260,7 +260,7 @@ Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. L
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/MNIST_exemple"}
+\includegraphics[width=200pt]{"images/MLP/MNIST_exemple"}
 \caption{Exemple de résultat de classification avec le MLP }
 \label{MNIST_exemple}
 \end{figure}
@@ -270,7 +270,7 @@ On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/MLP_largeur"}
+\includegraphics[width=200pt]{"images/MLP/MLP_largeur"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. On observe  à la fois que prendre trop peu de neurones ne permet pas une classification satisfaisante, et à la fois que prendre trop de neurones est contre productif. Il s'agit alors de trouver le juste milieu.\\ }
 \label{MLP_largeur}
 \end{figure}
@@ -280,7 +280,7 @@ On s'intéresse ici à la profondeur du réseau. Les résultats sont présentés
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/MLP_profondeur"}
+\includegraphics[width=200pt]{"images/MLP/MLP_profondeur"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. Une seule couche correspond donc à un perceptron simple. On observe que le MLP est plus performant. Cependant augmenter la profondeur du réseau réseau réduit sa vitesse de convergence.\\ }
 \label{MLP_profondeur}
 \end{figure}
@@ -292,7 +292,7 @@ Comme vu précédemment la taille des batchs influe grandement sur l'algorithme.
 Il s'agit du cas où le batch est de taille 1. On met à jour les poids pour chaque exemple parcouru. On observe alors sur la figure \ref{batch1} une forte instabilité liée au fait que le gradient peut fortement varier d'un exemple à l'autre.
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/batch1"}
+\includegraphics[width=200pt]{"images/MLP/batch1"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 1. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch1}
 \end{figure}
@@ -302,7 +302,7 @@ Il s'agit du cas où le batch est de taille 1. On met à jour les poids pour cha
 On illustre ici avec de très grands batch. On moyenne le gradient dans cet exemple sur 2048 images. Sur la figure \ref{batch2}, on n'observe plus l'instabilité initiale. Cependant de grands batch augmentent la sensibilité aux minima locaux et mène parfois à une saturation de la fonction de coût. De plus, une passe correspond au passage d'un batch dans l'algorithme. Ainsi, avec de très grands batch, le calcul de chaque pas peut devenir très long. Souvent, une grande taille de batch est associée à un fort taux d'apprentissage (car on estime mieux le gradient).
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/batch2048"}
+\includegraphics[width=200pt]{"images/MLP/batch2048"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 2048. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch2}
 \end{figure}
@@ -312,7 +312,7 @@ On choisit des batch de taille plus restreinte (ici 32 images). On réduit l'ins
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/batch32"}
+\includegraphics[width=200pt]{"images/MLP/batch32"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec \textit{batch\_size} = 32. Un epoch correspond au passage d'un batch dans l'algorithme. }
 \label{batch3}
 \end{figure}
@@ -324,7 +324,7 @@ On commence par s'intéresser à une initialisation par loi normale. La moyenne 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/MLP_initnormale"}
+\includegraphics[width=200pt]{"images/MLP/MLP_initnormale"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec initialisation des poids selon une loi normale.}
 \label{MLP_initnormale}
 \end{figure}
@@ -334,7 +334,7 @@ On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les 
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=150pt]{"images/MLP/MLP_inituni"}
+\includegraphics[width=200pt]{"images/MLP/MLP_inituni"}
 \caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage avec initialisation des poids selon une loi uniforme.}
 \label{MLP_inituni}
 \end{figure}
@@ -346,7 +346,7 @@ Le taux d'apprentissage est un hyper-paramètre très important, il va détermin
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=250pt]{"images/MLP/taux_app"}
+\includegraphics[width=320pt]{"images/MLP/taux_app"}
 \caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais sont moyennés sur 50 essais, sur les premiers batchs seulement, ce qui explique que l'on n'atteint pas une bonne précision.}
 \label{taux_app}
 \end{figure}
