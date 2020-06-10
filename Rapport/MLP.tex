@@ -266,22 +266,22 @@ Les MLP utilisés pour les mesures ont été réalisés \textit{from scratch}. L
 \end{figure}
 
 \subsection{Effet du nombre de neurones par couche}
-On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de neurones par couche. Les résultats sont présentés sur la figure \ref{MLP_largeur}.
+On s'intéresse ici à la largeur du réseau, c’est-à-dire-dire le nombre de neurones par couche. Les résultats sont présentés sur la figure \ref{MLP_largeur}. On y observe  à la fois que prendre trop peu de neurones ne permet pas une classification satisfaisante, et à la fois que prendre trop de neurones est contre productif. Il s'agit alors de trouver le juste milieu.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/MLP/MLP_largeur"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. On observe  à la fois que prendre trop peu de neurones ne permet pas une classification satisfaisante, et à la fois que prendre trop de neurones est contre productif. Il s'agit alors de trouver le juste milieu.\\ }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage, en faisant varier le nombre de neurones par couche.\\ }
 \label{MLP_largeur}
 \end{figure}
 
 \subsection{Effet du nombre de couches de neurones}
-On s'intéresse ici à la profondeur du réseau. Les résultats sont présentés sur la figure \ref{MLP_profondeur}.
+On s'intéresse ici à la profondeur du réseau. Les résultats sont présentés sur la figure \ref{MLP_profondeur}. On notera que le cas on l'a une seule couche correspond à un perceptron simple. On observe que le MLP est plus performant que le perceptron simple. Cependant augmenter la profondeur du réseau réseau réduit sa vitesse de convergence.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=200pt]{"images/MLP/MLP_profondeur"}
-\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage. Une seule couche correspond donc à un perceptron simple. On observe que le MLP est plus performant. Cependant augmenter la profondeur du réseau réseau réduit sa vitesse de convergence.\\ }
+\caption{Courbes de précision sur les données de test en fonction de l'avancement de l'apprentissage, en faisant varier le nombre de couches du réseau.\\ }
 \label{MLP_profondeur}
 \end{figure}
 
@@ -342,11 +342,11 @@ On s'intéresse ensuite au cas d'une initialisation selon une loi uniforme. Les 
 On remarque d'ailleurs que dans le cas optimal la courbe d'apprentissage est similaire pour les deux lois.
 
 \subsection{Taux d'apprentissage}
-Le taux d'apprentissage est un hyper-paramètre très important, il va déterminer la vitesse d'apprentissage et conditionner sa stabilité. Un taux d'apprentissage trop important risque de provoquer des oscillations dans la descente de gradient, voire même de faire diverger l'apprentissage. Alors qu'un taux d'apprentissage trop faible donnera un apprentissage lent. L'influence du taux d'apprentissage est donnée par la figure \ref{taux_app}.
+Le taux d'apprentissage est un hyper-paramètre très important, il va déterminer la vitesse d'apprentissage et conditionner sa stabilité. Un taux d'apprentissage trop important risque de provoquer des oscillations dans la descente de gradient, voire même de faire diverger l'apprentissage. Alors qu'un taux d'apprentissage trop faible donnera un apprentissage lent. L'influence du taux d'apprentissage est donnée par la figure \ref{taux_app}. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais sont moyennés sur 50 essais, sur les premiers batchs seulement, ce qui explique que l'on n'atteint pas une bonne précision.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=320pt]{"images/MLP/taux_app"}
-\caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage. On observe l'existence d'une valeur optimale pour le taux d'apprentissage, celle-ci dépend des autres hyper-paramètres. Les essais sont moyennés sur 50 essais, sur les premiers batchs seulement, ce qui explique que l'on n'atteint pas une bonne précision.}
+\caption{Influence du taux d'apprentissage sur la convergence. À gauche, la précision atteinte sur les premiers batchs en fonction du taux d'apprentissage. À droite, l'évolution temporelle du coût en fonction du taux d'apprentissage.}
 \label{taux_app}
 \end{figure}
