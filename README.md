@@ -2,7 +2,7 @@
 CentraleSupélec **cycleGAN** (2019-2020)
 
 
-# How to use the JSON config file :
+# How to use the JSON config file (not up to date yet) :
 ```javascript
 
 {
