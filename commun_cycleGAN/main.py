@@ -34,12 +34,12 @@ train_A, train_B, test_A, test_B, DIMS = get_datas_mapping(test_ratio = CONFIG['
 
 #prevent collisions in directory names
 now = datetime.datetime.now()
-now = "_"+str(now.year)+"_"+str(now.month)+"_"+str(now.day)+"-"+str(now.hour)+"_"+str(now.minute)+"_"+str(now.second)
-output_folder_date = CONFIG['output_folder']+now
+now = "_"+str(now.year)+"_"+str(now.month)+"_"+str(now.day)+"-"+str(now.hour)+"_"+str(now.minute)
+output_folder_date = 'output'+now
 PATHS = [
-            f"{output_folder_date}/plots/{CONFIG['dataset']}/",
-            f"{output_folder_date}/models/{CONFIG['dataset']}/",
-            f"{output_folder_date}/logs/{CONFIG['dataset']}/" 
+            f"{CONFIG['name']}/{output_folder_date}/plots/",
+            f"{CONFIG['name']}/{output_folder_date}/models/",
+            f"{CONFIG['name']}/{output_folder_date}/logs/" 
         ]
 
 for path in PATHS:
@@ -53,7 +53,7 @@ losses.loc[len(losses)] = (0, 0)
 # display sample / visualisation
 if CONFIG['plot_sample']: plot_sample(train_A, train_B, CONFIG['vis_lines'], CONFIG['vis_rows'], CONFIG['plot_size'])
 
-model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'])
+model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'], CONFIG['max_buffer_size'], CONFIG['n_resnet'])
 
 
 
@@ -61,22 +61,29 @@ model = build_cycleGAN(CONFIG['alpha'], CONFIG['beta_1'], DIMS, CONFIG['dataset'
 BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
+#check if existing model
+last_epoch, models_folder, last_qsub = restore_epoch (CONFIG['name'])
 
 
-#continue training
-if not CONFIG['load_model'] :
-    START_EPOCH = 0
-else:
-    START_EPOCH = CONFIG['load_epoch']
+#continue training if existing model
+if last_epoch > 0 :
+    qsub = last_qsub+1
+    START_EPOCH = last_epoch+1
+    load_weights(CONFIG['name'], model, models_folder, last_epoch)
+    print("Model loaded - starting fit...")
+else :
+    START_EPOCH = 1
+    qsub = 1
 
-# evaluate the model performance, and save
-#j'ai laissé le train_A dans le plot comme c'était dans le code, mais en vrai c'est test_A qu'il faut plot, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-if CONFIG['save_plots'] : save_plots (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'])
-if CONFIG['save_models'] : save_models (START_EPOCH-1, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
-    
+#create text file for Fusion checkpoints
+create_checkpoint(qsub, CONFIG['name'], START_EPOCH, output_folder_date)
+
+#plots
+if CONFIG['save_plots'] : save_plots (CONFIG['name'], START_EPOCH, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], comment = '_STARTING')
+if CONFIG['save_models'] : save_models (CONFIG['name'], START_EPOCH, model, output_folder_date, train_A, train_B, losses)
 
 # iterate through epochs
-for i in range(START_EPOCH, CONFIG['end_epoch']):
+for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
 
     # initiate loss counter
     loss = []
@@ -108,12 +115,14 @@ for i in range(START_EPOCH, CONFIG['end_epoch']):
         loss.append((A_to_B_loss, B_to_A_loss))
 
         # diplay during batch
-        if CONFIG['save_plots_during_batch'] and int(tqdm_bar.n)%int(CONFIG['freq_plots_during_batch']) == 0 : save_plots (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'], during_batch = True, batch = int(tqdm_bar.n))
+        if CONFIG['save_plots_during_batch'] and int(tqdm_bar.n)%int(CONFIG['freq_plots_during_batch']) == 0 : save_plots (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], during_batch = True, batch = int(tqdm_bar.n))
 
     # average loss over epoch
     losses.loc[len(losses)] = np.mean(loss, axis=0)
     
     # evaluate the model performance, and save
     #j'ai laissé le train_A dans le plot comme c'était, mais en vrai c'est test qu'il faut plot_A, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-    if CONFIG['save_plots'] : save_plots (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'], CONFIG['n_sample'])
-    if CONFIG['save_models'] : save_models (i, model, output_folder_date, train_A, train_B, losses, CONFIG['dataset'])
+    if CONFIG['save_plots'] : save_plots (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'])
+    if CONFIG['save_models'] : save_models (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses)
+
+    update_checkpoint(CONFIG['name'], i)

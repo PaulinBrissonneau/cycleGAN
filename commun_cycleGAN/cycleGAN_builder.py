@@ -6,12 +6,12 @@ from gan_networks import *
 from buffer import *
 
 
-def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET, BUFFER_MAX_SIZE) :
+def build_cycleGAN(ALPHA, BETA_1, DIMS, DATASET, BUFFER_MAX_SIZE, N_RESNET) :
 
     #in : params of the model
     #out : complete Model object of cycleGAN
 
-    disc_A, disc_B, gen_A_to_B, gen_B_to_A = get_networks (DIMS, DATASET)
+    disc_A, disc_B, gen_A_to_B, gen_B_to_A = get_networks (DIMS, N_RESNET)
 
     buffer_A = Buffer(max_size = BUFFER_MAX_SIZE)
     buffer_B = Buffer(max_size = BUFFER_MAX_SIZE)

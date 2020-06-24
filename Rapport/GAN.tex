@@ -72,7 +72,7 @@ Comme expliqué plus haut, l'apprentissage des GAN repose sur un équilibre fin 
 \centering
 
 \includegraphics[width=130pt]{"images/GAN/failure3"}
-\caption{L'erreur du discriminateur - en orange - devient rapidement quasiment nulle, tandis que celle du génrateur - en bleu - explose}
+\caption{L'erreur du discriminateur - en orange - devient rapidement quasiment nulle, tandis que celle du générateur - en bleu - explose}
 \label{perte_eq}
 \end{figure}
 
@@ -125,7 +125,7 @@ W(p_{\mathrm{data}}, p_{\theta}) = \sup_{f \in L_{1}}\left(\mathbb{E}_{x\sim p_{
 \end{aligned}$$
  Avec $L_{1}$ l'ensemble des fonctions 1-lipschitziennes $\mathcal{X} \longrightarrow \mathbb{R}$. On obtient donc une équation assez similaire à celle du paragraphe \ref{DCGAN_prob}. Nous allons estimer $f$ par un réseau de neurones $\{f_{w}, w \in \mathcal{W} \}$ qui sera optimisé à l'aide du gradient $\mathbb{E}_{x\sim p_{\mathrm{data}}} \left[\nabla_{w}f_{w}(x)\right] - \mathbb{E}_{z\sim p_{\mathrm{bruit}}} \left[\nabla_{w}f_{w}(g_{\theta}(z))\right]$. De même, à $f$ fixé, $g_{\theta}(z)$ s'optimise par rétropagation du gradient selon $\theta$.
  
- \subsection{Avantages comparatif du WGAN par rapport au DCGAN}
+\subsection{Avantages comparatif du WGAN par rapport au DCGAN}
  
 Maintenant que nous savons ce qu'est un WGAN, il s'agit de comprendre son avantage par rapport au DCGAN. D'abord, la distance $W$ est topologiquement plus faible que la divergence de Jensen-Shanon, et donc par extension que $\delta$. Ceci signifie qu'il est plus facile en pratique de faire converger un WGAN qu'un DCGAN.
 

@@ -9,10 +9,6 @@ from tensorflow.keras.initializers import RandomNormal
 from tensorflow.keras.models import Sequential, Model
 import tensorflow as tf
 
-LOAD_MODEL = False #@param {type:"boolean"}
-LOAD_EPOCH = 0 #@param {type:"number"}
-N_RESNET = 9 #@param {type:"number"}
-
 
 # weight initialization
 init = RandomNormal(stddev=0.02)
@@ -60,7 +56,7 @@ def resnet_block(input_layer, n_filters):
     return g
 
 # define the standalone generator model
-def define_generator(image_shape, n_resnet=N_RESNET):
+def define_generator(image_shape, n_resnet):
     # image input
     input_image = Input(shape=image_shape)
     # c7s1-64
@@ -95,34 +91,16 @@ def define_generator(image_shape, n_resnet=N_RESNET):
     return model
 
 
-def get_networks (DIMS, DATASET) :
+def get_networks (DIMS, N_RESNET) :
 
-    #écrire les spécs
+    gen_A_to_B = define_generator(DIMS, N_RESNET)
+    # generator: B -> A
+    gen_B_to_A = define_generator(DIMS, N_RESNET)
 
-    if LOAD_MODEL:
-        # generators
-        # generator: A -> B
-        gen_A_to_B = tf.keras.models.load_model(f'models/{DATASET}/cycleGAN_e{LOAD_EPOCH:03}_gen_A_to_B')
-        # generator: B -> A
-        gen_B_to_A = tf.keras.models.load_model(f'models/{DATASET}/cycleGAN_e{LOAD_EPOCH:03}_gen_B_to_A')
-
-        # discriminators
-        # discriminator: A -> [real/fake]
-        disc_A = tf.keras.models.load_model(f'models/{DATASET}/cycleGAN_e{LOAD_EPOCH:03}_disc_A')
-        # discriminator: B -> [real/fake]
-        disc_B = tf.keras.models.load_model(f'models/{DATASET}/cycleGAN_e{LOAD_EPOCH:03}_disc_B')
-
-    else:
-        # generators
-        # generator: A -> B
-        gen_A_to_B = define_generator(DIMS)
-        # generator: B -> A
-        gen_B_to_A = define_generator(DIMS)
-
-        # discriminators
-        # discriminator: A -> [real/fake]
-        disc_A = define_discriminator(DIMS)
-        # discriminator: B -> [real/fake]
-        disc_B = define_discriminator(DIMS)
+    # discriminators
+    # discriminator: A -> [real/fake]
+    disc_A = define_discriminator(DIMS)
+    # discriminator: B -> [real/fake]
+    disc_B = define_discriminator(DIMS)
 
     return disc_A, disc_B, gen_A_to_B, gen_B_to_A 
