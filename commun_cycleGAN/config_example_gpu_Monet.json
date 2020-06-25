@@ -1,15 +1,15 @@
 {
-    "output_folder" : "/gpfs/workdir/brissonnp/output_Smile_1",
+    "output_folder" : "/gpfs/workdir/brissonnp/output_Monet_1",
     "on_gpu" : true,
     "number_of_epochs" : 100,
 
 
-    "dataset" : "celeb_smile",
-    "data_x_folder" : "/gpfs/workdir/brissonnp/celeb_smile_168_216/celebNotSmile/",
-    "data_y_folder" : "/gpfs/workdir/brissonnp/celeb_smile_168_216/celebSmile/",
+    "dataset" : "monet",
+    "data_x_folder" : "/gpfs/workdir/brissonnp/monetRaw/photo/",
+    "data_y_folder" : "/gpfs/workdir/brissonnp/monetRaw/paint/",
     "batch_size" : 1,
     "test_ratio" : 0.2,
-    "debug_sample" : 6000,
+    "debug_sample" : -1,
 
 
     "plot_sample" : false,
@@ -23,7 +23,7 @@
     "save_models" : true,
 
     
-    "save_plots_during_batch" : true,
+    "save_plots_during_batch" : false,
     "freq_plots_during_batch" : 1000,
 
 
