@@ -1,7 +1,7 @@
 {
     "output_folder" : "/gpfs/workdir/brissonnp/output_Orange_1",
     "on_gpu" : true,
-    "number_of_epochs" : 10,
+    "number_of_epochs" : 100,
 
 
     "dataset" : "orangeApple",

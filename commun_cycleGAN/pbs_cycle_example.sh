@@ -3,7 +3,7 @@
 #PBS -S /bin/bash
 #PBS -N cycleGAN_example
 #PBS -j oe
-#PBS -l walltime=1:00:00
+#PBS -l walltime=24:00:00
 #PBS -l select=1:ncpus=12:ngpus=1:mem=26gb
 #PBS -q gpuq
 #PBS -P cycleGAN
@@ -19,4 +19,4 @@ module load anaconda3/5.3.1
 source activate tf-gpu
 
 # Train the network
-python main.py config_example_gpu_Smile.json
+python main.py config_example_gpu_Orange.json
