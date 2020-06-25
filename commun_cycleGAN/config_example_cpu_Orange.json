@@ -22,6 +22,7 @@
     "n_sample" : 3,
     "save_models" : true,
 
+    
     "save_plots_during_batch" : false,
     "freq_plots_during_batch" : 1000,
 
