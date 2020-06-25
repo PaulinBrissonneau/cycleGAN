@@ -92,7 +92,10 @@ for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
     number_of_batch = len(list(zip(train_A, train_B)))
 
     #update learning rate
+    #if i < CONFIG['starting_decay'] : current_learning_rate = CONFIG['alpha']
+    #else : current_learning_rate = tf.compat.v1.train.polynomial_decay(learning_rate=CONFIG['alpha'], global_step=i-CONFIG['starting_decay'], decay_steps=CONFIG['decay_steps'], end_learning_rate=CONFIG['end_learning_rate'], power=1.0)
     current_learning_rate = tf.compat.v1.train.polynomial_decay(learning_rate=CONFIG['alpha'], global_step=i, decay_steps=CONFIG['decay_steps'], end_learning_rate=CONFIG['end_learning_rate'], power=1.0)
+
     model.disc_A_optimizer.learning_rate = current_learning_rate
     model.disc_B_optimizer.learning_rate = current_learning_rate
     model.gen_A_to_B_optimizer.learning_rate = current_learning_rate
