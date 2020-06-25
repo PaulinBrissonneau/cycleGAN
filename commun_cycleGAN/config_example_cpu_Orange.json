@@ -1,10 +1,6 @@
 {
-    "name" : "output_example_1",
-    
+    "output_folder" : "output_example_1",
     "on_gpu" : false,
-
-
-    "load_model" : false,
     "number_of_epochs" : 2,
 
 

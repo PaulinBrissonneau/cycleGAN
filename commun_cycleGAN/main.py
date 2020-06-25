@@ -37,9 +37,9 @@ now = datetime.datetime.now()
 now = "_"+str(now.year)+"_"+str(now.month)+"_"+str(now.day)+"-"+str(now.hour)+"_"+str(now.minute)
 output_folder_date = 'output'+now
 PATHS = [
-            f"{CONFIG['name']}/{output_folder_date}/plots/",
-            f"{CONFIG['name']}/{output_folder_date}/models/",
-            f"{CONFIG['name']}/{output_folder_date}/logs/" 
+            f"{CONFIG['output_folder']}/{output_folder_date}/plots/",
+            f"{CONFIG['output_folder']}/{output_folder_date}/models/",
+            f"{CONFIG['output_folder']}/{output_folder_date}/logs/" 
         ]
 
 for path in PATHS:
@@ -62,25 +62,25 @@ BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
 #check if existing model
-last_epoch, models_folder, last_qsub = restore_epoch (CONFIG['name'])
+last_epoch, models_folder, last_qsub = restore_epoch (CONFIG['output_folder'])
 
 
 #continue training if existing model
 if last_epoch > 0 :
     qsub = last_qsub+1
     START_EPOCH = last_epoch+1
-    load_weights(CONFIG['name'], model, models_folder, last_epoch)
+    load_weights(CONFIG['output_folder'], model, models_folder, last_epoch)
     print("Model loaded - starting fit...")
 else :
     START_EPOCH = 1
     qsub = 1
 
 #create text file for Fusion checkpoints
-create_checkpoint(qsub, CONFIG['name'], START_EPOCH, output_folder_date)
+create_checkpoint(qsub, CONFIG['output_folder'], START_EPOCH, output_folder_date)
 
 #plots
-if CONFIG['save_plots'] : save_plots (CONFIG['name'], START_EPOCH, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], comment = '_STARTING')
-if CONFIG['save_models'] : save_models (CONFIG['name'], START_EPOCH, model, output_folder_date, train_A, train_B, losses)
+if CONFIG['save_plots'] : save_plots (CONFIG['output_folder'], START_EPOCH, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], comment = '_STARTING')
+if CONFIG['save_models'] : save_models (CONFIG['output_folder'], START_EPOCH, model, output_folder_date, train_A, train_B, losses)
 
 # iterate through epochs
 for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
@@ -115,14 +115,14 @@ for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
         loss.append((A_to_B_loss, B_to_A_loss))
 
         # diplay during batch
-        if CONFIG['save_plots_during_batch'] and int(tqdm_bar.n)%int(CONFIG['freq_plots_during_batch']) == 0 : save_plots (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], during_batch = True, batch = int(tqdm_bar.n))
+        if CONFIG['save_plots_during_batch'] and int(tqdm_bar.n)%int(CONFIG['freq_plots_during_batch']) == 0 : save_plots (CONFIG['output_folder'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], during_batch = True, batch = int(tqdm_bar.n))
 
     # average loss over epoch
     losses.loc[len(losses)] = np.mean(loss, axis=0)
     
     # evaluate the model performance, and save
     #j'ai laissé le train_A dans le plot comme c'était, mais en vrai c'est test qu'il faut plot_A, sinon on plot les images sur lesquelles on s'entraine, elles vont forcément être bien
-    if CONFIG['save_plots'] : save_plots (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'])
-    if CONFIG['save_models'] : save_models (CONFIG['name'], i, model, output_folder_date, train_A, train_B, losses)
+    if CONFIG['save_plots'] : save_plots (CONFIG['output_folder'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'])
+    if CONFIG['save_models'] : save_models (CONFIG['output_folder'], i, model, output_folder_date, train_A, train_B, losses)
 
-    update_checkpoint(CONFIG['name'], i)
+    update_checkpoint(CONFIG['output_folder'], i)
