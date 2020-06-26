@@ -1,7 +1,7 @@
 {
     "output_folder" : "output_example_1",
     "on_gpu" : false,
-    "number_of_epochs" : 2,
+    "number_of_epochs" : 10,
 
 
     "dataset" : "orangeApple",
@@ -9,7 +9,7 @@
     "data_y_folder" : "/home/paulin/Documents/datas/orangeApple/orange/",
     "batch_size" : 1,
     "test_ratio" : 0.2,
-    "debug_sample" : 2,
+    "debug_sample" : 4,
 
 
     "plot_sample" : false,
@@ -28,7 +28,8 @@
 
 
     "alpha" : 0.0002,
-    "decay_steps" : 300,
+    "starting_decay" : 5,
+    "decay_steps" : 5,
     "end_learning_rate" : 0,
     "beta_1" : 0.5,
     "max_buffer_size" : 50,

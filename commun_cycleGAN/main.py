@@ -16,7 +16,7 @@ from cycleGAN_builder import *
 import sys
 
 
-#passage en eager execution
+#eager execution
 tf.config.experimental_run_functions_eagerly(True)
 
 #read configuration file
@@ -91,10 +91,10 @@ for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
     #get the number of batch
     number_of_batch = len(list(zip(train_A, train_B)))
 
-    #update learning rate
-    #if i < CONFIG['starting_decay'] : current_learning_rate = CONFIG['alpha']
-    #else : current_learning_rate = tf.compat.v1.train.polynomial_decay(learning_rate=CONFIG['alpha'], global_step=i-CONFIG['starting_decay'], decay_steps=CONFIG['decay_steps'], end_learning_rate=CONFIG['end_learning_rate'], power=1.0)
-    current_learning_rate = tf.compat.v1.train.polynomial_decay(learning_rate=CONFIG['alpha'], global_step=i, decay_steps=CONFIG['decay_steps'], end_learning_rate=CONFIG['end_learning_rate'], power=1.0)
+    #update learning rate : constant before "starting_decay", then linary decreasing during "decay_steps", to "end_learning_rate"
+    # formula used for linear decrease : current_learning_rate = end_learning_rate + (alpha - end_learning_rate)*(1-starting_decay/decay_steps)
+    if i < CONFIG['starting_decay'] : current_learning_rate = CONFIG['alpha']
+    else : current_learning_rate = CONFIG['end_learning_rate'] +  (CONFIG['alpha']-CONFIG['end_learning_rate'])*(1-(i-CONFIG['starting_decay'])/CONFIG['decay_steps'])
 
     model.disc_A_optimizer.learning_rate = current_learning_rate
     model.disc_B_optimizer.learning_rate = current_learning_rate
