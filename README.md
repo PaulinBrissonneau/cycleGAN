@@ -2,18 +2,14 @@
 CentraleSupélec **cycleGAN** (2019-2020)
 
 
-# How to use the JSON config file (not up to date yet) :
+# How to use the JSON config file :
 ```javascript
 
 {
 
-    
+    "output_folder" : "/workdir/output/OrangeApple_ex_1", // where to save plots and models (if a model already exists in this folder, the model will be automatically loaded and the fittig will continue)
     "on_gpu" : true, // if true : use gpu, if false : use cpu
-
-
-    "load_model" : false, // if false : create new model, if false : use a saved model
-    "load_epoch" : 0, // if "load_model" : load the model at defined epoch
-    "end_epoch" : 100, // end epoch of the training
+    "number_of_epochs" : 100, //number of epoch in one pbs submission
 
 
     "dataset" : "horsesVsZebras", // name of the dataset
@@ -33,18 +29,18 @@ CentraleSupélec **cycleGAN** (2019-2020)
     "save_plots" : true, // save plots at the end of each epoch
     "n_sample" : 3, // number of samples plotted 
     "save_models" : true, // if true : save the models at the end of each epoch
-    "output_folder" : "/workdir/output/", // where to save plots and models
 
     "save_plots_during_batch" : true, // save plots at the end of batches 
     "freq_plots_during_batch" : 1000, // periods of saving (number of batches between two plots)
 
 
     "alpha" : 0.0002, // start learning_rate
-    "decay_steps" : 100, // epochs before linear decay
-    "end_learning_rate" : 0, // learning_rate at "end_epoch"
+    "starting_decay" : 100, // epochs before linear decay
+    "decay_steps" : 100, // size of the support of the linear decrease
+    "end_learning_rate" : 0, // learning_rate at ("starting_decay" + "decay_steps")
     "beta_1" : 0.5, // beta_1 in Adam optimizer
-    "max_buffer_size" : 50 // size of buffer of generated images
-
+    "max_buffer_size" : 50, // size of buffer of generated images
+    "n_resnet" : 9, // number of resnet layers
 
 }
 
