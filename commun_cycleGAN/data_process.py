@@ -53,7 +53,8 @@ def get_datas_mapping(test_ratio, data_x_folder, data_y_folder, debug_sample):
             image_string = tf.io.read_file(filenames)  
             image_decoded = tf.image.decode_jpeg(image_string, channels=3)
             image = tf.cast(image_decoded, tf.float32)
-            image = (image-(255/2))/255
+            #image = (image-(255/2))/255
+            image = image / 127.5 - 1.
             return image
             
         dataset = dataset.map(_parse_function)
