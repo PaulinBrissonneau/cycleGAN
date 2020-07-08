@@ -3,11 +3,16 @@ import numpy as np
 from matplotlib import pyplot
 import tensorflow as tf
 import os.path
+from pandas import DataFrame
+import pandas as pd
 
 # evaluate the discrimenator, plot generated images
 def save_plots (name, epoch, model, output_folder, test_A, test_B, losses, n_samples,  during_batch = False, batch = -1, comment = ''):
     # a simple summerizing print
-    print(f"Epoch: {epoch} | A_to_B_loss: {losses.A_to_B_loss.values[-1]} | B_to_A_loss: {losses.B_to_A_loss.values[-1]}")
+    if len(losses.A_to_B_loss.values) > 0 :
+        print(f"Epoch: {epoch} | A_to_B_loss: {losses.A_to_B_loss.values[-1]} | B_to_A_loss: {losses.B_to_A_loss.values[-1]}")
+    else :
+        print(f"Epoch: {epoch} | no losses yet")
     # save plot
     save_plot(name, epoch, model.A_to_B, output_folder, test_A, 'A_to_B'+comment, n_samples, during_batch, batch)
     save_plot(name, epoch, model.B_to_A, output_folder, test_B, 'B_to_A'+comment, n_samples, during_batch, batch)
@@ -83,7 +88,7 @@ def save_history(name, losses,output_folder):
 
 
 #create the txt checkpoint file
-def create_checkpoint (i, name, epoch, folder) :
+def create_checkpoint (i, name, epoch, folder, losses) :
     f= open(f"{name}/checkpoints.txt","a")
     f.write(f"QSUB {i} :\n")
     f.write(f"  Start epoch : {epoch:03}\n")
@@ -91,10 +96,11 @@ def create_checkpoint (i, name, epoch, folder) :
     f.write(f"  Last epoch : {epoch:03}\n")
     f.write(f"\n")
     f.close()
+    losses.to_pickle(f"{name}/losses_dataframe")
     return None
 
 #change last lines of the checkpoints
-def update_checkpoint (name, epoch) :
+def update_checkpoint (name, epoch, losses) :
     f= open(f"{name}/checkpoints.txt","r+")
     lines = f.readlines()
     f.close()
@@ -104,6 +110,7 @@ def update_checkpoint (name, epoch) :
     f.write(f"  Last epoch : {epoch:03}\n")
     f.write(f"\n")
     f.close()
+    losses.to_pickle(f"{name}/losses_dataframe")
     return None
 
 
@@ -115,6 +122,10 @@ def restore_epoch (name) :
         last_epoch = 0
         models_folder = "not defined"
         last_qsub = 0
+
+        # a pandas dataframe to save the loss information to
+        losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
+        #losses.loc[len(losses)] = (0, 0)
 
         print("\n")
         print("--- NO MODEL TO LOAD - starting from scratch ---")
@@ -128,6 +139,9 @@ def restore_epoch (name) :
         last_epoch = int(lines[-2].split(" : ")[-1])
         models_folder = str(lines[-3].split(" : ")[-1]).replace("\n", "").replace(" ", "")
         last_qsub = int(lines[-5].split(" ")[1])
+
+        #Panda
+        losses = pd.read_pickle(f"{name}/losses_dataframe")
         
         #recap
         print("\n")
@@ -137,4 +151,4 @@ def restore_epoch (name) :
         print("models_folder : ", models_folder)
         print("\n")
 
-    return last_epoch, models_folder, last_qsub
+    return last_epoch, models_folder, last_qsub, losses

@@ -1,39 +1,32 @@
 {
-    "output_folder" : "output_example_1",
-    "on_gpu" : false,
-    "number_of_epochs" : 10,
+  "output_folder": "output_example_1",
+  "on_gpu": false,
+  "number_of_epochs": 2,
 
+  "dataset": "orangeApple",
+  "data_x_folder": "/home/paulin/Documents/datas/orangeApple/apple/",
+  "data_y_folder": "/home/paulin/Documents/datas/orangeApple/orange/",
+  "batch_size": 1,
+  "test_ratio": 0.2,
+  "debug_sample": 3,
 
-    "dataset" : "orangeApple",
-    "data_x_folder" : "/home/paulin/Documents/datas/orangeApple/apple/",
-    "data_y_folder" : "/home/paulin/Documents/datas/orangeApple/orange/",
-    "batch_size" : 1,
-    "test_ratio" : 0.2,
-    "debug_sample" : 4,
+  "plot_sample": false,
+  "vis_lines": 1,
+  "vis_rows": 3,
+  "plot_size": 20,
 
+  "save_plots": true,
+  "n_sample": 3,
+  "save_models": true,
 
-    "plot_sample" : false,
-    "vis_lines" : 1,
-    "vis_rows" : 3,
-    "plot_size" : 20,
+  "save_plots_during_batch": false,
+  "freq_plots_during_batch": 1000,
 
-
-    "save_plots" : true,
-    "n_sample" : 3,
-    "save_models" : true,
-
-    
-    "save_plots_during_batch" : false,
-    "freq_plots_during_batch" : 1000,
-
-
-    "alpha" : 0.0002,
-    "starting_decay" : 5,
-    "decay_steps" : 5,
-    "end_learning_rate" : 0,
-    "beta_1" : 0.5,
-    "max_buffer_size" : 50,
-    "n_resnet" : 9
-
-
+  "alpha": 0.0002,
+  "starting_decay": 5,
+  "decay_steps": 5,
+  "end_learning_rate": 0,
+  "beta_1": 0.5,
+  "max_buffer_size": 50,
+  "n_resnet": 9
 }
