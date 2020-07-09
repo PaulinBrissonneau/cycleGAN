@@ -46,9 +46,7 @@ for path in PATHS:
     Path(path).mkdir(parents=True, exist_ok=True)
 
 
-# a pandas dataframe to save the loss information to
-losses = DataFrame(columns = ['A_to_B_loss', 'B_to_A_loss'])
-losses.loc[len(losses)] = (0, 0)
+
 
 # display sample / visualisation
 if CONFIG['plot_sample']: plot_sample(train_A, train_B, CONFIG['vis_lines'], CONFIG['vis_rows'], CONFIG['plot_size'])
@@ -62,7 +60,7 @@ BATCH_SIZE = CONFIG['batch_size']
 train_A, train_B, test_A, test_B = train_A.batch(BATCH_SIZE), train_B.batch(BATCH_SIZE), test_A.batch(BATCH_SIZE), test_B.batch(BATCH_SIZE)
 
 #check if existing model
-last_epoch, models_folder, last_qsub = restore_epoch (CONFIG['output_folder'])
+last_epoch, models_folder, last_qsub, losses = restore_epoch (CONFIG['output_folder'])
 
 
 #continue training if existing model
@@ -76,7 +74,7 @@ else :
     qsub = 1
 
 #create text file for Fusion checkpoints
-create_checkpoint(qsub, CONFIG['output_folder'], START_EPOCH, output_folder_date)
+create_checkpoint(qsub, CONFIG['output_folder'], START_EPOCH, output_folder_date, losses)
 
 #plots
 if CONFIG['save_plots'] : save_plots (CONFIG['output_folder'], START_EPOCH, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'], comment = '_STARTING')
@@ -128,4 +126,4 @@ for i in range(START_EPOCH, START_EPOCH+CONFIG['number_of_epochs']):
     if CONFIG['save_plots'] : save_plots (CONFIG['output_folder'], i, model, output_folder_date, train_A, train_B, losses, CONFIG['n_sample'])
     if CONFIG['save_models'] : save_models (CONFIG['output_folder'], i, model, output_folder_date, train_A, train_B, losses)
 
-    update_checkpoint(CONFIG['output_folder'], i)
+    update_checkpoint(CONFIG['output_folder'], i, losses)
