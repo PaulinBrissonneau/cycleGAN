@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #PBS -S /bin/bash
-#PBS -N cycleGAN_example
+#PBS -N Smile_cycleGAN
 #PBS -j oe
 #PBS -l walltime=24:00:00
-#PBS -l select=1:ncpus=12:ngpus=1:mem=26gb
+#PBS -l select=1:ncpus=12:ngpus=1:mem=36gb
 #PBS -q gpuq
 #PBS -P cycleGAN
 #PBS -M paulin.brissonneau@student-cs.fr

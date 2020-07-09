@@ -1,5 +1,5 @@
 {
-    "output_folder" : "/gpfs/workdir/brissonnp/output_Smile_1",
+    "output_folder" : "/gpfs/workdir/brissonnp/output_Smile_2",
     "on_gpu" : true,
     "number_of_epochs" : 100,
 
@@ -9,7 +9,7 @@
     "data_y_folder" : "/gpfs/workdir/brissonnp/celeb_smile_168_216/celebSmile/",
     "batch_size" : 1,
     "test_ratio" : 0.2,
-    "debug_sample" : 6000,
+    "debug_sample" : 10000,
 
 
     "plot_sample" : false,
@@ -24,7 +24,7 @@
 
     
     "save_plots_during_batch" : true,
-    "freq_plots_during_batch" : 1000,
+    "freq_plots_during_batch" : 5000,
 
 
     "alpha" : 0.0002,

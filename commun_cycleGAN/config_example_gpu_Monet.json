@@ -1,5 +1,5 @@
 {
-    "output_folder" : "/gpfs/workdir/brissonnp/output_Monet_1",
+    "output_folder" : "/gpfs/workdir/brissonnp/output_Monet_2",
     "on_gpu" : true,
     "number_of_epochs" : 100,
 

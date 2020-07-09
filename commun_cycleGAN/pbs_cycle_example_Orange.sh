@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -S /bin/bash
-#PBS -N cycleGAN_example
+#PBS -N Orange_cycleGAN
 #PBS -j oe
 #PBS -l walltime=24:00:00
 #PBS -l select=1:ncpus=12:ngpus=1:mem=26gb
